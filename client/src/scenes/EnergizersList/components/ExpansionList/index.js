@@ -13,32 +13,42 @@ const styles = () => ({
   root: {
     padding: '24px 30px',
   },
+  panelContainer: {
+    width: "60%",
+    textAlign: "left",
+    paddingLeft: '50px'
+  },
   title: {
     fontWeight: 'normal',
     fontSize: '24px',
     lineHeight: '19px',
     color: '#1C1C1C',
-    paddingBottom: '24px',
+    paddingBottom: '0px',
   },
   energizerTitle: {
     fontSize: '16px',
-    lineHeight: '22px',
+    lineHeight: '20px',
     fontWeight: 'normal',
     paddingRight: '5px',
+    margin: "0px"
   },
   energizerSubTitle: {
     fontSize: '16px',
-    lineHeight: '22px',
+    lineHeight: '20px',
     fontWeight: 'normal',
     color: '#494949',
     textTransform: 'capitalize',
+    margin: "0px"
   },
   panelDetails: {
     borderTop: '1px solid rgba(96,106,116,0.4)',
     padding: '24px 0',
+    textAlign: "left",
   },
   panelDetailsSection: {
     paddingBottom: '34px',
+    paddingLeft: '60px',
+    textAlign: "left",
   },
   panelDetailsSectionTitle: {
     fontSize: '12px',
@@ -46,12 +56,16 @@ const styles = () => ({
     textTransform: 'uppercase',
     color: '#606A74',
     fontWeight: 'normal',
+    margin: "0px",
+    textAlign: "left"
   },
   panelDetailsSectionText: {
     color: '#1C2B39',
     fontWeight: '300',
     fontSize: '16px',
-    lineHeight: '19px',
+    lineHeight: '14px',
+    margin: "0px",
+    textAlign: "left",
   },
   panelActions: {
     padding: '24px',
@@ -67,13 +81,13 @@ class ExpansionList extends Component {
   render() {
     const { classes, energizers } = this.props;
     return (
-      <div>
+      <div className={cx(classes.panelContainer)}>
         {energizers.map(energizer  => {
           return (
             <ExpansionPanel key={energizer.id}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <h2 className={cx(classes.energizerTitle)}>
-                  {energizer.lastName}, {energizer.firstName}
+                  {energizer.firstName} {energizer.lastName}
                 </h2>
                 <h3 className={cx(classes.energizerSubTitle)}>
                   ({energizer.occupation})
@@ -81,7 +95,8 @@ class ExpansionList extends Component {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails className={cx(classes.panelDetails)}>
                 <Grid container justify={'center'}>
-                  <Grid item xs={12} lg={3}>
+
+                  <Grid item xs={6} lg={3}>
                     <div className={cx(classes.panelDetailsSection)}>
                       <h4 className={cx(classes.panelDetailsSectionTitle)}>
                         Name
@@ -90,7 +105,9 @@ class ExpansionList extends Component {
                           {energizer.firstName} {energizer.lastName}
                       </span>
                     </div>
+                  </Grid>
 
+                  <Grid item xs={6} lg={3}>
                     <div className={cx(classes.panelDetailsSection)}>
                       <h4 className={cx(classes.panelDetailsSectionTitle)}>
                         Occupation
@@ -99,7 +116,10 @@ class ExpansionList extends Component {
                         {energizer.occupation || '--'}
                       </span>
                     </div>
+                  </Grid>
 
+
+                  <Grid item xs={12} lg={12}>
                     <div className={cx(classes.panelDetailsSection)}>
                       <h4 className={cx(classes.panelDetailsSectionTitle)}>
                         Wiki Page
@@ -108,21 +128,22 @@ class ExpansionList extends Component {
                         {energizer.wikiPage}
                       </span>
                     </div>
-                  </Grid>
 
-                  <Grid item xs={12} lg={3}>
                     <div className={cx(classes.panelDetailsSection)}>
                       <h4 className={cx(classes.panelDetailsSectionTitle)}>
                         Home Town
                       </h4>
                       <span className={cx(classes.panelDetailsSectionText)}>
-                        {energizer.homeTown}, {energizer.homeState},
+                        {energizer.homeTown}, {energizer.homeState}
                       </span>
                     </div>
+                   </Grid>
 
-                  </Grid>
+
+
                 </Grid>
               </ExpansionPanelDetails>
+
               <ExpansionPanelActions className={cx(classes.panelActions)}>
                 <Button
                   color="primary"
