@@ -76,10 +76,11 @@ class Root extends Component {
                                 <Navigation />
 
                         <ul>
-                                <li><Link to='/list'> List </Link></li>
+                                <li><Link to='/'> List </Link></li>
                                 <li><Link to='/new'> Add New </Link></li>
                         </ul>
 
+                        <Route  path="/"  component = {EnergizersList} />
                         <Route  path="/list"  component = {EnergizersList} />
                         <Route  path="/new"  component = {showDate} />
 

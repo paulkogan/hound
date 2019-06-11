@@ -13,7 +13,7 @@ const CurrentUserController = require('./controllers/current-user');
 //server.use('/api', currentUserMiddleware);
 
 // Private Routes
-server.use('/', EnergizersController);
+//server.use('/list', EnergizersController);
 server.use('/api/current-user', CurrentUserController);
 server.use('/api/energizers', EnergizersController);
 

@@ -6,7 +6,7 @@ import ExpansionList from './components/ExpansionList';
 import * as api from '../../services/api';
 import { TextField } from '@material-ui/core';
 
-class EnergizersList extends Component {
+class Energizers extends Component {
 
   state = {
     isLoading: true,
@@ -56,7 +56,7 @@ onDialogClose = () => {
 
           <ExpansionList
             energizers={energizers}
-            onEditEnergizer={this.onEditEnergizer}          
+            onEditEnergizer={this.onEditEnergizer}
           />
 
         </div>
@@ -121,4 +121,4 @@ const styles = () => ({
   },
 });
 
-export default withStyles(styles)(EnergizersList);
+export default withStyles(styles)(Energizers);

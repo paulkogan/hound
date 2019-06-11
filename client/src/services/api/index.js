@@ -14,6 +14,15 @@ const httpClient = axios.create({
 
 
 export const fetchEnergizers = async () => {
-    const result = await httpClient.get(`/list`);
+    const result = await httpClient.get(`/api/energizers/`);
     return result.data.data
+  };
+
+
+  export const createEnergizer = async params => {
+    return httpClient.post('/api/energizers/create', params);
+  };
+
+  export const updateEnergizer = async params => {
+    return httpClient.post('/api/energizers/update', params);
   };
