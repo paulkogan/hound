@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import * as cx from 'classnames';
 import ExpansionList from './components/ExpansionList';
+import EnergizerProfile from './components/EnergizerProfile';
 import * as api from '../../services/api';
 import { TextField } from '@material-ui/core';
 
@@ -17,26 +18,79 @@ class Energizers extends Component {
 
   async componentDidMount() {
 
-      this.setState({ isLoading: true });
-      const energizers = await api.fetchEnergizers();
-      this.setState({ isLoading: false,
-                      energizers
-      });
-
+      this.refreshEnergizers()
   }
-onEditEnergizer = ({ energizer }) => {
+
+
+async refreshEnergizers() {
+
+  this.setState({ isLoading: true });
+  const energizers = await api.fetchEnergizers();
+  this.setState({ isLoading: false,
+                  energizers
+  });
+
+}
+
+
+  onEditEnergizer = ({ energizer }) => {
     this.setState({ energizerUnderEdit: energizer , openEditModal: true });
   };
 
-handleChange = (e) => {
-      console.log (e.value)
 
-}
+  onNewEnergizer = () => {
+      this.setState({ energizerUnderEdit: {}, openEditModal: true });
+  };
+
+  updateEnergizer = async energizer => {
+    try {
+      await api.updateEnergizer(energizer);
+      this.refreshEnergizers();
+      //this.props.enqueueSnackbar('Energizer updated!');
+    } catch {
+      // this.props.enqueueSnackbar(
+      //   'Oops, something went wrong. Please Try again'
+      // );
+    }
+  };
+
+  createEnergizer = async energizer => {
+    try {
+      await api.createEnergizer(energizer);
+      this.refreshEnergizers();
+      //this.props.enqueueSnackbar('Energizer updated!');
+    } catch {
+      // this.props.enqueueSnackbar(
+      //   'Oops, something went wrong. Please Try again'
+      // );
+    }
+  };
+
+
+
+
+//search
+handleChange = event => {
+    const { Energizers } = this.state;
+    const searchedEnergizerName = event.target.value.toLowerCase();
+
+    if (searchedEnergizerName) {
+      this.setState({
+        filteredEnergizers: Energizers.filter(
+          Energizer =>
+            Energizer.name &&
+            Energizer.name.toLowerCase().includes(searchedEnergizerName)
+        ),
+      });
+    } else {
+      this.setState({ filteredEnergizers: Energizers });
+    }
+  };
 
 onDialogClose = () => {
   this.setState({
     openEditModal: false,
-    patientUnderEdit: {},
+    energizerUnderEdit: {},
   });
 };
 
@@ -44,7 +98,7 @@ onDialogClose = () => {
 
   render() {
     const { classes } = this.props;
-    const { energizers } = this.state;
+    const { energizers, energizerUnderEdit, openEditModal } = this.state;
 
     return (
       <div className={cx(classes.root)}>
@@ -53,13 +107,36 @@ onDialogClose = () => {
         </header>
 
         <div>
-
           <ExpansionList
             energizers={energizers}
             onEditEnergizer={this.onEditEnergizer}
           />
 
         </div>
+
+       {openEditModal && (
+        <div>
+          <EnergizerProfile
+            energizer={energizerUnderEdit}
+            updateEnergizer={this.updateEnergizer}
+            createEnergizer={this.createEnergizer}
+            onClose={this.onDialogClose}
+          />
+
+        </div>
+
+      )}
+
+        <div className={cx(classes.actions)}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={this.onNewEnergizer}
+          >
+            Add New Energizer
+          </Button>
+        </div>
+
 
 
       </div>
@@ -78,13 +155,13 @@ const styles = () => ({
     color: '#1C1C1C',
     paddingBottom: '24px',
   },
-  patientTitle: {
+  EnergizerTitle: {
     fontSize: '16px',
     lineHeight: '22px',
     fontWeight: 'normal',
     paddingRight: '5px',
   },
-  patientSubTitle: {
+  EnergizerSubTitle: {
     fontSize: '16px',
     lineHeight: '22px',
     fontWeight: 'normal',
@@ -116,7 +193,7 @@ const styles = () => ({
     borderTop: '1px solid rgba(96,106,116,0.4)',
   },
   actions: {
-    textAlign: 'right',
+    textAlign: 'left',
     paddingTop: '24px',
   },
 });
