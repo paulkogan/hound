@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import * as cx from 'classnames';
+import { withSnackbar } from 'notistack';
 import ExpansionList from './components/ExpansionList';
 import EnergizerProfile from './components/EnergizerProfile';
-import * as api from '../../services/api';
 import { TextField } from '@material-ui/core';
+import * as cx from 'classnames';
+import * as api from '../../services/api';
 
 class Energizers extends Component {
 
@@ -13,6 +14,7 @@ class Energizers extends Component {
     isLoading: true,
     energizerUnderEdit : {},
     openEditModal:false,
+    openScrapeModal:false,
     energizers: []
   }
 
@@ -34,7 +36,7 @@ async refreshEnergizers() {
 
 
   onEditEnergizer = ({ energizer }) => {
-    this.setState({ energizerUnderEdit: energizer , openEditModal: true });
+    this.setState({ energizerUnderEdit: energizer, openEditModal: true });
   };
 
 
@@ -42,19 +44,49 @@ async refreshEnergizers() {
       this.setState({ energizerUnderEdit: {}, openEditModal: true });
   };
 
+
+  onStartScrapeWiki = async  energizer  => {
+      this.setState({ energizerUnderEdit: energizer, openScrapeModal: true });
+      try {
+        await api.scrapeWikiUrl(energizer);
+        //console.log("FRONTEND", results)
+        this.props.enqueueSnackbar('Got Wiki Page')
+      } catch (err) {
+        console.log("problem", err)
+         this.props.enqueueSnackbar(
+           'Oops, something went wrong getting Wiki page'
+         );
+      }
+  };
+
+
+
   updateEnergizer = async energizer => {
     try {
       await api.updateEnergizer(energizer);
       this.refreshEnergizers();
-      //this.props.enqueueSnackbar('Energizer updated!');
+      this.props.enqueueSnackbar('Energizer updated!');
     } catch {
-      // this.props.enqueueSnackbar(
-      //   'Oops, something went wrong. Please Try again'
-      // );
+       this.props.enqueueSnackbar(
+        'Oops, something went wrong. Please Try again'
+       );
     }
   };
 
   createEnergizer = async energizer => {
+    try {
+      await api.createEnergizer(energizer);
+      this.refreshEnergizers();
+      this.props.enqueueSnackbar('Energizer created!');
+    } catch {
+       this.props.enqueueSnackbar(
+         'Oops, something went wrong. Please Try again'
+       );
+    }
+  };
+
+
+  scrapeWikiURL = async energizer => {
     try {
       await api.createEnergizer(energizer);
       this.refreshEnergizers();
@@ -65,7 +97,6 @@ async refreshEnergizers() {
       // );
     }
   };
-
 
 
 
@@ -110,6 +141,7 @@ onDialogClose = () => {
           <ExpansionList
             energizers={energizers}
             onEditEnergizer={this.onEditEnergizer}
+            onStartScrapeWiki = {this.onStartScrapeWiki}
           />
 
         </div>
@@ -198,4 +230,4 @@ const styles = () => ({
   },
 });
 
-export default withStyles(styles)(Energizers);
+export default withSnackbar(withStyles(styles)(Energizers));

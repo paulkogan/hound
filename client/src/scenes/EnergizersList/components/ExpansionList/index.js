@@ -153,6 +153,18 @@ class ExpansionList extends Component {
                   Edit Info
                 </Button>
 
+
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={() => this.props.onStartScrapeWiki ({ energizer })}
+                >
+                  Get Wiki Info
+                </Button>
+
+
+
+
               </ExpansionPanelActions>
             </ExpansionPanel>
           );

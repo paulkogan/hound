@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect,   Link, } from 'react-router-dom';
-//import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider } from 'notistack';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import EnergizersList from '../EnergizersList';
 import Navigation from '../../components/Navigation';
@@ -71,23 +71,22 @@ class Root extends Component {
 
     return (
           <div>
-
+             <SnackbarProvider maxSnack={3}>
               <Router>
                                 <Navigation />
 
-                        <ul>
-                                <li><Link to='/'> List </Link></li>
-                                <li><Link to='/new'> Add New </Link></li>
-                        </ul>
-
-                        <Route  path="/"  component = {EnergizersList} />
-                        <Route  path="/list"  component = {EnergizersList} />
+                        <Route  path="/" exact component = {EnergizersList} />
                         <Route  path="/new"  component = {showDate} />
+                        <Route  path="/list"  component = {EnergizersList} />
+
+
+
 
 
 
 
               </Router>
+            </SnackbarProvider>
           </div>
 
           )
@@ -95,6 +94,13 @@ class Root extends Component {
 };
 
 export default Root;
+
+//
+// <ul>
+//         <li><Link to='/'> List </Link></li>
+//         <li><Link to='/new'> Add New </Link></li>
+// </ul>
+
 
 //                 <Route path={url} exact component={Home} />
 //
