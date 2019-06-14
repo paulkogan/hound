@@ -48,8 +48,8 @@ async refreshEnergizers() {
   onStartScrapeWiki = async  energizer  => {
       this.setState({ energizerUnderEdit: energizer, openScrapeModal: true });
       try {
-        await api.scrapeWikiUrl(energizer);
-        //console.log("FRONTEND", results)
+        let results = await api.scrapeWikiUrl(energizer);
+        console.log("FRONTEND", results)
         this.props.enqueueSnackbar('Got Wiki Page')
       } catch (err) {
         console.log("problem", err)
@@ -86,17 +86,6 @@ async refreshEnergizers() {
   };
 
 
-  scrapeWikiURL = async energizer => {
-    try {
-      await api.createEnergizer(energizer);
-      this.refreshEnergizers();
-      //this.props.enqueueSnackbar('Energizer updated!');
-    } catch {
-      // this.props.enqueueSnackbar(
-      //   'Oops, something went wrong. Please Try again'
-      // );
-    }
-  };
 
 
 

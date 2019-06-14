@@ -16,7 +16,9 @@ const Navigation = ({history, classes, currentUser}) => {
       <Toolbar className="toolbar">
         <Link className="home-link" component={RouterLink} to="/">
           <h3 className="hound-head">Energizer Hound</h3>
+
         </Link>
+        <b>v. 1.1</b>
       </Toolbar>
     </AppBar>
   );

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 //import moment from 'moment';
-import { withStyles } from '@material-ui/core/styles';
-import * as cx from 'classnames'
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -10,13 +9,13 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 //import MomentUtils from '@date-io/moment';
 import * as generator from 'generate-password'
+import * as cx from 'classnames'
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 
 const styles = () => ({
@@ -25,11 +24,13 @@ const styles = () => ({
   },
 });
 
-class EnergizerProfile extends Component {
+class ReviewWikiResults extends Component {
   constructor(props) {
     super(props);
 
-    const { energizer } = this.props;
+    const { energizer:enerObj, wikiResults} = this.props;
+    console.log("In Review Wiki: "+JSON.stringify(enerObj,null,4) )
+    const { energizer } = enerObj;
 
     this.state = {
       firstName: energizer.firstName || '',
@@ -38,31 +39,36 @@ class EnergizerProfile extends Component {
       wikiPage: energizer.wikiPage || '',
       homeTown: energizer.homeTown || '',
       homeState: energizer.homeState || '',
+      bornTown: wikiResults.bornTown|| '',
+      bornState: wikiResults.bornState|| '',
+      education: wikiResults.education || '',
+      bio: wikiResults.earlyLife || '',
+      wikiBirthPlaceTown: wikiResults.birthPlaceTown,
+      wikiBirthPlaceState: wikiResults.birthPlaceState,
+      wikiEducation: wikiResults.education,
+      wikiBornTown: wikiResults.bornTown,
+      wikiBornState: wikiResults.bornState,
+      wikiEarlyLife: wikiResults.earlyLife
     };
   }
 
   onSubmit = () => {
-    const { energizer, createEnergizer, updateEnergizer } = this.props;
+    const { energizer, updateEnergizer } = this.props;
 
-    this.isEmpty(energizer) ? (
-      createEnergizer({
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        occupation: this.state.occupation,
-        wikiPage: this.state.wikiPage,
-        homeTown: this.state.homeTown,
-        homeState: this.state.homeState,
-      }))
-      : (
+
       updateEnergizer({
-        id: energizer.id,
+        id: energizer.energizer.id,
         firstName: this.state.firstName,
         lastName: this.state.lastName,
         occupation: this.state.occupation,
         wikiPage: this.state.wikiPage,
         homeTown: this.state.homeTown,
         homeState: this.state.homeState,
-      }))
+        bornTown: this.state.bornTown,
+        bornState: this.state.bornState,
+        bio: this.state.bio,
+        education: this.state.education,
+      })
 
     this.props.onClose();
   }
@@ -78,93 +84,122 @@ class EnergizerProfile extends Component {
 
 
   render() {
-    const { classes, onClose } = this.props;
+    const { classes, onClose, wikiResults, energizer:enerObj } = this.props;
+    const { energizer } = enerObj;
+
 
     return (
-      <Dialog open fullWidth onClose={ onClose } maxWidth={ 'sm' }>
+      <Dialog open fullWidth onClose={ onClose } maxWidth={ 'lg' }>
           <DialogTitle>
-            {this.isEmpty(this.props.energizer) ?
-                "New Energizer" : "Update Energizer"}
+                "Review Wiki Results"
          </DialogTitle>
-
 
 
         <ValidatorForm ref="form" onSubmit={ this.onSubmit }>
           <DialogContent>
+          <div>
+             <b>Current Information:</b>
+          </div>
+          <div>
+             Name:  { energizer.firstName } { energizer.lastName }
+          </div>
+          <div>
+             Occupation:   { energizer.occupation}
+          </div>
+          <div>
+             Wiki Page:   { energizer.wikiPage}
+          </div>
+          <div>
+             BornTown:   {energizer.bornTown} , {energizer.bornState}
+          </div>
+          <div>
+             HomeTown:   {energizer.homeTown} , {energizer.homeState}
+          </div>
+          <div>
+             Education:   {energizer.education}
+          </div>
+
+
+          <div>
+             <br/><b>Found on WikiPedia</b>
+          </div>
+
             <TextValidator
               fullWidth
-              label="First Name"
-              value={ this.state.firstName }
+              label="Born Town from Wiki"
+              value={ this.state.bornTown}
               variant="outlined"
-              name="firstName"
+              name="bornTown"
               onChange={this.onChange}
-              validators={ ['required'] }
-              errorMessages={ ['Required'] }
               className={ cx(classes.input) }
             />
 
+
             <TextValidator
               fullWidth
-              label="Last Name"
-              value={ this.state.lastName }
+              label="Born State from Wiki"
+              value={ this.state.bornState}
               variant="outlined"
-              name="lastName"
+              name="bornState"
               onChange={this.onChange}
-              validators={ ['required'] }
-              errorMessages={ ['Required'] }
               className={ cx(classes.input) }
             />
 
 
-
             <TextValidator
               fullWidth
-              label="Occupation"
-              value={ this.state.occupation}
-              variant="outlined"
-              name="occupation"
-              onChange={this.onChange}
-              validators={ ['required'] }
-              errorMessages={ ['Required']}
-              className={ cx(classes.input) }
-            />
-
-            <TextValidator
-              fullWidth
-              label="Wiki Page"
-              value={ this.state.wikiPage}
-              variant="outlined"
-              name="wikiPage"
-              onChange={this.onChange}
-              validators={ ['required'] }
-              errorMessages={ ['Required'] }
-              className={ cx(classes.input) }
-            />
-
-            <TextValidator
-              fullWidth
-              label="Home Town"
+              label="Home Town (can edit)"
               value={ this.state.homeTown}
               variant="outlined"
               name="homeTown"
               onChange={this.onChange}
-              validators={ ['required'] }
-              errorMessages={ ['Required'] }
               className={ cx(classes.input) }
             />
 
 
             <TextValidator
               fullWidth
-              label="Home State"
+              label="Home State (can edit)"
               value={ this.state.homeState}
               variant="outlined"
               name="homeState"
               onChange={this.onChange}
-              validators={ ['required'] }
-              errorMessages={ ['Required'] }
               className={ cx(classes.input) }
             />
+
+
+            <TextValidator
+              fullWidth
+              label="Education from Wiki"
+              value={ this.state.education}
+              variant="outlined"
+              name="education"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+
+            <TextValidator
+              fullWidth
+              label="Bio from Wiki"
+              value={ this.state.bio}
+              variant="outlined"
+              multiline
+              rows="6"
+              name="bio"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+
+            <div>
+                   Wiki Born: { wikiResults.bornTown } , { wikiResults.bornState }
+            </div>
+
+            <div>
+                   Wiki Birthplace: { wikiResults.birthPlaceTown } , { wikiResults.birthPlaceState }
+            </div>
+
 
 
 
@@ -179,11 +214,10 @@ class EnergizerProfile extends Component {
   }
 };
 
-EnergizerProfile.propTypes = {
+ReviewWikiResults.propTypes = {
   energizer: PropTypes.object,
-  createEnergizer: PropTypes.func.isRequired,
   updateEnergizer: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(EnergizerProfile);
+export default withStyles(styles)(ReviewWikiResults);

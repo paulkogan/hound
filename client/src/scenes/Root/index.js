@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect,   Link, } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import EnergizersList from '../EnergizersList';
+import Energizers from '../Energizers';
 import Navigation from '../../components/Navigation';
 //import { CurrentUserProvider } from 'contexts/CurrentUserContext';
 //import * as api from 'services/api';
@@ -75,9 +75,9 @@ class Root extends Component {
               <Router>
                                 <Navigation />
 
-                        <Route  path="/" exact component = {EnergizersList} />
+                        <Route  path="/" exact component = {Energizers} />
                         <Route  path="/new"  component = {showDate} />
-                        <Route  path="/list"  component = {EnergizersList} />
+                        <Route  path="/list"  component = {Energizers} />
 
 
 

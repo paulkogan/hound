@@ -5,25 +5,28 @@ class Energizer extends Model {
     return 'energizers';
   }
 
-  static async create({firstName,lastName, occupation, wikiPage, homeState, homeTown }) {
+  static async create({firstName,lastName, occupation, wikiPage }) {
     return Energizer.query().insert({
       first_name:firstName,
       last_name: lastName,
       occupation,
-      wiki_page: wikiPage,
-      home_state: homeState,
-      home_town: homeTown
+      wiki_page: wikiPage
     }).returning('*');
   }
 
-  static async update({id, firstName,lastName, occupation, wikiPage, homeState, homeTown }) {
+  static async update({id, firstName,lastName, occupation, wikiPage,
+    homeState, homeTown,   bornState, bornTown, education,bio }) {
     return Energizer.query().findById(id).patch({
       first_name:firstName,
       last_name: lastName,
       occupation,
       wiki_page: wikiPage,
       home_state: homeState,
-      home_town: homeTown
+      home_town: homeTown,
+      born_state: bornState,
+      born_town: bornTown,
+      education,
+      bio
     }).returning('*');
   }
 

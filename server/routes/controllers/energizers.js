@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const energizers = await Energizer.all();
-     console.log("Controllers/Energizers/list -> EXAMPLE", JSON.stringify(energizers[0],null,4))
+     //console.log("Controllers/Energizers/list -> EXAMPLE", JSON.stringify(energizers[0],null,4))
 
   res.json({
       data: energizers.map(energizer => ({
@@ -15,8 +15,12 @@ router.get('/', async (req, res) => {
         lastName: energizer.last_name,
         occupation: energizer.occupation,
         wikiPage: energizer.wiki_page,
+        bornState: energizer.born_state,
+        bornTown: energizer.born_town,
         homeState: energizer.home_state,
-        homeTown: energizer.home_town
+        homeTown: energizer.home_town,
+        education: energizer.education,
+        bio: energizer.bio
       })
     )
     });
@@ -32,7 +36,7 @@ router.get('/', async (req, res) => {
 // create energizer
 router.post('/create', async (req, res) => {
   const {
-    firstName, lastName, occupation, wikiPage, homeState, homeTown
+    firstName, lastName, occupation, wikiPage
   } = req.body;
 
   console.log(`/Controllers/energizers/CREATE  - ${JSON.stringify(req.body, null, 4)}`);
@@ -45,8 +49,6 @@ router.post('/create', async (req, res) => {
         lastName,
         occupation,
         wikiPage,
-        homeState,
-        homeTown
     });
   } catch (err) {
     console.log('error........');
@@ -60,7 +62,7 @@ router.post('/create', async (req, res) => {
 // update energizer
 router.post('/update', async (req, res) => {
   const {
-    id, firstName, lastName, occupation, wikiPage, homeState, homeTown
+    id, firstName, lastName, occupation, wikiPage, homeState,   homeTown, bornState, bornTown,  education, bio
   } = req.body;
 
 console.log(`/Controllers/energizers/UPDATE  - ${JSON.stringify(req.body, null, 4)}`);
@@ -73,7 +75,11 @@ console.log(`/Controllers/energizers/UPDATE  - ${JSON.stringify(req.body, null, 
       occupation,
       wikiPage,
       homeState,
-      homeTown
+      homeTown,
+      bornState,
+      bornTown,
+      education,
+      bio
     });
 
   } catch (err) {
