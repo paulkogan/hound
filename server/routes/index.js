@@ -1,11 +1,9 @@
 const server = require('../server');
 
-
-
 // Private API
 const EnergizersController = require('./controllers/energizers');
-const CurrentUserController = require('./controllers/current-user');
-const WebScrapeController = require('./controllers/webscrape');
+const CurrentUserController = require('./controllers/current-users');
+const WebScrapeController = require('./controllers/webscrapes');
 // Public APIs
 
 

@@ -23,6 +23,25 @@ const styles = () => ({
   input: {
     margin: '0.5rem 0',
   },
+fieldSmall: {
+    fontSize: '12px',
+    lineHeight: '14px',
+    color: '#606A74',
+    fontWeight: 'normal',
+    maxWidth: '80%',
+    margin: '0px',
+    textAlign: 'left',
+    contentAlign: 'left'
+  },
+  fieldBig: {
+      fontSize: '12px',
+      lineHeight: '14px',
+      color: '#606A74',
+      fontWeight: 'normal',
+      maxWidth: '100%',
+      margin: '0px',
+    },
+
 });
 
 class EnergizerProfile extends Component {
@@ -98,8 +117,10 @@ class EnergizerProfile extends Component {
 
         <ValidatorForm ref="form" onSubmit={ this.onSubmit }>
           <DialogContent>
+
+
+        <div className={ cx(classes.fieldSmall) } >
             <TextValidator
-              fullWidth
               label="First Name"
               value={ this.state.firstName }
               variant="outlined"
@@ -111,7 +132,6 @@ class EnergizerProfile extends Component {
             />
 
             <TextValidator
-              fullWidth
               label="Last Name"
               value={ this.state.lastName }
               variant="outlined"
@@ -122,10 +142,7 @@ class EnergizerProfile extends Component {
               className={ cx(classes.input) }
             />
 
-
-
             <TextValidator
-              fullWidth
               label="Occupation"
               value={ this.state.occupation}
               variant="outlined"
@@ -136,58 +153,65 @@ class EnergizerProfile extends Component {
               className={ cx(classes.input) }
             />
 
-            <TextValidator
-              fullWidth
-              label="Wiki Page"
-              value={ this.state.wikiPage}
-              variant="outlined"
-              name="wikiPage"
-              onChange={this.onChange}
-              className={ cx(classes.input) }
-            />
 
-            <TextValidator
-              fullWidth
-              label="Born Town"
-              value={ this.state.bornTown}
-              variant="outlined"
-              name="bornTown"
-              onChange={this.onChange}
-              className={ cx(classes.input) }
-            />
+        </div>
 
 
-            <TextValidator
-              fullWidth
-              label="Born State"
-              value={ this.state.bornState}
-              variant="outlined"
-              name="bornState"
-              onChange={this.onChange}
-              className={ cx(classes.input) }
-            />
+
+            <div className={ cx(classes.fieldSmall) } >
+              <TextValidator
+                label="Born Town"
+                value={ this.state.bornTown}
+                variant="outlined"
+                name="bornTown"
+                onChange={this.onChange}
+                className={ cx(classes.input) }
+              />
+
+              <TextValidator
+                label="Born State"
+                value={ this.state.bornState}
+                variant="outlined"
+                name="bornState"
+                onChange={this.onChange}
+                className={ cx(classes.input) }
+              />
+            </div>
 
 
-            <TextValidator
-              fullWidth
-              label="Home Town"
-              value={ this.state.homeTown}
-              variant="outlined"
-              name="homeTown"
-              onChange={this.onChange}
-              className={ cx(classes.input) }
-            />
+
+            <div className={ cx(classes.fieldSmall) } >
+              <TextValidator
+                label="Home Town"
+                value={ this.state.homeTown}
+                variant="outlined"
+                name="homeTown"
+                onChange={this.onChange}
+                className={ cx(classes.input) }
+              />
 
 
-            <TextValidator
-              fullWidth
-              label="Home State"
-              value={ this.state.homeState}
-              variant="outlined"
-              name="homeState"
-              onChange={this.onChange}
-              className={ cx(classes.input) }
-            />
+              <TextValidator
+                label="Home State"
+                value={ this.state.homeState}
+                variant="outlined"
+                name="homeState"
+                onChange={this.onChange}
+                className={ cx(classes.input) }
+              />
+            </div>
+
+
+            <div className={ cx(classes.fieldBig) } >
+                  <TextValidator
+                    fullWidth
+                    label="Wiki Page"
+                    value={ this.state.wikiPage}
+                    variant="outlined"
+                    name="wikiPage"
+                    onChange={this.onChange}
+                  />
+              </div>
 
 
             <TextValidator
@@ -216,7 +240,8 @@ class EnergizerProfile extends Component {
           </DialogContent>
 
           <DialogActions>
-            <Button color="primary" variant="contained" type="submit">Save</Button>
+              <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
+              <Button color="primary" variant="contained" type="submit">Save</Button>
           </DialogActions>
         </ValidatorForm>
       </Dialog>

@@ -10,7 +10,7 @@ import './styles.css';
 const Navigation = ({history, classes, currentUser}) => {
   //const { id: currentUserId, name: currentUserName } = currentUser;
   //const currentUserExists = Boolean(currentUserId);
-
+const houndVersion = process.env.REACT_APP_VERSION
   return (
     <AppBar position="sticky" className="navigation">
       <Toolbar className="toolbar">
@@ -18,7 +18,7 @@ const Navigation = ({history, classes, currentUser}) => {
           <h3 className="hound-head">Energizer Hound</h3>
 
         </Link>
-        <b>v. 1.1</b>
+        <b>v. {houndVersion}</b>
       </Toolbar>
     </AppBar>
   );

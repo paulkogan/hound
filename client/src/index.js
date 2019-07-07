@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Root from './scenes/Root';
 import * as serviceWorker from './serviceWorker';
-//this magically points to /public/index.html
+require('dotenv').config();
+
+
+let version = process.env.REACT_APP_VERSION
+console.log("IN index.js, version is:", version)
+//this magically points to /public/index.html **
 ReactDOM.render(<Root />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

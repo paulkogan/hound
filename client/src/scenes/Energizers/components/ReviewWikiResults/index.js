@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-//import moment from 'moment';
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,6 +20,26 @@ const styles = () => ({
   input: {
     margin: '0.5rem 0',
   },
+fieldSmall: {
+    fontSize: '12px',
+    lineHeight: '14px',
+    color: '#606A74',
+    fontWeight: 'normal',
+    maxWidth: '400px',
+    margin: 'auto',
+    textAlign: 'left',
+    contentAlign: 'left'
+  },
+  fieldBig: {
+      fontSize: '12px',
+      lineHeight: '14px',
+      textTransform: 'uppercase',
+      color: '#606A74',
+      fontWeight: 'normal',
+      maxWidth: '600px',
+      margin: 'auto'
+    },
+
 });
 
 class ReviewWikiResults extends Component {
@@ -91,7 +109,7 @@ class ReviewWikiResults extends Component {
     return (
       <Dialog open fullWidth onClose={ onClose } maxWidth={ 'lg' }>
           <DialogTitle>
-                "Review Wiki Results"
+                Review Wiki Results
          </DialogTitle>
 
 
@@ -107,7 +125,7 @@ class ReviewWikiResults extends Component {
              Occupation:   { energizer.occupation}
           </div>
           <div>
-             Wiki Page:   { energizer.wikiPage}
+             Wiki Page:    <a href = {energizer.wikiPage} target="_blank">{energizer.wikiPage}</a>
           </div>
           <div>
              BornTown:   {energizer.bornTown} , {energizer.bornState}
@@ -124,8 +142,8 @@ class ReviewWikiResults extends Component {
              <br/><b>Found on WikiPedia</b>
           </div>
 
+          <div className={ cx(classes.fieldSmall) } >
             <TextValidator
-              fullWidth
               label="Born Town from Wiki"
               value={ this.state.bornTown}
               variant="outlined"
@@ -134,9 +152,7 @@ class ReviewWikiResults extends Component {
               className={ cx(classes.input) }
             />
 
-
             <TextValidator
-              fullWidth
               label="Born State from Wiki"
               value={ this.state.bornState}
               variant="outlined"
@@ -144,10 +160,10 @@ class ReviewWikiResults extends Component {
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
+        </div>
 
-
+         <div className={ cx(classes.fieldSmall) } >
             <TextValidator
-              fullWidth
               label="Home Town (can edit)"
               value={ this.state.homeTown}
               variant="outlined"
@@ -158,7 +174,6 @@ class ReviewWikiResults extends Component {
 
 
             <TextValidator
-              fullWidth
               label="Home State (can edit)"
               value={ this.state.homeState}
               variant="outlined"
@@ -166,7 +181,7 @@ class ReviewWikiResults extends Component {
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
-
+       </div>
 
             <TextValidator
               fullWidth
@@ -181,7 +196,7 @@ class ReviewWikiResults extends Component {
 
             <TextValidator
               fullWidth
-              label="Bio from Wiki"
+              label="Early Life from Wiki"
               value={ this.state.bio}
               variant="outlined"
               multiline
@@ -206,6 +221,7 @@ class ReviewWikiResults extends Component {
           </DialogContent>
 
           <DialogActions>
+            <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
             <Button color="primary" variant="contained" type="submit">Save</Button>
           </DialogActions>
         </ValidatorForm>

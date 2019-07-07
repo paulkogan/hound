@@ -1,8 +1,15 @@
 import axios from 'axios';
 
 
+let apiBaseURL = process.env.REACT_APP_API_BASE_URL
+let version = process.env.REACT_APP_VERSION
+
+console.log("IN API, backEnd_BaseURL is:", apiBaseURL)
+console.log("IN API, version is:", version)
+
+
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: apiBaseURL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',

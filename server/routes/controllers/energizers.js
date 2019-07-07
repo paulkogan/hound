@@ -2,13 +2,13 @@ const express = require('express');
 const Energizer = require('../../models/energizer');
 const router = express.Router();
 
-
+//list all energizers
 router.get('/', async (req, res) => {
   try {
-    const energizers = await Energizer.all();
+   const energizers = await Energizer.all();
      //console.log("Controllers/Energizers/list -> EXAMPLE", JSON.stringify(energizers[0],null,4))
-
-  res.json({
+     //console.log("Controllers/Energizers/list -> length", energizers.length)
+   res.status(200).json({
       data: energizers.map(energizer => ({
         id: energizer.id,
         firstName: energizer.first_name,
