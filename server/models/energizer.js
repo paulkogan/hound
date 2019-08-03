@@ -14,17 +14,24 @@ class Energizer extends Model {
     }).returning('*');
   }
 
-  static async update({id, firstName,lastName, occupation, wikiPage,
-    homeState, homeTown,   bornState, bornTown, education,bio }) {
+  static async update({id, firstName,lastName,  wikiPage,
+    homeState, homeTown,  bornState, bornTown, currentTown, currentState, earlyLife, playsWith,
+    ethnicity, gender, occupation, education, bio }) {
     return Energizer.query().findById(id).patch({
       first_name:firstName,
       last_name: lastName,
-      occupation,
       wiki_page: wikiPage,
       home_state: homeState,
       home_town: homeTown,
       born_state: bornState,
       born_town: bornTown,
+      current_town: currentTown,
+      current_state: currentState,
+      early_life: earlyLife,
+      plays_with: playsWith,
+      ethnicity,
+      gender,
+      occupation,
       education,
       bio
     }).returning('*');

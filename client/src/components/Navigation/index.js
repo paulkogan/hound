@@ -11,6 +11,7 @@ const Navigation = ({history, classes, currentUser}) => {
   //const { id: currentUserId, name: currentUserName } = currentUser;
   //const currentUserExists = Boolean(currentUserId);
 const houndVersion = process.env.REACT_APP_VERSION
+
   return (
     <AppBar position="sticky" className="navigation">
       <Toolbar className="toolbar">
@@ -18,7 +19,7 @@ const houndVersion = process.env.REACT_APP_VERSION
           <h3 className="hound-head">Energizer Hound</h3>
 
         </Link>
-        <b>v. {houndVersion}</b>
+        <b>ver. {houndVersion}</b>
       </Toolbar>
     </AppBar>
   );

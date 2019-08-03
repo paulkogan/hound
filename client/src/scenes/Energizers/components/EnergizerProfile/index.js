@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 const styles = () => ({
   input: {
     margin: '0.5rem 0',
+    padding: '5px'
   },
 fieldSmall: {
     fontSize: '12px',
@@ -30,6 +31,7 @@ fieldSmall: {
     fontWeight: 'normal',
     maxWidth: '80%',
     margin: '0px',
+    padding: '0px',
     textAlign: 'left',
     contentAlign: 'left'
   },
@@ -53,12 +55,18 @@ class EnergizerProfile extends Component {
     this.state = {
       firstName: energizer.firstName || '',
       lastName: energizer.lastName || '',
-      occupation: energizer.occupation || '',
       wikiPage: energizer.wikiPage || '',
       homeTown: energizer.homeTown || '',
       homeState: energizer.homeState || '',
       bornTown: energizer.bornTown || '',
       bornState: energizer.bornState || '',
+      currentTown : energizer.currentTown || '',
+      currentState : energizer.currentState || '',
+      earlyLife: energizer.earlyLife || '',
+      playsWith: energizer.playsWith || '',
+      ethnicity: energizer.ethnicity|| '',
+      gender: energizer.gender || '',
+      occupation: energizer.occupation || '',
       education: energizer.education || '',
       bio: energizer.bio || '',
     };
@@ -79,12 +87,18 @@ class EnergizerProfile extends Component {
         id: energizer.id,
         firstName: this.state.firstName,
         lastName: this.state.lastName,
-        occupation: this.state.occupation,
         wikiPage: this.state.wikiPage,
         homeTown: this.state.homeTown,
         homeState: this.state.homeState,
         bornTown: this.state.bornTown,
         bornState: this.state.bornState,
+        currentTown : this.state.currentTown || '',
+        currentState : this.state.currentState || '',
+        earlyLife: this.state.earlyLife || '',
+        playsWith: this.state.playsWith || '',
+        ethnicity: this.state.ethnicity|| '',
+        gender: this.state.gender || '',
+        occupation: this.state.occupation,
         education: this.state.education,
         bio: this.state.bio
 
@@ -121,7 +135,7 @@ class EnergizerProfile extends Component {
 
         <div className={ cx(classes.fieldSmall) } >
             <TextValidator
-              label="First Name"
+              label="First Name *"
               value={ this.state.firstName }
               variant="outlined"
               name="firstName"
@@ -132,7 +146,7 @@ class EnergizerProfile extends Component {
             />
 
             <TextValidator
-              label="Last Name"
+              label="Last Name *"
               value={ this.state.lastName }
               variant="outlined"
               name="lastName"
@@ -143,7 +157,7 @@ class EnergizerProfile extends Component {
             />
 
             <TextValidator
-              label="Occupation"
+              label="Occupation *"
               value={ this.state.occupation}
               variant="outlined"
               name="occupation"
@@ -153,9 +167,28 @@ class EnergizerProfile extends Component {
               className={ cx(classes.input) }
             />
 
+            <TextValidator
+              label="Plays With (band/team)"
+              value={ this.state.playsWith}
+              variant="outlined"
+              name="playsWith"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
 
         </div>
 
+        <div className={ cx(classes.fieldBig) } >
+              <TextValidator
+                fullWidth
+                label="Wiki Page *"
+                value={ this.state.wikiPage}
+                variant="outlined"
+                name="wikiPage"
+                onChange={this.onChange}
+              />
+        </div>
 
 
             <div className={ cx(classes.fieldSmall) } >
@@ -202,16 +235,29 @@ class EnergizerProfile extends Component {
             </div>
 
 
-            <div className={ cx(classes.fieldBig) } >
-                  <TextValidator
-                    fullWidth
-                    label="Wiki Page"
-                    value={ this.state.wikiPage}
-                    variant="outlined"
-                    name="wikiPage"
-                    onChange={this.onChange}
-                  />
-              </div>
+
+            <div className={ cx(classes.fieldSmall) } >
+              <TextValidator
+                label="Current Town"
+                value={ this.state.currentTown}
+                variant="outlined"
+                name="currentTown"
+                onChange={this.onChange}
+                className={ cx(classes.input) }
+              />
+
+
+              <TextValidator
+                label="Current State"
+                value={ this.state.currentState}
+                variant="outlined"
+                name="currentState"
+                onChange={this.onChange}
+                className={ cx(classes.input) }
+              />
+            </div>
+
+
 
 
             <TextValidator
@@ -220,6 +266,18 @@ class EnergizerProfile extends Component {
               value={ this.state.education}
               variant="outlined"
               name="education"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+            <TextValidator
+              fullWidth
+              label="Early Life"
+              value={ this.state.earlyLife}
+              variant="outlined"
+              multiline
+              rows="6"
+              name="earlyLife"
               onChange={this.onChange}
               className={ cx(classes.input) }
             />

@@ -42,11 +42,12 @@ const styles = () => ({
   },
   panelDetails: {
     borderTop: '1px solid rgba(96,106,116,0.4)',
-    padding: '24px 0',
+    padding: '0px 0',
     textAlign: "left",
   },
   panelDetailsSection: {
-    paddingBottom: '34px',
+    paddingTop: '5px',
+    paddingBottom: '5px',
     paddingLeft: '60px',
     textAlign: "left",
   },
@@ -68,7 +69,7 @@ const styles = () => ({
     textAlign: "left",
   },
   panelActions: {
-    padding: '24px',
+    padding: '7px',
     borderTop: '1px solid rgba(96,106,116,0.4)',
   },
   actions: {
@@ -98,7 +99,7 @@ class ExpansionList extends Component {
               <ExpansionPanelDetails className={cx(classes.panelDetails)}>
                 <Grid container justify={'center'}>
 
-                  <Grid item xs={6} lg={3}>
+                  <Grid item xs={4} lg={4}>
                     <div className={cx(classes.panelDetailsSection)}>
                       <h4 className={cx(classes.panelDetailsSectionTitle)}>
                         Name
@@ -109,7 +110,7 @@ class ExpansionList extends Component {
                     </div>
                   </Grid>
 
-                  <Grid item xs={6} lg={3}>
+                  <Grid item xs={4} lg={4}>
                     <div className={cx(classes.panelDetailsSection)}>
                       <h4 className={cx(classes.panelDetailsSectionTitle)}>
                         Occupation
@@ -121,30 +122,19 @@ class ExpansionList extends Component {
                   </Grid>
 
 
-                  <Grid item xs={6} lg={3}>
+                  <Grid item xs={4} lg={4}>
                     <div className={cx(classes.panelDetailsSection)}>
                       <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                        Wiki Page
-                      </h4>
-                      <span className={cx(classes.panelDetailsSectionText)}>
-                        {energizer.wikiPage}
-                      </span>
-                    </div>
-                  </Grid>
 
-                   <Grid item xs={6} lg={3}>
-                    <div className={cx(classes.panelDetailsSection)}>
-                      <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                        Education
                       </h4>
                       <span className={cx(classes.panelDetailsSectionText)}>
-                        {energizer.education}
+                        {'--'}
                       </span>
                     </div>
                   </Grid>
 
 
-                  <Grid item xs={6} lg={3}>
+                  <Grid item xs={4} lg={4}>
                     <div className={cx(classes.panelDetailsSection)}>
                       <h4 className={cx(classes.panelDetailsSectionTitle)}>
                         Born Town
@@ -157,7 +147,7 @@ class ExpansionList extends Component {
 
 
 
-                  <Grid item xs={6} lg={3}>
+                  <Grid item xs={6} lg={4}>
                     <div className={cx(classes.panelDetailsSection)}>
                       <h4 className={cx(classes.panelDetailsSectionTitle)}>
                         Home Town
@@ -168,6 +158,20 @@ class ExpansionList extends Component {
                     </div>
                   </Grid>
 
+
+                  <Grid item xs={4} lg={4}>
+                    <div className={cx(classes.panelDetailsSection)}>
+                      <h4 className={cx(classes.panelDetailsSectionTitle)}>
+                        Current Town
+                      </h4>
+                      <span className={cx(classes.panelDetailsSectionText)}>
+                      {energizer.currentTown ?
+                        energizer.currentTown+ ", "+energizer.currentState : "  "
+                      }
+
+                      </span>
+                    </div>
+                  </Grid>
 
 
                 </Grid>

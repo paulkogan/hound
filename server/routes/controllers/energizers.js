@@ -13,12 +13,18 @@ router.get('/', async (req, res) => {
         id: energizer.id,
         firstName: energizer.first_name,
         lastName: energizer.last_name,
-        occupation: energizer.occupation,
         wikiPage: energizer.wiki_page,
         bornState: energizer.born_state,
         bornTown: energizer.born_town,
         homeState: energizer.home_state,
         homeTown: energizer.home_town,
+        currentTown: energizer.current_town,
+        currentState: energizer.current_state,
+        earlyLife: energizer.early_life,
+        playsWith: energizer.plays_with,
+        ethnicity: energizer.ethnicity,
+        gender: energizer.gender,
+        occupation: energizer.occupation,
         education: energizer.education,
         bio: energizer.bio
       })
@@ -62,7 +68,23 @@ router.post('/create', async (req, res) => {
 // update energizer
 router.post('/update', async (req, res) => {
   const {
-    id, firstName, lastName, occupation, wikiPage, homeState,   homeTown, bornState, bornTown,  education, bio
+    id,
+    firstName,
+    lastName,
+    wikiPage,
+    homeState,
+    homeTown,
+    bornState,
+    bornTown,
+    currentTown,
+    currentState,
+    earlyLife,
+    playsWith,
+    ethnicity,
+    gender,
+    occupation,
+    education,
+    bio
   } = req.body;
 
 console.log(`/Controllers/energizers/UPDATE  - ${JSON.stringify(req.body, null, 4)}`);
@@ -72,12 +94,18 @@ console.log(`/Controllers/energizers/UPDATE  - ${JSON.stringify(req.body, null, 
       id,
       firstName,
       lastName,
-      occupation,
       wikiPage,
       homeState,
       homeTown,
       bornState,
       bornTown,
+      currentTown,
+      currentState,
+      earlyLife,
+      playsWith,
+      ethnicity,
+      gender,
+      occupation,
       education,
       bio
     });

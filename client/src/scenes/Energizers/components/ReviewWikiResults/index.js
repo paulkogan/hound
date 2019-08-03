@@ -25,7 +25,7 @@ fieldSmall: {
     lineHeight: '14px',
     color: '#606A74',
     fontWeight: 'normal',
-    maxWidth: '400px',
+    maxWidth: '600px',
     margin: 'auto',
     textAlign: 'left',
     contentAlign: 'left'
@@ -36,11 +36,43 @@ fieldSmall: {
       textTransform: 'uppercase',
       color: '#606A74',
       fontWeight: 'normal',
-      maxWidth: '600px',
+      maxWidth: '800px',
       margin: 'auto'
     },
 
+    parentCont: {
+      display: 'inline-block',
+      width: '100%',
+      border: '1px solid blue',
+      padding: '10px'
+
+    },
+
+    textBlockLeft: {
+      float: 'left',
+      textAlign: 'left',
+      contentAlign: 'left',
+      marginRight: '30px'
+    },
+
+
+    textBlockRight: {
+      float: 'right',
+      textAlign: 'left',
+      contentAlign: 'left',
+      marginRight: '20px'
+    },
+
+
+
 });
+
+
+//  display: 'flex'
+// float: 'left',
+// clear: 'none',
+// margin: 'auto',
+
 
 class ReviewWikiResults extends Component {
   constructor(props) {
@@ -57,16 +89,13 @@ class ReviewWikiResults extends Component {
       wikiPage: energizer.wikiPage || '',
       homeTown: energizer.homeTown || '',
       homeState: energizer.homeState || '',
-      bornTown: wikiResults.bornTown|| '',
-      bornState: wikiResults.bornState|| '',
-      education: wikiResults.education || '',
-      bio: wikiResults.earlyLife || '',
-      wikiBirthPlaceTown: wikiResults.birthPlaceTown,
-      wikiBirthPlaceState: wikiResults.birthPlaceState,
-      wikiEducation: wikiResults.education,
-      wikiBornTown: wikiResults.bornTown,
-      wikiBornState: wikiResults.bornState,
-      wikiEarlyLife: wikiResults.earlyLife
+      bornTown: wikiResults.bornTown || wikiResults.birthPlaceTown || energizer.bornTown|| '',
+      bornState: wikiResults.bornState || wikiResults.birthPlaceState || energizer.bornState|| '',
+      currentTown: energizer.currentTown|| '',
+      currentState: energizer.currentState|| '',
+      education: wikiResults.education || energizer.education || '',
+      bio: wikiResults.bio || energizer.bio || '',
+      earlyLife: wikiResults.earlyLife || energizer.earlyLife || ''
     };
   }
 
@@ -84,7 +113,10 @@ class ReviewWikiResults extends Component {
         homeState: this.state.homeState,
         bornTown: this.state.bornTown,
         bornState: this.state.bornState,
+        currentTown: this.state.currentTown,
+        currentState: this.state.currentState,
         bio: this.state.bio,
+        earlyLife: this.state.earlyLife,
         education: this.state.education,
       })
 
@@ -113,38 +145,62 @@ class ReviewWikiResults extends Component {
          </DialogTitle>
 
 
-        <ValidatorForm ref="form" onSubmit={ this.onSubmit }>
-          <DialogContent>
-          <div>
-             <b>Current Information:</b>
-          </div>
-          <div>
-             Name:  { energizer.firstName } { energizer.lastName }
-          </div>
-          <div>
-             Occupation:   { energizer.occupation}
-          </div>
-          <div>
-             Wiki Page:    <a href = {energizer.wikiPage} target="_blank">{energizer.wikiPage}</a>
-          </div>
-          <div>
-             BornTown:   {energizer.bornTown} , {energizer.bornState}
-          </div>
-          <div>
-             HomeTown:   {energizer.homeTown} , {energizer.homeState}
-          </div>
-          <div>
-             Education:   {energizer.education}
+    <ValidatorForm ref="form" onSubmit={ this.onSubmit }>
+      <DialogContent>
+
+     <div className = { cx(classes.parentCont) }>
+          <div className = { cx(classes.textBlockLeft) }>
+                    <div>
+                       <b>Current Information:</b>
+                    </div>
+                    <div>
+                       Name:  { energizer.firstName } { energizer.lastName }
+                    </div>
+                    <div>
+                       Occupation:   { energizer.occupation}
+                    </div>
+                    <div>
+                       Wiki Page:    <a href = {energizer.wikiPage} target="_blank">{energizer.wikiPage}</a>
+                    </div>
+                    <div>
+                       BornTown:   {energizer.bornTown}, {energizer.bornState}
+                    </div>
+                    <div>
+                       HomeTown:   {energizer.homeTown}, {energizer.homeState}
+                    </div>
+                    <div>
+                       CurrentTown:   {energizer.currentTown}, {energizer.currentState}
+                    </div>
+                    <div>
+                       Education:   {energizer.education}
+                    </div>
           </div>
 
 
-          <div>
-             <br/><b>Found on WikiPedia</b>
-          </div>
+            <div className = { cx(classes.textBlockRight) }>
+                  <div>
+                     <b>Found on WikiPedia:</b>
+                  </div>
+                  <div>
+                         Born: { wikiResults.bornTown }, { wikiResults.bornState }
+                  </div>
 
-          <div className={ cx(classes.fieldSmall) } >
+                  <div>
+                         Birthplace: { wikiResults.birthPlaceTown }, { wikiResults.birthPlaceState }
+                  </div>
+                  <div>
+                         Education: { wikiResults.education }
+                  </div>
+            </div>
+
+
+     </div>
+
+
+
+        <div className={ cx(classes.fieldSmall) } >
             <TextValidator
-              label="Born Town from Wiki"
+              label="Born Town (can edit)"
               value={ this.state.bornTown}
               variant="outlined"
               name="bornTown"
@@ -153,7 +209,7 @@ class ReviewWikiResults extends Component {
             />
 
             <TextValidator
-              label="Born State from Wiki"
+              label="Born State (can edit)"
               value={ this.state.bornState}
               variant="outlined"
               name="bornState"
@@ -197,23 +253,16 @@ class ReviewWikiResults extends Component {
             <TextValidator
               fullWidth
               label="Early Life from Wiki"
-              value={ this.state.bio}
+              value={ this.state.earlyLife}
               variant="outlined"
               multiline
               rows="6"
-              name="bio"
+              name="earlyLife"
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
 
 
-            <div>
-                   Wiki Born: { wikiResults.bornTown } , { wikiResults.bornState }
-            </div>
-
-            <div>
-                   Wiki Birthplace: { wikiResults.birthPlaceTown } , { wikiResults.birthPlaceState }
-            </div>
 
 
 
