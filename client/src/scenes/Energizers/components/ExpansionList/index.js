@@ -98,80 +98,77 @@ class ExpansionList extends Component {
 
               <ExpansionPanelDetails className={cx(classes.panelDetails)}>
                 <Grid container justify={'center'}>
+                            <Grid item xs={4} lg={4}>
+                              <div className={cx(classes.panelDetailsSection)}>
+                                <h4 className={cx(classes.panelDetailsSectionTitle)}>
+                                  Name
+                                </h4>
+                                <span className={cx(classes.panelDetailsSectionText)}>
+                                    {energizer.firstName} {energizer.lastName}
+                                </span>
+                              </div>
+                            </Grid>
 
-                  <Grid item xs={4} lg={4}>
-                    <div className={cx(classes.panelDetailsSection)}>
-                      <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                        Name
-                      </h4>
-                      <span className={cx(classes.panelDetailsSectionText)}>
-                          {energizer.firstName} {energizer.lastName}
-                      </span>
-                    </div>
-                  </Grid>
-
-                  <Grid item xs={4} lg={4}>
-                    <div className={cx(classes.panelDetailsSection)}>
-                      <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                        Occupation
-                      </h4>
-                      <span className={cx(classes.panelDetailsSectionText)}>
-                        {energizer.occupation || '--'}
-                      </span>
-                    </div>
-                  </Grid>
-
-
-                  <Grid item xs={4} lg={4}>
-                    <div className={cx(classes.panelDetailsSection)}>
-                      <h4 className={cx(classes.panelDetailsSectionTitle)}>
-
-                      </h4>
-                      <span className={cx(classes.panelDetailsSectionText)}>
-                        {'--'}
-                      </span>
-                    </div>
-                  </Grid>
+                            <Grid item xs={4} lg={4}>
+                              <div className={cx(classes.panelDetailsSection)}>
+                                <h4 className={cx(classes.panelDetailsSectionTitle)}>
+                                  Occupation
+                                </h4>
+                                <span className={cx(classes.panelDetailsSectionText)}>
+                                  {energizer.occupation || '--'}
+                                </span>
+                              </div>
+                            </Grid>
 
 
-                  <Grid item xs={4} lg={4}>
-                    <div className={cx(classes.panelDetailsSection)}>
-                      <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                        Born Town
-                      </h4>
-                      <span className={cx(classes.panelDetailsSectionText)}>
-                        {energizer.bornTown}, {energizer.bornState}
-                      </span>
-                    </div>
-                  </Grid>
+                            <Grid item xs={4} lg={4}>
+                              <div className={cx(classes.panelDetailsSection)}>
+                                <h4 className={cx(classes.panelDetailsSectionTitle)}>
+                                </h4>
+                                <span className={cx(classes.panelDetailsSectionText)}>
+                                  {'--'}
+                                </span>
+                              </div>
+                            </Grid>
+
+                        <Grid item xs={4} lg={4}>
+                          <div className={cx(classes.panelDetailsSection)}>
+                            <h4 className={cx(classes.panelDetailsSectionTitle)}>
+                              Born Town
+                            </h4>
+                            <span className={cx(classes.panelDetailsSectionText)}>
+                              {energizer.bornTown}, {energizer.bornState}
+                            </span>
+                          </div>
+                        </Grid>
 
 
 
-                  <Grid item xs={6} lg={4}>
-                    <div className={cx(classes.panelDetailsSection)}>
-                      <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                        Home Town
-                      </h4>
-                      <span className={cx(classes.panelDetailsSectionText)}>
-                        {energizer.homeTown}, {energizer.homeState}
-                      </span>
-                    </div>
-                  </Grid>
+                        <Grid item xs={4} lg={4}>
+                          <div className={cx(classes.panelDetailsSection)}>
+                            <h4 className={cx(classes.panelDetailsSectionTitle)}>
+                              Home Town
+                            </h4>
+                            <span className={cx(classes.panelDetailsSectionText)}>
+                              {energizer.homeTown}, {energizer.homeState}
+                            </span>
+                          </div>
+                        </Grid>
 
 
-                  <Grid item xs={4} lg={4}>
-                    <div className={cx(classes.panelDetailsSection)}>
-                      <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                        Current Town
-                      </h4>
-                      <span className={cx(classes.panelDetailsSectionText)}>
-                      {energizer.currentTown ?
-                        energizer.currentTown+ ", "+energizer.currentState : "  "
-                      }
+                        <Grid item xs={4} lg={4}>
+                          <div className={cx(classes.panelDetailsSection)}>
+                            <h4 className={cx(classes.panelDetailsSectionTitle)}>
+                              Current Town
+                            </h4>
+                            <span className={cx(classes.panelDetailsSectionText)}>
+                            {energizer.currentTown ?
+                              energizer.currentTown+ ", "+energizer.currentState : "  "
+                            }
 
-                      </span>
-                    </div>
-                  </Grid>
+                            </span>
+                          </div>
+                        </Grid>
 
 
                 </Grid>

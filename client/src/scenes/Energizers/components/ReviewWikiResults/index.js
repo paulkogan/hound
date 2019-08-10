@@ -19,6 +19,7 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = () => ({
   input: {
     margin: '0.5rem 0',
+    paddingRight: '5px'
   },
 fieldSmall: {
     fontSize: '12px',
@@ -239,29 +240,62 @@ class ReviewWikiResults extends Component {
             />
        </div>
 
+
+       <div className={ cx(classes.fieldSmall) } >
+          <TextValidator
+            label="Current Town (can edit)"
+            value={ this.state.currentTown}
+            variant="outlined"
+            name="currentTown"
+            onChange={this.onChange}
+            className={ cx(classes.input) }
+          />
+
+
+          <TextValidator
+            label="Current State (can edit)"
+            value={ this.state.currentState}
+            variant="outlined"
+            name="currentState"
+            onChange={this.onChange}
+            className={ cx(classes.input) }
+          />
+     </div>
+
+     <div className={ cx(classes.fieldSmall) } >
             <TextValidator
-              fullWidth
-              label="Education from Wiki"
+              label="Education"
               value={ this.state.education}
               variant="outlined"
               name="education"
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
-
+    </div>
 
             <TextValidator
               fullWidth
-              label="Early Life from Wiki"
+              label="Early Life"
               value={ this.state.earlyLife}
               variant="outlined"
               multiline
-              rows="6"
+              rows="12"
               name="earlyLife"
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
 
+            <TextValidator
+              fullWidth
+              label="Bio"
+              value={ this.state.bio}
+              variant="outlined"
+              multiline
+              rows="12"
+              name="bio"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
 
 
 
