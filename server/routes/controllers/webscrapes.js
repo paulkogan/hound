@@ -37,57 +37,29 @@ router.post('/', async (req, res) => {
     let earlyLife= $('.mw-parser-output').find('#Early_life').parent().next().text()
     let birthPlaceTown = "no match"
     let birthPlaceState = "no match"
+
+  //early life ==============  
     var bigEarly = $('.mw-parser-output').find('#Early_life').parent().nextUntil('h2', "p")
-
-
     console.log("BIG EARLY: ");
     let bigEarlyText = ""
     $(bigEarly).each( function( index, element ){
             //console.log( $( this ).text() );
             bigEarlyText += $( this ).text()+"\n"
     });
+    bigEarlyText = bigEarlyText.replace(/\[\d{1,2}\]/g, "");
+
+
+//bio ==============
    var topBio = $('.mw-parser-output').find('p').eq(1).text()
    var topBio2 = $('.mw-parser-output').find('p').eq(1).nextUntil('div', 'p')
 
+   console.log("ALL ELEMENTS OF TOPBIO2: ");
+   $(topBio2).each( function( index, element ){
+           console.log( $( this ).text() );
+           topBio += "\n"+$( this ).text()
+   });
 
-
-    // var topBio = $('.mw-parser-output').find('.mw-empty-elt').nextUntil('div', 'p')
-    // var topBio2 = $('.mw-parser-output').find('p').eq(0).nextUntil('div', 'p')
-    // var topBio3 = $('.mw-parser-output').find('p').eq(1).nextUntil('div', 'p')
-  //  var topBio3 = $('.mw-parser-output').find('.infobox biography vcard').nextUntil('.toc', 'p')
-
-
-
-  //  var topBio3 = $('.mw-parser-output').find('p').eq(1).text()
-    console.log("TB - length: "+topBio.length)
-    console.log("TB2 - length: "+topBio2.length)
-    //console.log("TB3 - length: "+topBio3.length)
-
-    //console.log("top_Bio ",topBio);
-    //console.log("top_Bio2 ",topBio2);
-    //console.log("top_Bio3 ",topBio3);
-
-
-    // console.log("ALL ELEMENTS OF TOPBIO: ");
-    // $(topBio).each( function( index, element ){
-    //         console.log( $( this ).text() );
-    //         //bigEarlyText += $( this ).text()+"\n"
-    // });
-
-
-    console.log("ALL ELEMENTS OF TOPBIO2: ");
-    $(topBio2).each( function( index, element ){
-            console.log( $( this ).text() );
-            topBio += "\n"+$( this ).text()
-    });
-
-    // console.log("ALL ELEMENTS OF TOPBIO3: ");
-    // $(topBio3).each( function( index, element ){
-    //         console.log( $( this ).text() );
-    //         //bigEarlyText += $( this ).text()+"\n"
-    // });
-
-
+   topBio = topBio.replace(/\[\d{1,2}\]/g, "");
 
     console.log("BirthplaceText: ",birthPlaceText);
     console.log("BirthplaceTitle: ",birthPlaceTitle);
@@ -96,12 +68,6 @@ router.post('/', async (req, res) => {
     console.log("bornState: ",bornState);
     //console.log("ele: ",ele);
     //console.log("early_life: ",earlyLife);
-
-
-
-
-
-
 
 
     if (birthPlaceTitle && birthPlaceTitle.indexOf(",")>0 ) {
@@ -126,7 +92,7 @@ router.post('/', async (req, res) => {
                      earlyLife: bigEarlyText|| earlyLife || ele || "no match",
                      bio: topBio
     }
-    //console.log("wikiFound:  ", wikiFound);
+    console.log("wikiFound:  ", wikiFound);
     //return wikiFound
 
   } catch (err) {
@@ -140,6 +106,39 @@ router.post('/', async (req, res) => {
 
 
 module.exports = router;
+
+
+
+
+    // var topBio = $('.mw-parser-output').find('.mw-empty-elt').nextUntil('div', 'p')
+    // var topBio2 = $('.mw-parser-output').find('p').eq(0).nextUntil('div', 'p')
+    // var topBio3 = $('.mw-parser-output').find('p').eq(1).nextUntil('div', 'p')
+  //  var topBio3 = $('.mw-parser-output').find('.infobox biography vcard').nextUntil('.toc', 'p')
+
+
+
+  //  var topBio3 = $('.mw-parser-output').find('p').eq(1).text()
+    //console.log("TB - length: "+topBio.length)
+    //console.log("TB2 - length: "+topBio2.length)
+    //console.log("TB3 - length: "+topBio3.length)
+
+    //console.log("top_Bio ",topBio);
+    //console.log("top_Bio2 ",topBio2);
+    //console.log("top_Bio3 ",topBio3);
+
+
+    // console.log("ALL ELEMENTS OF TOPBIO: ");
+    // $(topBio).each( function( index, element ){
+    //         console.log( $( this ).text() );
+    //         //bigEarlyText += $( this ).text()+"\n"
+    // });
+
+
+
+
+
+
+
 
 
     // //let earlyLifePara= $('.mw-parser-output').find('#Early_life').parent().find('p').text()
