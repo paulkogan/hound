@@ -30,6 +30,7 @@ router.post('/', async (req, res) => {
     let birthPlaceTitle = $('.birthplace').find('a').attr('title')
 
     let education= $('th:contains("Education")').next().text()
+    let almaMater = $('th:contains("Alma")').next().text()
     let bornTown= $('th:contains("Born")').next().find('a').first().text()
     let bornState= $('th:contains("Born")').next().find('a').last().text()
     let ele= $('.mw-parser-output').find('#Early_life_and_education').parent().next().text()
@@ -38,7 +39,7 @@ router.post('/', async (req, res) => {
     let birthPlaceTown = "no match"
     let birthPlaceState = "no match"
 
-  //early life ==============  
+  //early life ==============
     var bigEarly = $('.mw-parser-output').find('#Early_life').parent().nextUntil('h2', "p")
     console.log("BIG EARLY: ");
     let bigEarlyText = ""
@@ -64,6 +65,7 @@ router.post('/', async (req, res) => {
     console.log("BirthplaceText: ",birthPlaceText);
     console.log("BirthplaceTitle: ",birthPlaceTitle);
     console.log("Education: ",education);
+    console.log("Alma mater: ",almaMater);
     console.log("bornTown: ",bornTown);
     console.log("bornState: ",bornState);
     //console.log("ele: ",ele);
@@ -87,13 +89,14 @@ router.post('/', async (req, res) => {
                      birthPlaceTown,
                      birthPlaceState,
                      education,
+                     almaMater,
                      bornTown,
                      bornState,
                      earlyLife: bigEarlyText|| earlyLife || ele || "no match",
                      bio: topBio
     }
-    console.log("wikiFound:  ", wikiFound);
-    //return wikiFound
+    //console.log("wikiFound:  ", wikiFound);
+    //return wikiFound -- need to return witha 200 status
 
   } catch (err) {
     console.log('error........');
