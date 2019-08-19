@@ -31,6 +31,22 @@ fieldSmall: {
     textAlign: 'left',
     contentAlign: 'left'
   },
+
+
+  fieldMed: {
+      fontSize: '12px',
+      lineHeight: '14px',
+      color: '#606A74',
+      fontWeight: 'normal',
+      maxWidth: '900px',
+      margin: 'auto',
+      textAlign: 'left',
+      contentAlign: 'left',
+      marginLeft: '208px'
+
+    },
+
+
   fieldBig: {
       fontSize: '12px',
       lineHeight: '14px',
@@ -94,7 +110,7 @@ class ReviewWikiResults extends Component {
       bornState: wikiResults.bornState || wikiResults.birthPlaceState || energizer.bornState|| '',
       currentTown: energizer.currentTown|| '',
       currentState: energizer.currentState|| '',
-      education: wikiResults.education || energizer.education || '',
+      education: wikiResults.almaMater || wikiResults.education || energizer.education || '',
       bio: wikiResults.bio || energizer.bio || '',
       earlyLife: wikiResults.earlyLife || energizer.earlyLife || ''
     };
@@ -192,6 +208,9 @@ class ReviewWikiResults extends Component {
                   <div>
                          Education: { wikiResults.education }
                   </div>
+                  <div>
+                         Alma Mater: { wikiResults.almaMater}
+                  </div>
             </div>
 
 
@@ -262,7 +281,7 @@ class ReviewWikiResults extends Component {
           />
      </div>
 
-     <div className={ cx(classes.fieldSmall) } >
+     <div className={ cx(classes.fieldMed) } >
             <TextValidator
               label="Education"
               value={ this.state.education}

@@ -39,6 +39,8 @@ const styles = () => ({
   },
   toolbar: {
     paddingLeft: '18rem',
+    paddingRight: '18rem',
+    marginRight: '20px',
     display: 'flex',
     position: 'relative',
   },

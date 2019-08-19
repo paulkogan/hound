@@ -12,19 +12,26 @@ import * as api from '../../services/api';
 
 class Energizers extends Component {
 
-  state = {
-    isLoading: true,
-    openEditModal:false,
-    openReviewWikiModal:false,
-    openSearchModal:false,
-    energizerUnderEdit : {},
-    wikiResults: {},
-    energizers: [],
-    filteredEnergizers: [],
-    searchTerm: " "
+
+  constructor(props) {
+      super(props);
+
+      this.state = {
+        isLoading: true,
+        openEditModal:false,
+        openReviewWikiModal:false,
+        openSearchModal:false,
+        energizerUnderEdit : {},
+        wikiResults: {},
+        energizers: [],
+        filteredEnergizers: [],
+        searchTerm: "none"
+      }
   }
 
+
   async componentDidMount() {
+
       this.refreshEnergizers()
   }
 
@@ -34,8 +41,7 @@ async refreshEnergizers() {
   this.setState({ isLoading: true });
   const energizers = await api.fetchEnergizers();
   this.setState({ isLoading: false,
-                  energizers,
-                  filteredEnergizers: energizers
+                  energizers
   });
 
 }
@@ -50,21 +56,14 @@ async refreshEnergizers() {
       this.setState({ energizerUnderEdit: {}, openEditModal: true });
   };
 
-  onOpenSearch = () => {
-      this.setState({ openSearchModal: true });
-  };
+  // onOpenSearch = () => {
+  //     this.setState({ openSearchModal: true });
+  // };
 
 
-  doSearch = async searchTerm => {
-      const {energizers}  = this.state
-      let filteredEnergizers = energizers.filter (ezr => {
-              return ezr.bornState.toLowerCase().includes(searchTerm.toLowerCase())
-              //return ezr.homeState == "")
-
-      })
-      this.setState({ searchTerm, filteredEnergizers });
-  };
-
+  // doSearch = async searchTerm => {
+  //     this.setState({ openSearchModal: true });
+  // };
 
   onStartScrapeWiki = async  energizer  => {
       try {
@@ -116,14 +115,30 @@ async refreshEnergizers() {
 
 
 
+//search
+handleChange = event => {
+    const { Energizers } = this.state;
+    const searchedEnergizerName = event.target.value.toLowerCase();
 
+    if (searchedEnergizerName) {
+      this.setState({
+        filteredEnergizers: Energizers.filter(
+          Energizer =>
+            Energizer.name &&
+            Energizer.name.toLowerCase().includes(searchedEnergizerName)
+        ),
+      });
+    } else {
+      this.setState({ filteredEnergizers: Energizers });
+    }
+  };
 
 onDialogClose = () => {
   this.setState({
     openEditModal: false,
     openReviewWikiModal: false,
+    openSearchModal: false,
     energizerUnderEdit: {},
-    openSearchModal: false
   });
 };
 
@@ -131,7 +146,7 @@ onDialogClose = () => {
 
   render() {
     const { classes } = this.props;
-    const { energizers, filteredEnergizers, searchTerm, wikiResults, openSearchModal, energizerUnderEdit, openEditModal, openReviewWikiModal} = this.state;
+    const { energizers, searchTerm, wikiResults, energizerUnderEdit, openEditModal, openSearchModal, openReviewWikiModal} = this.state;
 
     return (
       <div className={cx(classes.root)}>
@@ -139,37 +154,9 @@ onDialogClose = () => {
           <h1 className={cx(classes.title)}>Energizers</h1>
         </header>
 
-        <div className={cx(classes.actions)}>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={this.onNewEnergizer}
-              >
-                Add New Energizer
-              </Button>
-
-
-            <Button
-             className={cx(classes.actionButton)}
-             color="primary"
-             variant="contained"
-             onClick={this.onOpenSearch}
-           >
-             Search
-           </Button>
-
-
-           <span>
-             Filter: {searchTerm}
-           </span>
-
-       </div>
-
-
-
         <div>
           <ExpansionList
-            energizers={filteredEnergizers}
+            energizers={energizers}
             onEditEnergizer={this.onEditEnergizer}
             onStartScrapeWiki = {this.onStartScrapeWiki}
           />
@@ -186,8 +173,8 @@ onDialogClose = () => {
           />
 
         </div>
-
       )}
+
 
 
         {openReviewWikiModal && (
@@ -202,25 +189,12 @@ onDialogClose = () => {
 
       )}
 
-      {openSearchModal && (
-       <div>
-         <SearchPage
-           doSearch={this.doSearch}
-           onClose={this.onDialogClose}
-         />
-       </div>
-      )}
-
-
-
-
-
-      </div>
-    );
+     </div>
+    ) //return
   }
 }
 
-const styles = () => ({
+const styles = () => {
   root: {
     padding: '24px 30px',
   },
@@ -271,40 +245,46 @@ const styles = () => ({
   actions: {
     textAlign: 'left',
     paddingTop: '24px',
-    marginLeft: '50px',
-    paddingBottom: '30px',
   },
-  actionButton: {
-    marginLeft: '30px',
-    marginRight: '30px',
-
-  },
-});
+};
 
 export default withSnackbar(withStyles(styles)(Energizers));
 
+    //display: 'inline-block'
 
 
-          //  <div>
-          //    {JSON.stringify(filteredEnergizers,null,4)}
-          //  </div>
-           //
+// {openSearchModal && (
+//  <div>
+//    <SearchPage
+//      doSearch={this.doSearch}
+//      onClose={this.onDialogClose}
+//    />
+//  </div>
+// )}
 
 
-           //search
-          //  CICDSearch= event => {
-          //      const { energizers } = this.state;
-          //      const searchedEnergizerName = event.target.value.toLowerCase();
-           //
-          //      if (searchedEnergizerName) {
-          //        this.setState({
-          //          filteredEnergizers: energizers.filter(
-          //            energizer =>
-          //              energizer.name &&
-          //              energizer.name.toLowerCase().includes(searchedEnergizerName)
-          //          ),
-          //        });
-          //      } else {
-          //        this.setState({ filteredEnergizers: Energizers });
-          //      }
-          //    };
+
+// <div className={cx(classes.actions)}>
+//   <Button
+//     color="primary"
+//     variant="contained"
+//     onClick={this.onNewEnergizer}
+//   >
+//     Add New Energizer
+//   </Button>
+//
+//   <Button
+//     color="primary"
+//     variant="contained"
+//     onClick={this.onOpenSearch}
+//   >
+//     Search
+//   </Button>
+//
+//
+// <div>
+//   {searchTerm}
+// </div>
+//
+// </div>
+//
