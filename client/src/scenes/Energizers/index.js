@@ -155,12 +155,12 @@ onDialogClose = () => {
              variant="contained"
              onClick={this.onOpenSearch}
            >
-             Search
+             Filter
            </Button>
 
 
            <span>
-             Filter: {searchTerm}
+             {searchTerm}
            </span>
 
        </div>

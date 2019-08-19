@@ -102,20 +102,20 @@ class Search extends Component {
     this.setState({
                 [event.target.name]: event.target.value,
                 anchorEl: event.currentTarget
+
         });
+    console.log("type ",event.currentTarget)
   };
 
   handlePopoverOpen = event => {
         this.setState({
           anchorEl: event.currentTarget,
         });
+        console.log("click ",event.currentTarget)
       };
 
+
   handlePopoverClose = () => {
-
-        };
-
-handlePopoverClose2 = () => {
               this.setState({
                 anchorEl: null,
                 searchTerm: "",
@@ -151,9 +151,7 @@ onListClick = async event => {
                 Search
          </DialogTitle>
 
-  <div>
-        {"BAEL: "+Boolean(anchorEl)+" ST:"+searchTerm}
-</div>
+
 
           <DialogContent>
 
@@ -162,11 +160,11 @@ onListClick = async event => {
                 <TextField
                   fullWidth
                   autoFocus
-                  label="Enter Search Term"
+                  label="Enter State to filter results"
                   type="search"
                   name="searchTerm"
                   value={ this.state.searchTerm }
-                  autoComplete="false"
+                  autoComplete="off"
                   variant="filled"
                   onChange={this.onChange}
                   className={ cx(classes.input) }
@@ -181,13 +179,23 @@ onListClick = async event => {
                     anchorEl={anchorEl}
                     placement ='bottom-start'
                     disablePortal
-                   className={ cx(classes.popOver) }
+                    modifiers={{
+                            preventOverflow: {
+                              enabled: false,
+                              boundariesElement: 'scrollParent',
+                            },
+                    }}
+                    className={ cx(classes.popOver) }
             >
             <ClickAwayListener onClickAway={this.handlePopoverClose}>
 
             <Grid container justify={'center'}>
 
-                            { statesList.map( state => {
+                            { statesList.filter(state => {
+
+                                  return state.toLowerCase().includes(searchTerm.toLowerCase())
+
+                            }).map( state => {
                                   return (
                                       <Grid item xs={3} lg={2} key = {Math.random(100000)}>
                                                       <MenuItem
@@ -252,11 +260,17 @@ fieldSmall: {
 
     },
     popOver: {
-        maxWidth: '80%',
+        marginTop: '20px',
+        paddingTop: '20px',
+        maxWidth: '90%',
+        minWidth: '60%',
+        border: "1px solid grey"
     },
     menuItem: {
-      margin: '0px',
+      margin: "0px",
+      marginRight: '10px',
       padding: '0px',
+      paddingRight: '10px',
       fontSize: '14px',
       lineHeight: '14px',
     },
@@ -272,6 +286,13 @@ Search.propTypes = {
 };
 
 export default withStyles(styles)(Search);
+
+// <div>
+//       {"BAEL: "+Boolean(anchorEl)+" ST:"+searchTerm}
+// </div>
+
+
+
 
 
 // closeStateList = () => {
