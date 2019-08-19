@@ -7,15 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl'
-import FormLabel from '@material-ui/core/FormLabel'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
-//import MomentUtils from '@date-io/moment';
-import * as generator from 'generate-password'
 import PropTypes from 'prop-types';
 
 
@@ -124,7 +116,7 @@ class EnergizerProfile extends Component {
       <Dialog open fullWidth onClose={ onClose } maxWidth={ 'lg' }>
           <DialogTitle>
             {this.isEmpty(this.props.energizer) ?
-                "New Energizer" : "Update Energizer"}
+                "New Energizer - add * fields only" : "Update Energizer"}
          </DialogTitle>
 
 

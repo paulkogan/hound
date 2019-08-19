@@ -8,22 +8,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl'
-import FormLabel from '@material-ui/core/FormLabel'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { TextField } from '@material-ui/core';
-import PickStatesList from './stateslist';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Popper from '@material-ui/core/Popper';
-import Popover from '@material-ui/core/Popover';
-import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
 import Grid from '@material-ui/core/Grid';
-import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
 
 
 let statesList = [
+  'Alabama',
   'Alaska',
   'Arizona',
   'Arkansas',
@@ -86,13 +80,14 @@ class Search extends Component {
         searchTerm: "",
         statesList: statesList,
         anchorEl: null,
-        showStateListModal: false
+        showStateListModal: false,
+        statesOnly: true
     };
   }
 
   onSubmit = () => {
       const { doSearch } = this.props;
-      doSearch(this.state.searchTerm)
+      doSearch(this.state.searchTerm, this.state.statesOnly)
       this.props.onClose();
   }
 
@@ -104,21 +99,21 @@ class Search extends Component {
                 anchorEl: event.currentTarget
 
         });
-    console.log("type ",event.currentTarget)
+
   };
 
   handlePopoverOpen = event => {
         this.setState({
           anchorEl: event.currentTarget,
         });
-        console.log("click ",event.currentTarget)
       };
 
 
   handlePopoverClose = () => {
+              console.log("HandlePopClose")
               this.setState({
                 anchorEl: null,
-                searchTerm: "",
+
               });
               };
 
@@ -133,12 +128,14 @@ onListClick = async event => {
     this.onSubmit()
   }
 
-
+  onCheckboxChange = () => {
+    this.setState({ statesOnly: !this.state.statesOnly });
+  };
 
 
   render() {
     const { classes, onClose } = this.props;
-    const { anchorEl, searchTerm, statesList } = this.state;
+    const { statesOnly, anchorEl, searchTerm, statesList } = this.state;
     return (
       <Dialog
               open
@@ -151,26 +148,41 @@ onListClick = async event => {
                 Search
          </DialogTitle>
 
-
-
           <DialogContent>
 
+          <div className={ cx(classes.parentBox)}>
+                    <div className={ cx(classes.searchDiv) }>
+                        <TextField
+                          label="Enter state or search term to filter results"
+                          type="search"
+                          name="searchTerm"
+                          value={ this.state.searchTerm }
+                          autoComplete="off"
+                          variant="filled"
+                          onChange={this.onChange}
+                          className={ cx(classes.input) }
+                          onClick={this.handlePopoverOpen}
+                        />
+                    </div>
 
-            <div className={ cx(classes.fieldSmall) }>
-                <TextField
-                  fullWidth
-                  autoFocus
-                  label="Enter State to filter results"
-                  type="search"
-                  name="searchTerm"
-                  value={ this.state.searchTerm }
-                  autoComplete="off"
-                  variant="filled"
-                  onChange={this.onChange}
-                  className={ cx(classes.input) }
-                  onClick={this.handlePopoverOpen}
-                />
-            </div>
+                    <div className={ cx(classes.optionsBox)}>
+                          <div className={ cx(classes.optionsLabel)}>
+                            {statesOnly
+                              ? 'State Fields Only'
+                              : 'All Fields'}
+                          </div>
+
+                          <Checkbox
+                                checked={this.state.statesOnly}
+                                onChange={this.onCheckboxChange}
+                          />
+                    </div>
+
+          </div>
+
+
+
+
 
 
             <div>
@@ -229,51 +241,89 @@ onListClick = async event => {
 
 
 const styles = () => ({
-  input: {
-    margin: '0.5rem 0',
-    padding: '5px',
-    autocomplete: 'false'
+
+
+
+  dialogPaper: {
+          minHeight: '80%',
+          minWidth: '80%',
+
   },
-fieldSmall: {
+
+  parentBox: {
+    display: 'inline-block',
+    width: '100%',
+    border: '0px solid red',
+    padding: '5px'
+
+  },
+
+
+searchDiv: {
     fontSize: '12px',
-    lineHeight: '14px',
+    lineHeight: '12px',
     color: '#606A74',
     fontWeight: 'normal',
-    maxWidth: '80%',
+    width: '70%',
     margin: '0px',
     padding: '0px',
     textAlign: 'left',
-    contentAlign: 'left'
+    contentAlign: 'left',
+    border: "0px solid blue",
+    float: 'left',
   },
-  fieldBig: {
-      fontSize: '12px',
-      lineHeight: '14px',
-      color: '#606A74',
-      fontWeight: 'normal',
-      maxWidth: '100%',
-      margin: '0px',
-    },
 
-    dialogPaper: {
-            minHeight: '80%',
-            minWidth: '80%',
+  input: {
+    margin: '0 rem 0',
+    padding: '0px',
+    autocomplete: 'false',
+    width: '100%'
+  },
 
-    },
-    popOver: {
-        marginTop: '20px',
-        paddingTop: '20px',
-        maxWidth: '90%',
-        minWidth: '60%',
-        border: "1px solid grey"
-    },
-    menuItem: {
-      margin: "0px",
-      marginRight: '10px',
-      padding: '0px',
-      paddingRight: '10px',
-      fontSize: '14px',
-      lineHeight: '14px',
-    },
+  popOver: {
+      marginTop: '0px',
+      paddingTop: '0px',
+      maxWidth: '90%',
+      minWidth: '60%',
+      border: "1px solid grey"
+  },
+
+  menuItem: {
+    margin: "0px",
+    marginRight: '10px',
+    padding: '0px',
+    paddingLeft: '5px',
+    fontSize: '14px',
+    lineHeight: '14px',
+  },
+
+  optionsBox: {
+    minWidth: '140px',
+    padding: '0px',
+    paddingTop: '5px',
+    margin: '0px',
+    textAlign: 'center',
+    contentAlign: 'center',
+    float: 'right',
+    border: "0px solid green"
+  },
+
+  optionsLabel: {
+    fontWeight: 'normal',
+    fontSize: '14px',
+    lineHeight: '12px',
+    color: '#606A74',
+    float: 'center',
+  },
+
+  checkBox: {
+    fontWeight: 'normal',
+    fontSize: '12px',
+    lineHeight: '12px',
+    padding: '0px',
+
+  },
+
 
 
 });
@@ -286,6 +336,16 @@ Search.propTypes = {
 };
 
 export default withStyles(styles)(Search);
+
+
+
+
+            //    color: '#1C1C1C',
+
+
+
+
+
 
 // <div>
 //       {"BAEL: "+Boolean(anchorEl)+" ST:"+searchTerm}

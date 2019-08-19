@@ -6,7 +6,6 @@ import ExpansionList from './components/ExpansionList';
 import EnergizerProfile from './components/EnergizerProfile';
 import ReviewWikiResults from './components/ReviewWikiResults';
 import SearchPage from './components/Search';
-import { TextField } from '@material-ui/core';
 import * as cx from 'classnames';
 import * as api from '../../services/api';
 
@@ -55,13 +54,19 @@ async refreshEnergizers() {
   };
 
 
-  doSearch = async searchTerm => {
+  doSearch = async (searchTerm, statesOnly) => {
       const {energizers}  = this.state
-      let filteredEnergizers = energizers.filter (ezr => {
-              return ezr.bornState.toLowerCase().includes(searchTerm.toLowerCase())
-              //return ezr.homeState == "")
-
+      let filteredEnergizers = statesOnly ?
+      energizers.filter (ezr => {
+              return ezr.bornState.includes(searchTerm) || ezr.homeState.includes(searchTerm)
+      })   :
+      energizers.filter (ezr => {
+              return ezr.bornState.includes(searchTerm) || ezr.homeState.includes(searchTerm) || ezr.currentState.includes(searchTerm) ||
+              ezr.bio.includes(searchTerm) || ezr.earlyLife.includes(searchTerm) || ezr.education.includes(searchTerm)
+             || ezr.playsWith.includes(searchTerm)
       })
+
+
       this.setState({ searchTerm, filteredEnergizers });
   };
 
@@ -113,11 +118,6 @@ async refreshEnergizers() {
   };
 
 
-
-
-
-
-
 onDialogClose = () => {
   this.setState({
     openEditModal: false,
@@ -131,13 +131,10 @@ onDialogClose = () => {
 
   render() {
     const { classes } = this.props;
-    const { energizers, filteredEnergizers, searchTerm, wikiResults, openSearchModal, energizerUnderEdit, openEditModal, openReviewWikiModal} = this.state;
+    const { filteredEnergizers, searchTerm, wikiResults, openSearchModal, energizerUnderEdit, openEditModal, openReviewWikiModal} = this.state;
 
     return (
       <div className={cx(classes.root)}>
-        <header>
-          <h1 className={cx(classes.title)}>Energizers</h1>
-        </header>
 
         <div className={cx(classes.actions)}>
               <Button
@@ -155,7 +152,7 @@ onDialogClose = () => {
              variant="contained"
              onClick={this.onOpenSearch}
            >
-             Filter
+             Search
            </Button>
 
 
@@ -222,27 +219,18 @@ onDialogClose = () => {
 
 const styles = () => ({
   root: {
-    padding: '24px 30px',
+    padding: '0px',
+    paddingLeft: '30px',
   },
   title: {
     fontWeight: 'normal',
     fontSize: '24px',
     lineHeight: '19px',
     color: '#1C1C1C',
-    paddingBottom: '24px',
-  },
-  EnergizerTitle: {
-    fontSize: '16px',
-    lineHeight: '22px',
-    fontWeight: 'normal',
-    paddingRight: '5px',
-  },
-  EnergizerSubTitle: {
-    fontSize: '16px',
-    lineHeight: '22px',
-    fontWeight: 'normal',
-    color: '#494949',
-    textTransform: 'capitalize',
+    margin: '0px',
+    marginTop: '30px',
+    paddingBottom: '0px',
+    paddingLeft: '52px',
   },
   panelDetails: {
     borderTop: '1px solid rgba(96,106,116,0.4)',

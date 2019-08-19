@@ -4,13 +4,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl'
-import FormLabel from '@material-ui/core/FormLabel'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 //import MomentUtils from '@date-io/moment';
-import * as generator from 'generate-password'
 import * as cx from 'classnames'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';

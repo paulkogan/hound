@@ -3,11 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Root from './scenes/Root';
 import * as serviceWorker from './serviceWorker';
-require('dotenv').config();
 
 
-let version = process.env.REACT_APP_VERSION
-console.log("IN index.js, version is:", version)
 //this magically points to /public/index.html **
 ReactDOM.render(<Root />, document.getElementById('root'));
 

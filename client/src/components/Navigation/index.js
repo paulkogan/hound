@@ -7,19 +7,20 @@ import { withStyles } from '@material-ui/core/styles';
 
 import './styles.css';
 
-const Navigation = ({history, classes, currentUser}) => {
+const Navigation = (classes) => {
   //const { id: currentUserId, name: currentUserName } = currentUser;
   //const currentUserExists = Boolean(currentUserId);
 const houndVersion = process.env.REACT_APP_VERSION
-
+//const { classes } = this.props;
   return (
     <AppBar position="sticky" className="navigation">
       <Toolbar className="toolbar">
         <Link className="home-link" component={RouterLink} to="/">
           <h3 className="hound-head">Energizer Hound</h3>
-
         </Link>
-        <b>ver. {houndVersion}</b>
+        <div className="version">
+              <b>ver. {houndVersion}</b>
+        </div>
       </Toolbar>
     </AppBar>
   );
@@ -27,7 +28,7 @@ const houndVersion = process.env.REACT_APP_VERSION
 
 const styles = () => ({
   appBar: {
-    boxShadow: 'none',
+    boxShadow: '2px',
   },
   selectWrapper: {
     alignItems: 'left',
@@ -40,9 +41,17 @@ const styles = () => ({
   toolbar: {
     paddingLeft: '18rem',
     paddingRight: '18rem',
-    marginRight: '20px',
+    marginRight: '40px',
     display: 'flex',
     position: 'relative',
+  },
+  version: {
+    paddingLeft: '18rem',
+    paddingRight: '18rem',
+    marginRight: '40px',
+    display: 'flex',
+    position: 'relative',
+    border: '2px solid red',
   },
   menuItem: {
     padding: '0.5rem 2.5rem',
@@ -65,7 +74,7 @@ const styles = () => ({
 
 export default withStyles(styles)(Navigation);
 
-
+//        <div className={ cx(classes.version)}>
 
 //   <div>
 //     <span className={classes.name}>Hi {currentUserName}!</span>

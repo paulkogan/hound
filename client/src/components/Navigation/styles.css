@@ -1,11 +1,12 @@
 .navigation {
   width: 100%;
-  height: 61px;
+  height: 65px;
   background-color: #F8F8F8 !important;
   color: #525252 !important;
   box-shadow: none !important;
   align-items: center;
   border-right: 1px solid #DCDCDC !important;
+  border-bottom: 2px solid lightgrey;
 }
 
 .navigation .toolbar {
@@ -16,6 +17,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: 0px solid red;
 }
 
 .hound-head {
@@ -48,4 +50,11 @@
 
 .home-link {
   text-decoration: none !important;
+}
+
+.version {
+  margin-right: 60px;
+  display: flex;
+  position: relative;
+  border: 0px solid red;
 }
