@@ -80,7 +80,6 @@ class Search extends Component {
         searchTerm: "",
         statesList: statesList,
         anchorEl: null,
-        showStateListModal: false,
         statesOnly: true
     };
   }

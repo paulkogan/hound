@@ -19,6 +19,7 @@ const apiClient = axios.create({
 
 
 export const scrapeWikiUrl = async params => {
+    console.log("IN API, scrape request:", params)
     const result = await apiClient.post(`/api/webscrape/`, params)
     console.log("IN API, scrape result:", result.data)
     return result.data.wikiFound

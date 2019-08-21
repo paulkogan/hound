@@ -16,11 +16,13 @@ const webClient = axios.create({
 
 // scrape page
 router.post('/', async (req, res) => {
+
+  //console.log(`/Controllers/webscrape/req.body - ${JSON.stringify(req.body, null, 4)}`);
   const {
-    firstName, lastName, occupation, wikiPage, homeState, homeTown
+    firstName, lastName, wikiPage
   } = req.body.energizer;
   var wikiFound = {}
-  //console.log(`/Controllers/webscrape/req.body - ${JSON.stringify(req.body, null, 4)}`);
+
   try {
     console.log("SCRAPE CONTROLLER - wikiurl: ",wikiPage);
     const result = await webClient.get(wikiPage);
@@ -41,7 +43,7 @@ router.post('/', async (req, res) => {
 
   //early life ==============
     var bigEarly = $('.mw-parser-output').find('#Early_life').parent().nextUntil('h2', "p")
-    console.log("BIG EARLY: ");
+    //console.log("BIG EARLY: ");
     let bigEarlyText = ""
     $(bigEarly).each( function( index, element ){
             //console.log( $( this ).text() );
@@ -54,20 +56,20 @@ router.post('/', async (req, res) => {
    var topBio = $('.mw-parser-output').find('p').eq(1).text()
    var topBio2 = $('.mw-parser-output').find('p').eq(1).nextUntil('div', 'p')
 
-   console.log("ALL ELEMENTS OF TOPBIO2: ");
+   //console.log("ALL ELEMENTS OF TOPBIO2: ");
    $(topBio2).each( function( index, element ){
-           console.log( $( this ).text() );
+           //console.log( $( this ).text() );
            topBio += "\n"+$( this ).text()
    });
 
    topBio = topBio.replace(/\[\d{1,2}\]/g, "");
 
-    console.log("BirthplaceText: ",birthPlaceText);
-    console.log("BirthplaceTitle: ",birthPlaceTitle);
-    console.log("Education: ",education);
-    console.log("Alma mater: ",almaMater);
-    console.log("bornTown: ",bornTown);
-    console.log("bornState: ",bornState);
+    // console.log("BirthplaceText: ",birthPlaceText);
+    // console.log("BirthplaceTitle: ",birthPlaceTitle);
+    // console.log("Education: ",education);
+    // console.log("Alma mater: ",almaMater);
+    // console.log("bornTown: ",bornTown);
+    // console.log("bornState: ",bornState);
     //console.log("ele: ",ele);
     //console.log("early_life: ",earlyLife);
 
@@ -97,13 +99,14 @@ router.post('/', async (req, res) => {
     }
     //console.log("wikiFound:  ", wikiFound);
     //return wikiFound -- need to return witha 200 status
-
+    res.status(200).json({ message: 'OK wiki', wikiFound});
   } catch (err) {
-    console.log('error........');
-    console.log(err);
+    console.log('error getting wiki........');
+    //console.log(err);
     res.status(422).json({ message: 'Unable to get wiki' });
+    //res.status(422);
   }
-  res.status(200).json({ message: 'OK wiki', wikiFound});
+
 });
 
 

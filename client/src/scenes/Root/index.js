@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect,   Link, } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 import Energizers from '../Energizers';
 import Navigation from '../../components/Navigation';
 //import { CurrentUserProvider } from 'contexts/CurrentUserContext';
@@ -56,11 +56,6 @@ class Root extends Component {
       this.setState({ isLoading: false });
     }
   }
-
-
-
-
-
 
 
 

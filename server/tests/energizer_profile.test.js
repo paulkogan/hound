@@ -2,83 +2,132 @@ const Energizer = require('../models/energizer')
 const request = require('supertest');
 const app = require('../app');
 
+// ============= Options with SUPERTEST ======
+//(1) Promises  WAY- need that return
+//dont need done
+// (2) regular Supertest - use done
+//(3) async/await - also no done
 
-
-
-describe('fetch energizers', () => {
-
+describe('FETCH ENERGIZERS with SuperTest', () => {
 
      it('gets a list of all energizers from model', async () => {
         const energizers = await Energizer.all();
-        console.log("Yo here is one: ", energizers[0].first_name)
         expect(energizers.length).toBeGreaterThan(2)
         expect(Object.keys(energizers[0])).toContain('bio')
     })
 
 
-    it('gets a list of all energizers from API', async (done) => {
-      request(app)
-              .get('/api/energizers')
-              .set('Accept', 'application/json')
-              //.expect('Content-Type', /json/)
-              //.expect(res.data.length).toBeGreaterThan(0);
-              //.expect(200)
-              .end((err,response)=>{
-                  console.log("in API test",response)
-                  done()
-              })
-
-
-      });
-
-      //  const energizers = await Energizer.all();
-      //  console.log(energizers[0].first_name)
-      //  expect(energizers.length).toBeGreaterThan(0);
-
+    it('gets a list of all energizers from API (ST promise way)', (done) => {
+            request(app)
+                .get('/api/energizers')
+                .expect('Content-Type', /json/)
+                .then((response) => {
+                     expect(response.statusCode).toBe(200);
+                     done();
+                });
+    });
 
 });
 
 
-
-
-
-
-
-
-
-
-
-
-// describe('scrape Wiki', () => {
-//      it('scrapes a sample wiki page', async () => {
-//        request(app)
-//        .post('/api/webscrape')
-//        .set('Accept', 'application/json')
-//        .expect('Content-Type', /json/)
-//        .expect(200, done);
-//       });
-//
+// describe('FETCH ENERGIZERS with Jest only', () => {
+//     it('NO ST - gets a list of all energizers from API (async)', async () => {
+//       const data = await fetchData();
+//       expect(data).toBe('peanut butter');
+//     });
 //
 // });
 
 
-// export const scrapeWikiUrl = async params => {
-//     const result = await apiClient.post(`/api/webscrape/`, params)
-//     console.log("IN API, scrape result:", result.data)
-//     return result.data.wikiFound
-// };
+
+describe('SCRAPE WIKI with SuperTest', () => {
+
+      it('POST-> scrapes a known wiki page with a 200 response (ST async way)',  async () => {
+               let reqObject = {
+                     energizer: {
+                         firstName: "Tom ",
+                         lastName: "Hanks",
+                         wikiPage: "https://en.wikipedia.org/wiki/Tom_Hanks"
+                     }
+               }
+               jest.setTimeout(30000);
+
+               let response = await request(app).post('/api/webscrape').send(reqObject)
+               //console.log("back in POST test", response)
+               //console.log("resp-ALL", response)
+               expect(response.statusCode).toBe(200);
+               expect(response.body.message).toBe("OK wiki");
+
+      });
+
+      it('POST-> scrapes a bad wiki page with a 402 response (async way)',  async () => {
+               let reqObject = {
+                     energizer: {
+                         firstName: "Tom ",
+                         lastName: "Hanks",
+                         wikiPage: "https://bad.web.co"
+                     }
+               }
+               jest.setTimeout(5000);
+
+               let response = await request(app).post('/api/webscrape').send(reqObject)
+               //console.log("bad post - resp.body", response.body)
+               expect(response.statusCode).toBe(422);
+
+             });
+
+
+             it('POST-> scrapes a bad wiki page with a 402 response (Supettest way)',  (done) => {
+                      let reqObject = {
+                            energizer: {
+                                firstName: "Tom ",
+                                lastName: "Hanks",
+                                wikiPage: "https://bad.web.co"
+                            }
+                      }
+
+
+                      return request(app)
+                          .post('/api/webscrape')
+                          .send(reqObject)
+                          .set('Accept', 'application/json')
+                          .expect('Content-Type', /json/)
+                          //this can modify the response before testing assertions
+                          .expect(function(res) {
+                                     res.body.message = "Unable to get wiki";
+                            })
+                          .expect(422, {
+                             message: "Unable to get wiki"
+                          })
+                          .end(function(err,res){
+                                // HTTP status should be 200
+                                expect(res.body.message).toBe("Unable to get wiki");
+                                // Error key should be false.
+                                // expect(res.error)
+                                // .toContain('Error: cannot POST /api/webscrape (422)')
+                                done();
+                          });
+
+              });
+
+
+});  //describe wiki
 
 
 
 
 
-// await Energizer.create({
-//     firstName,
-//     lastName,
-//     occupation,
-//     wikiPage,
-// });
 
+
+
+
+
+
+
+
+
+
+//======= old qwell stuff ============
 
 // jest.mock('../../../core/timekit', () => ({
 //   fetchAvailability: jest.fn(),
