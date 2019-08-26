@@ -6,20 +6,82 @@ import ExpansionList from './components/ExpansionList';
 import EnergizerProfile from './components/EnergizerProfile';
 import ReviewWikiResults from './components/ReviewWikiResults';
 import SearchPage from './components/Search';
+import ChartPage from './components/Chart';
 import * as cx from 'classnames';
 import * as api from '../../services/api';
+
+let statesList = [
+  'Alabama',
+  'Alaska',
+  'Arizona',
+  'Arkansas',
+  'California',
+  'Colorado',
+  'Connecticut',
+  'Delaware',
+  'Florida',
+  'Georgia',
+  'Hawaii',
+  'Idaho',
+  'Illinois',
+  'Indiana',
+  'Iowa',
+  'Kansas',
+  'Kentucky',
+  'Louisiana',
+  'Maine',
+  'Maryland',
+  'Massachusetts',
+  'Michigan',
+  'Minnesota',
+  'Mississippi',
+  'Missouri',
+  'Montana',
+  'Nebraska',
+  'Nevada',
+  'New Hampshire',
+  'New Jersey',
+  'New Mexico',
+  'New York',
+  'North Carolina',
+  'North Dakota',
+  'Ohio',
+  'Oklahoma',
+  'Oregon',
+  'Pennsylvania',
+  'Rhode Island',
+  'South Carolina',
+  'South Dakota',
+  'Tennessee',
+  'Texas',
+  'Utah',
+  'Vermont',
+  'Virginia',
+  'Washington',
+  'West Virginia',
+  'Wisconsin',
+  'Wyoming'
+]
+
+
+
+
+
 
 class Energizers extends Component {
 
   state = {
     isLoading: true,
     openEditModal:false,
+    openListModal:true,
     openReviewWikiModal:false,
     openSearchModal:false,
+    openChartModal:false,
     energizerUnderEdit : {},
     wikiResults: {},
     energizers: [],
     filteredEnergizers: [],
+    statesWithCounts: null,
     searchTerm: " "
   }
 
@@ -52,6 +114,27 @@ async refreshEnergizers() {
   onOpenSearch = () => {
       this.setState({ openSearchModal: true });
   };
+
+  onOpenChart = () => {
+      const statesWithCounts = new Map()
+      const {energizers}  = this.state
+      //statesWithCounts.set("test",608)
+      energizers.forEach(enzr => {
+            if(statesWithCounts.has(enzr.bornState)) {
+                  statesWithCounts.set(enzr.bornState,statesWithCounts.get(enzr.bornState)+1)
+            } else {
+                  statesWithCounts.set(enzr.bornState,1)
+            }
+      })
+
+
+      this.setState({
+          openChartModal: true,
+          openListModal: false,
+          statesWithCounts
+      });
+  };
+
 
 
   doSearch = async (searchTerm, statesOnly) => {
@@ -120,10 +203,12 @@ async refreshEnergizers() {
 
 onDialogClose = () => {
   this.setState({
+    openListModal: true,
     openEditModal: false,
     openReviewWikiModal: false,
     energizerUnderEdit: {},
-    openSearchModal: false
+    openSearchModal: false,
+    openChartModal: false
   });
 };
 
@@ -131,7 +216,9 @@ onDialogClose = () => {
 
   render() {
     const { classes } = this.props;
-    const { filteredEnergizers, searchTerm, wikiResults, openSearchModal, energizerUnderEdit, openEditModal, openReviewWikiModal} = this.state;
+    const { statesWithCounts, filteredEnergizers, energizers, searchTerm, wikiResults,
+      openListModal, openChartModal, openSearchModal, energizerUnderEdit,
+      openEditModal, openReviewWikiModal} = this.state;
 
     return (
       <div className={cx(classes.root)}>
@@ -145,6 +232,14 @@ onDialogClose = () => {
                 Add New Energizer
               </Button>
 
+              <Button
+               className={cx(classes.actionButton)}
+               color="primary"
+               variant="contained"
+               onClick={this.onOpenChart}
+             >
+               Chart
+             </Button>
 
             <Button
              className={cx(classes.actionButton)}
@@ -160,10 +255,13 @@ onDialogClose = () => {
              {searchTerm}
            </span>
 
+
+
+
        </div>
 
 
-
+       {openListModal && (
         <div>
           <ExpansionList
             energizers={filteredEnergizers}
@@ -172,6 +270,7 @@ onDialogClose = () => {
           />
 
         </div>
+        )}
 
        {openEditModal && (
         <div>
@@ -183,7 +282,6 @@ onDialogClose = () => {
           />
 
         </div>
-
       )}
 
 
@@ -204,9 +302,20 @@ onDialogClose = () => {
          <SearchPage
            doSearch={this.doSearch}
            onClose={this.onDialogClose}
+           statesList={statesList}
          />
        </div>
       )}
+
+      {openChartModal && (
+       <div>
+         <ChartPage
+           statesWithCounts = {statesWithCounts}
+           onClose={this.onDialogClose}
+         />
+       </div>
+      )}
+
 
 
 
@@ -264,7 +373,7 @@ const styles = () => ({
   },
   actionButton: {
     marginLeft: '30px',
-    marginRight: '30px',
+    marginRight: '0px',
 
   },
 });

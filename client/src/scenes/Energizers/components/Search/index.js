@@ -16,60 +16,6 @@ import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 
 
-let statesList = [
-  'Alabama',
-  'Alaska',
-  'Arizona',
-  'Arkansas',
-  'California',
-  'Colorado',
-  'Connecticut',
-  'Delaware',
-  'Florida',
-  'Georgia',
-  'Hawaii',
-  'Idaho',
-  'Illinois',
-  'Indiana',
-  'Iowa',
-  'Kansas',
-  'Kentucky',
-  'Louisiana',
-  'Maine',
-  'Maryland',
-  'Massachusetts',
-  'Michigan',
-  'Minnesota',
-  'Mississippi',
-  'Missouri',
-  'Montana',
-  'Nebraska',
-  'Nevada',
-  'New Hampshire',
-  'New Jersey',
-  'New Mexico',
-  'New York',
-  'North Carolina',
-  'North Dakota',
-  'Ohio',
-  'Oklahoma',
-  'Oregon',
-  'Pennsylvania',
-  'Rhode Island',
-  'South Carolina',
-  'South Dakota',
-  'Tennessee',
-  'Texas',
-  'Utah',
-  'Vermont',
-  'Virginia',
-  'Washington',
-  'West Virginia',
-  'Wisconsin',
-  'Wyoming'
-]
-
-
 
 class Search extends Component {
   constructor(props) {
@@ -78,7 +24,6 @@ class Search extends Component {
 
     this.state = {
         searchTerm: "",
-        statesList: statesList,
         anchorEl: null,
         statesOnly: true
     };
@@ -133,8 +78,8 @@ onListClick = async event => {
 
 
   render() {
-    const { classes, onClose } = this.props;
-    const { statesOnly, anchorEl, searchTerm, statesList } = this.state;
+    const { classes, onClose, statesList } = this.props;
+    const { statesOnly, anchorEl, searchTerm } = this.state;
     return (
       <Dialog
               open
@@ -240,8 +185,6 @@ onListClick = async event => {
 
 
 const styles = () => ({
-
-
 
   dialogPaper: {
           minHeight: '80%',
