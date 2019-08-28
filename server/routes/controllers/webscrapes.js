@@ -100,6 +100,7 @@ router.post('/', async (req, res) => {
     //console.log("wikiFound:  ", wikiFound);
     //return wikiFound -- need to return witha 200 status
     res.status(200).json({ message: 'OK wiki', wikiFound});
+    
   } catch (err) {
     console.log('error getting wiki........');
     //console.log(err);

@@ -81,7 +81,7 @@ class Energizers extends Component {
     wikiResults: {},
     energizers: [],
     filteredEnergizers: [],
-    statesWithCounts: null,
+    statesWithCounts: [],
     searchTerm: " "
   }
 
@@ -115,18 +115,32 @@ async refreshEnergizers() {
       this.setState({ openSearchModal: true });
   };
 
-  onOpenChart = () => {
-      const statesWithCounts = new Map()
+  onOpenChart = async () => {
+      const statesMap = new Map()
       const {energizers}  = this.state
       //statesWithCounts.set("test",608)
       energizers.forEach(enzr => {
-            if(statesWithCounts.has(enzr.bornState)) {
-                  statesWithCounts.set(enzr.bornState,statesWithCounts.get(enzr.bornState)+1)
+            if(statesMap.has(enzr.bornState)) {
+                  statesMap.set(enzr.bornState,statesMap.get(enzr.bornState)+1)
             } else {
-                  statesWithCounts.set(enzr.bornState,1)
+                  statesMap.set(enzr.bornState,1)
             }
       })
 
+
+      let statesWithCounts = []
+
+      for (let [key,value] of statesMap.entries() ) {
+
+        statesWithCounts.push({
+          "stateName" : key,
+          "numEnergizers" : value
+        })
+      }
+
+      statesWithCounts.sort((a,b) => {
+          return b.numEnergizers - a.numEnergizers
+      })
 
       this.setState({
           openChartModal: true,
@@ -134,7 +148,6 @@ async refreshEnergizers() {
           statesWithCounts
       });
   };
-
 
 
   doSearch = async (searchTerm, statesOnly) => {
@@ -216,9 +229,12 @@ onDialogClose = () => {
 
   render() {
     const { classes } = this.props;
-    const { statesWithCounts, filteredEnergizers, energizers, searchTerm, wikiResults,
+    const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
       openEditModal, openReviewWikiModal} = this.state;
+
+    //console.log("in index render", JSON.stringify(statesWithCounts,null,4))
+
 
     return (
       <div className={cx(classes.root)}>
@@ -229,7 +245,7 @@ onDialogClose = () => {
                 variant="contained"
                 onClick={this.onNewEnergizer}
               >
-                Add New Energizer
+                Add Energizer
               </Button>
 
               <Button
@@ -307,7 +323,7 @@ onDialogClose = () => {
        </div>
       )}
 
-      {openChartModal && (
+      {openChartModal &&  (
        <div>
          <ChartPage
            statesWithCounts = {statesWithCounts}
