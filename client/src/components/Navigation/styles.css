@@ -1,6 +1,6 @@
 .navigation {
   width: 100%;
-  height: 65px;
+  height: 85px;
   background-color: #F8F8F8 !important;
   color: #525252 !important;
   box-shadow: none !important;
@@ -13,21 +13,22 @@
   max-width: 1110px;
   width: 100%;
   height: 100%;
-
+  margin-left: 50px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: left;
+  align-items: left;
   border: 0px solid red;
 }
 
 .hound-head {
 	height: 39px;
-	width: 300px;
+	width: 80%;
 	color: #525252;
-	font-size: 27px;
+	font-size: 32px;
 	font-weight: 550;
 	line-height: 39px;
 	text-align: center;
+  border: 0px solid blue;
 }
 
 .link {
@@ -53,8 +54,10 @@
 }
 
 .version {
-  margin-right: 60px;
-  display: flex;
-  position: relative;
-  border: 0px solid red;
+  margin-right: 30px;
+  width: 100%;
+  position: right;
+  text-align: right;
+  text-align: right;
+  border: 0px solid green;
 }

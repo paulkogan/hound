@@ -14,7 +14,9 @@ import Button from '@material-ui/core/Button';
 class Chart extends Component {
 
   state = {
-      usData : null
+      usData : null,
+      congressData: null,
+      currentState: "here"
   }
 
 
@@ -23,67 +25,189 @@ class Chart extends Component {
 
     const {statesWithCounts} = this.props;
     //console.log("in chart obj: ",statesWithCounts)
-    //this.drawStatesBarChart(statesWithCounts)
-
-
-     let response = await fetch('https://d3js.org/us-10m.v1.json')
-     let usData = await response.json();
+     let responseStates = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json')
+    // let responseStates = await fetch('https://d3js.org/us-10m.v1.json')
+     let usData = await responseStates.json();
      this.setState({usData})
-     //console.log("CDM", this.state.usData)
+     console.log("CDM-US", this.state.usData)
+
 
      this.drawStatesMap();
-
-
   }
 
 
 
 
 drawStatesMap = async () =>  {
-    var width = 1200;
-    var height = 700;
 
-    var projection = d3.geoAlbersUsa()
-    				   .translate([width/3, height/3])
-               .scale([200])   // translate to center of screen
-    				          // scale things down so see entire US
+    const {usData, congressData, currentState} = this.state
+    const {statesWithCounts, doSearch, onClose} = this.props;
 
+    var width = 1000;
+    var height = 600;
+    //var projection = d3.geoAlbersUsa().scale(1280).translate([480, 300])
     var path = d3.geoPath();
-    //var path = d3.geoPath(projection);
+    //var path = d3.geoPath.projection(projection);
 
-    const {usData} = this.state
-    console.log("in function", usData)
 
-    var svg = d3.select(this.refs.canvas)
+  //var svg = d3.select("this.refs.canvas")
+  var svg = d3.select(".svg-div")
        			.append("svg")
        			.attr("width", width)
        			.attr("height", height)
-             .style("border", "1px solid blue")
-
+            .style("border", "1px solid lightslategrey")
 
 
 
 
        svg.append("g")
-         .attr("class", "states")
-         //.attr("transform", "translate(600,40)")
          .selectAll("path")
+         //data() binds data to previous selection (path)
          .data(topojson.feature(usData, usData.objects.states).features)
          .join("path")
-         .attr("fill", "green")
-         .attr("d", path)
-         //.enter()
-          //.append("path")
-        //.call(legend);
+           .attr("class", "chart-state")
+           .attr("fill", d => {
+                let stateColor = "lightslategrey"
+                statesWithCounts.forEach(eState => {
+                      if (d.properties.name == eState.stateName) {
+                          stateColor = "orange"
+                      }
+                })
+                return stateColor
+           })
+           .attr("d", path)
+           .attr("stateName", d => d.properties.name)
+           .append("title")
+           .text( d => d.properties.name)
+
+      svg.selectAll(".chart-state")
+            .on("click", (node) => {
+                  console.log("Node-prop-name", node.properties.name)
+                  doSearch(node.properties.name, true)
+                  onClose()
+
+            })
 
 
-    //    svg.append("path")
-    //        .attr("class", "state-borders")
-    //        .attr("d", path(topojson.mesh(usData, usData.objects.states,
-    //          function(a, b) { return a != b; })));
-    // //});
+            svg.append("text")
+                .attr("x", 400)
+                .attr("y", 450)
+                .text("Texas", currentState)
+
 
   } //function
+
+
+
+  render() {
+    const { onClose } = this.props;
+
+
+    return (
+      <div>
+
+              <div className="svg-div"></div>
+      </div>
+    )
+
+
+
+  } //render
+
+
+} //component
+
+
+
+
+const styles = () => ({
+
+
+root: {
+    fontSize: '12px',
+    lineHeight: '12px',
+    color: '#606A74',
+    fontWeight: 'normal',
+    width: '70%',
+    margin: '0px',
+    padding: '0px',
+    textAlign: 'left',
+    contentAlign: 'left',
+    border: "0px solid blue",
+    float: 'left',
+  },
+
+
+
+
+});
+
+
+
+Chart.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  statesWithCounts: PropTypes.array.isRequired
+};
+
+export default withStyles(styles)(Chart);
+
+
+
+// svg.selectAll(".chart-state")
+//       .on("click", (node) => {
+//             doSearch(node.properties.name, true)
+//
+//             console.log("This", this)
+//             console.log("Node", node)
+//             console.log("Node-prop-name", node.properties.name)
+//             console.log("Event-path0",d3.event.path[0])
+//             //console.log("Event-path0-path-statename",d3.event.path[0].path)
+//             console.log("Event-target",d3.event.target)
+//             //console.log("Event-target-path-stateName",d3.event.target.node("path"))
+//             //let stateDom = d3.event.select('path')
+//             //console.log("stateDom",stateDom)
+//       })
+
+
+
+
+    //  let responseCongress = await fetch('https://raw.githubusercontent.com/Swizec/113th-congressional-districts/master/public/us-congress-113.json')
+    //  let congressData= await responseCongress.json();
+    //  this.setState({congressData})
+    //  console.log("CDM-Congress", this.state.congressData)
+
+
+
+
+// d3.select(this.refs.temps)
+// .selectAll("color-code the temps")
+// .data(temps)
+// .enter()  //add thid to the DOM
+//     .append("div")
+//     .text(datapoint => `${datapoint} degrees`)
+//     .style("color", datapoint => (datapoint > 14) ? "red" : "green" )
+//
+// this.drawBarChart(temps)
+
+
+        // svg.append("g")
+        //   .attr("className", "districts")
+        //   //.attr("transform", "translate(600,40)")
+        //   .select("path2")
+        //   .data(topojson.feature(congressData, congressData.objects.districts).features)
+        //   .join("path2")
+        //   .attr("fill", "purple")
+        //   .attr("d", path2)
+
+
+
+      //  svg.append("path")
+      //      .attr("class", "state-borders")
+      //      .attr("d", path(topojson.mesh(usData, usData.objects.states,
+      //        function(a, b) { return a != b; })));
+    // //});
+
+
 
 
 
@@ -121,17 +245,6 @@ drawStatesMap = async () =>  {
     //    	// return "rgb(213,222,217)";
     //    	// }
     //    });
-
-
-
-
-
-
-
-
-
-
-
 
 
     //  d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
@@ -191,7 +304,7 @@ drawStatesMap = async () =>  {
     //
     // })
 
-  // ISSUE -- this does not wait
+  // ISSUE -- this does not wait => use await
   // fetch('https://d3js.org/us-10m.v1.json')
   //     .then(response => response.json())
   //     //.then(json => console.log("Fetch",json))
@@ -200,178 +313,35 @@ drawStatesMap = async () =>  {
 
 
 
-
-
-
-drawStatesBarChart = (sa) =>  {
-    const bCanvas = d3.select(this.refs.canvas)
-        .append("svg")
-        .attr("width", 600)
-        .attr("height", 400)
-        .style("border", "1px solid black")
-
-
-    bCanvas.selectAll("paint the bars")
-          .data(sa)
-          .enter()
-              .append("rect")
-              .attr("height",40)
-              .attr("width", datapoint =>datapoint.numEnergizers*20)
-              .attr("fill", "orange")
-              .attr("x", 0)
-              .attr("y", (datapoint, iteration) => iteration*45)
-              .attr("class", "chartBar")
-
-
-      bCanvas.selectAll("add descriptive text")
-          .data(sa)
-          .enter()
-                .append("text")
-                .attr("x", datapoint =>(datapoint.numEnergizers*20))
-                .attr("y", (datapoint, iteration) => (iteration*45)+25)
-                .text(datapoint =>`${datapoint.stateName} (${datapoint.numEnergizers})`)
-
-
-  }
-
-
-
-
-  render() {
-    const { onClose } = this.props;
-
-
-    return (
-    <div>
-
-              <div>
-                    By States
-              </div>
-
-              <div ref="canvas"></div>
-              <Button color="primary" variant="contained" onClick={onClose}>OK</Button>
-
-      </div>
-    )
-
-
-
-  } //render
-
-
-} //component
-
-
-
-
-const styles = () => ({
-
-  dialogPaper: {
-          minHeight: '80%',
-          minWidth: '80%',
-
-  },
-
-  parentBox: {
-    display: 'inline-block',
-    width: '100%',
-    border: '0px solid red',
-    padding: '5px'
-
-  },
-
-
-searchDiv: {
-    fontSize: '12px',
-    lineHeight: '12px',
-    color: '#606A74',
-    fontWeight: 'normal',
-    width: '70%',
-    margin: '0px',
-    padding: '0px',
-    textAlign: 'left',
-    contentAlign: 'left',
-    border: "0px solid blue",
-    float: 'left',
-  },
-
-  input: {
-    margin: '0 rem 0',
-    padding: '0px',
-    autocomplete: 'false',
-    width: '100%'
-  },
-
-  popOver: {
-      marginTop: '0px',
-      paddingTop: '0px',
-      maxWidth: '90%',
-      minWidth: '60%',
-      border: "1px solid grey"
-  },
-
-  menuItem: {
-    margin: "0px",
-    marginRight: '10px',
-    padding: '0px',
-    paddingLeft: '5px',
-    fontSize: '14px',
-    lineHeight: '14px',
-  },
-
-  optionsBox: {
-    minWidth: '140px',
-    padding: '0px',
-    paddingTop: '5px',
-    margin: '0px',
-    textAlign: 'center',
-    contentAlign: 'center',
-    float: 'right',
-    border: "0px solid green"
-  },
-
-  optionsLabel: {
-    fontWeight: 'normal',
-    fontSize: '14px',
-    lineHeight: '12px',
-    color: '#606A74',
-    float: 'center',
-  },
-
-  checkBox: {
-    fontWeight: 'normal',
-    fontSize: '12px',
-    lineHeight: '12px',
-    padding: '0px',
-
-  },
-
-
-
-});
-
-
-
-Chart.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  statesWithCounts: PropTypes.array.isRequired
-};
-
-export default withStyles(styles)(Chart);
-
-// constructor(props) {
-//   super(props);
-// }
-
-
-
-
-// d3.select(this.refs.temps)
-// .selectAll("color-code the temps")
-// .data(temps)
-// .enter()  //add thid to the DOM
-//     .append("div")
-//     .text(datapoint => `${datapoint} degrees`)
-//     .style("color", datapoint => (datapoint > 14) ? "red" : "green" )
+// drawStatesBarChart = (sa) =>  {
+//     const bCanvas = d3.select(this.refs.canvas)
+//         .append("svg")
+//         .attr("width", 600)
+//         .attr("height", 400)
+//         .style("border", "1px solid black")
 //
-// this.drawBarChart(temps)
+//
+//     bCanvas.selectAll("paint the bars")
+//           .data(sa)
+//           .enter()
+//               .append("rect")
+//               .attr("height",40)
+//               .attr("width", datapoint =>datapoint.numEnergizers*20)
+//               .attr("fill", "orange")
+//               .attr("x", 0)
+//               .attr("y", (datapoint, iteration) => iteration*45)
+//               .attr("class", "chartBar")
+//
+//
+//       bCanvas.selectAll("add descriptive text")
+//           .data(sa)
+//           .enter()
+//                 .append("text")
+//                 .attr("x", datapoint =>(datapoint.numEnergizers*20))
+//                 .attr("y", (datapoint, iteration) => (iteration*45)+25)
+//                 .text(datapoint =>`${datapoint.stateName} (${datapoint.numEnergizers})`)
+//
+//
+//   }
+//
+//

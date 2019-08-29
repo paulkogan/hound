@@ -112,12 +112,12 @@ async refreshEnergizers() {
   };
 
   onOpenSearch = () => {
-      this.setState({ openSearchModal: true });
+      this.setState({ openSearchModal: !this.state.openSearchModal });
   };
 
   onOpenChart = async () => {
       const statesMap = new Map()
-      const {energizers}  = this.state
+      const {energizers, openListModal, openChartModal}  = this.state
       //statesWithCounts.set("test",608)
       energizers.forEach(enzr => {
             if(statesMap.has(enzr.bornState)) {
@@ -143,8 +143,8 @@ async refreshEnergizers() {
       })
 
       this.setState({
-          openChartModal: true,
-          openListModal: false,
+          openChartModal: !openChartModal,
+          openListModal: !openListModal,
           statesWithCounts
       });
   };
@@ -254,7 +254,7 @@ onDialogClose = () => {
                variant="contained"
                onClick={this.onOpenChart}
              >
-               Chart
+               States Map
              </Button>
 
             <Button
@@ -267,7 +267,7 @@ onDialogClose = () => {
            </Button>
 
 
-           <span>
+           <span className={cx(classes.showSearchTerm)}>
              {searchTerm}
            </span>
 
@@ -327,6 +327,7 @@ onDialogClose = () => {
        <div>
          <ChartPage
            statesWithCounts = {statesWithCounts}
+           doSearch={this.doSearch}
            onClose={this.onDialogClose}
          />
        </div>
@@ -392,6 +393,12 @@ const styles = () => ({
     marginRight: '0px',
 
   },
+  showSearchTerm: {
+    marginLeft: '30px',
+    marginRight: '0px',
+
+  },
+
 });
 
 export default withSnackbar(withStyles(styles)(Energizers));

@@ -81,7 +81,9 @@ const styles = () => ({
 class ExpansionList extends Component {
   render() {
     const { classes, energizers } = this.props;
-    return (
+
+    if (energizers.length > 0) {
+     return (
       <div className={cx(classes.panelContainer)}>
         {energizers.map(energizer  => {
           return (
@@ -204,8 +206,13 @@ class ExpansionList extends Component {
           );
         })}
       </div>
-    );
-  }
+    )} else {
+
+       return (<div> <b>No results </b></div>)
+
+    } //if
+
+  } //render
 }
 
 export default withStyles(styles)(ExpansionList);
