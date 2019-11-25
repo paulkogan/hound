@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { createMuiTheme } from '@material-ui/core/styles';
 import Energizers from '../Energizers';
+import Login from '../Login';
 import Navigation from '../../components/Navigation';
 //import { CurrentUserProvider } from 'contexts/CurrentUserContext';
 //import * as api from 'services/api';
@@ -57,8 +58,6 @@ class Root extends Component {
     }
   }
 
-
-
   render() {
     const {
       isLoading,
@@ -68,18 +67,12 @@ class Root extends Component {
           <div>
              <SnackbarProvider maxSnack={3}>
               <Router>
-                                <Navigation />
+                        <Navigation />
 
                         <Route  path="/" exact component = {Energizers} />
                         <Route  path="/new"  component = {showDate} />
                         <Route  path="/list"  component = {Energizers} />
-
-
-
-
-
-
-
+                        <Route  path="/login"  component = {Login} />
               </Router>
             </SnackbarProvider>
           </div>

@@ -214,6 +214,32 @@ async refreshEnergizers() {
   };
 
 
+
+  onClearSearch = () => {
+    this.setState({
+      openListModal: true,
+      openEditModal: false,
+      openReviewWikiModal: false,
+      energizerUnderEdit: {},
+      openSearchModal: false,
+      openChartModal: false,
+      searchTerm: " ",
+      filteredEnergizers: this.state.energizers
+    });
+  };
+  
+  onDialogClose = () => {
+    this.setState({
+      openListModal: true,
+      openEditModal: false,
+      openReviewWikiModal: false,
+      energizerUnderEdit: {},
+      openSearchModal: false,
+      openChartModal: false
+    });
+  };
+  
+
 onDialogClose = () => {
   this.setState({
     openListModal: true,
@@ -270,6 +296,15 @@ onDialogClose = () => {
            <span className={cx(classes.showSearchTerm)}>
              {searchTerm}
            </span>
+
+           <Button
+             className={cx(classes.actionButton)}
+             color="primary"
+             variant="contained"
+             onClick={this.onClearSearch}
+           >
+             Clear
+           </Button>
 
 
 
