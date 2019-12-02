@@ -5,7 +5,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import Energizers from '../Energizers';
 import Login from '../Login';
 import Navigation from '../../components/Navigation';
-//import { CurrentUserProvider } from 'contexts/CurrentUserContext';
+import {CurrentUserProvider} from '../../contexts/CurrentUserContext.jsx';
 //import * as api from 'services/api';
 
 const theme = createMuiTheme({
@@ -25,6 +25,9 @@ const theme = createMuiTheme({
         color: 'white',
       },
     },
+    input: {
+      color: 'red'
+    }
   },
 });
 
@@ -52,30 +55,43 @@ class Root extends Component {
     try {
       this.setState({ isLoading: true });
       //const currentUser = await this.fetchCurrentUser();
+      this.attemptToFetchCurrentUser();
 
     } finally {
       this.setState({ isLoading: false });
     }
   }
 
+  attemptToFetchCurrentUser = async () => {
+    try {
+      //const currentUser = await api.fetchCurrentUser();
+      const currentUser = {email: "root@root.com"}
+      this.setState({ currentUser });
+    } catch {
+      // no-op; not being logged in is not an error state
+    }
+  }
+
+
+
+
   render() {
-    const {
-      isLoading,
-    } = this.state;
+    const {currentUser} = this.state;      
 
     return (
-          <div>
+        <div>
+          <CurrentUserProvider value={currentUser}>
              <SnackbarProvider maxSnack={3}>
               <Router>
                         <Navigation />
-
                         <Route  path="/" exact component = {Energizers} />
                         <Route  path="/new"  component = {showDate} />
                         <Route  path="/list"  component = {Energizers} />
                         <Route  path="/login"  component = {Login} />
               </Router>
             </SnackbarProvider>
-          </div>
+          </CurrentUserProvider>
+        </div>
 
           )
      } //render
@@ -83,67 +99,4 @@ class Root extends Component {
 
 export default Root;
 
-//
-// <ul>
-//         <li><Link to='/'> List </Link></li>
-//         <li><Link to='/new'> Add New </Link></li>
-// </ul>
-
-
-//                 <Route path={url} exact component={Home} />
-//
-// fetchCurrentUser = async () => {
-//   try {
-//     const currentUser = await api.fetchCurrentUser();
-//     this.setState({ currentUser });
-//     return currentUser;
-//   } catch {
-//     // noop
-//   }
-// }
-//
-// fetchPatientData = async ({ currentUser }) => {
-//   try {
-//     const currentPatient = await api.fetchPatient({ userId: currentUser.id });
-//     this.setState({ currentPatient });
-//   } catch {
-//     // noop
-//   }
-// }
-//
-// fetchAdminData = async ({ currentUser }) => {
-//   try {
-//     const currentProvider = await api.fetchProvider({ userId: currentUser.id });
-//     const currentPractice = await api.fetchPractice({ providerId: currentProvider.id });
-//     const currentUserIsAdmin = Boolean(currentProvider);
-//     this.setState({ currentProvider, currentPractice, currentUserIsAdmin });
-//   } catch {
-//     // noop
-//   }
-// }
-//
-// onLogout = async () => {
-//   try {
-//     await api.logoutUser();
-//   } finally {
-//     window.location.href = '/';
-//   }
-// }
-//
-//
-//
-// <>
-// <PublicNavigation
-//   currentUser={currentUser}
-//   currentUserIsAdmin={currentUserIsAdmin}
-//   onLogout={this.onLogout}
-// />
-// <Route path={url} exact component={Home} />
-// </>
-//
-//
-// </SnackbarProvider>
-// </MuiThemeProvider>
-// </CurrentProviderProvider>
-// </CurrentPatientProvider>
-// </CurrentUserProvider>
+//</MuiThemeProvider>

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
+import { CurrentUserConsumer } from '../../contexts/CurrentUserContext.jsx';
+import CurrentUserContext  from '../../contexts/CurrentUserContext.jsx';
 import ExpansionList from './components/ExpansionList';
 import EnergizerProfile from './components/EnergizerProfile';
 import ReviewWikiResults from './components/ReviewWikiResults';
@@ -82,8 +84,23 @@ class Energizers extends Component {
     energizers: [],
     filteredEnergizers: [],
     statesWithCounts: [],
-    searchTerm: " "
+    searchTerm: " ",
+    stateCurrentUser: {}
   }
+
+  componentWillMount() {
+    const { currentUser } = this.context;
+    const { history } = this.props;
+
+    if (!currentUser) {
+      history.push('/search');
+      return;
+    }
+
+    this.setState({ stateCurrentUser:currentUser });
+  }
+
+
 
   async componentDidMount() {
       this.refreshEnergizers()
@@ -257,126 +274,136 @@ onDialogClose = () => {
     const { classes } = this.props;
     const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
-      openEditModal, openReviewWikiModal} = this.state;
+      openEditModal, openReviewWikiModal, state} = this.state;
 
     //console.log("in index render", JSON.stringify(statesWithCounts,null,4))
 
 
     return (
-      <div className={cx(classes.root)}>
+      <CurrentUserConsumer>
+         {({ currentUser }) => (
+            <div className={cx(classes.root)}>
+                <div>
+                    "from Consumer" {JSON.stringify(currentUser)}
+                </div>
+                 
+              <div className={cx(classes.actions)}>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={this.onNewEnergizer}
+                    >
+                      Add Energizer
+                    </Button>
 
-        <div className={cx(classes.actions)}>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={this.onNewEnergizer}
-              >
-                Add Energizer
-              </Button>
+                    <Button
+                    className={cx(classes.actionButton)}
+                    color="primary"
+                    variant="contained"
+                    onClick={this.onOpenChart}
+                  >
+                    States Map
+                  </Button>
 
-              <Button
-               className={cx(classes.actionButton)}
-               color="primary"
-               variant="contained"
-               onClick={this.onOpenChart}
-             >
-               States Map
-             </Button>
-
-            <Button
-             className={cx(classes.actionButton)}
-             color="primary"
-             variant="contained"
-             onClick={this.onOpenSearch}
-           >
-             Search
-           </Button>
-
-
-           <span className={cx(classes.showSearchTerm)}>
-             {searchTerm}
-           </span>
-
-           <Button
-             className={cx(classes.actionButton)}
-             color="primary"
-             variant="contained"
-             onClick={this.onClearSearch}
-           >
-             Clear
-           </Button>
+                  <Button
+                  className={cx(classes.actionButton)}
+                  color="primary"
+                  variant="contained"
+                  onClick={this.onOpenSearch}
+                >
+                  Search
+                </Button>
 
 
+                <span className={cx(classes.showSearchTerm)}>
+                  {searchTerm}
+                </span>
 
-
-       </div>
-
-
-       {openListModal && (
-        <div>
-          <ExpansionList
-            energizers={filteredEnergizers}
-            onEditEnergizer={this.onEditEnergizer}
-            onStartScrapeWiki = {this.onStartScrapeWiki}
-          />
-
-        </div>
-        )}
-
-       {openEditModal && (
-        <div>
-          <EnergizerProfile
-            energizer={energizerUnderEdit}
-            updateEnergizer={this.updateEnergizer}
-            createEnergizer={this.createEnergizer}
-            onClose={this.onDialogClose}
-          />
-
-        </div>
-      )}
-
-
-        {openReviewWikiModal && (
-         <div>
-           <ReviewWikiResults
-             energizer={energizerUnderEdit}
-             wikiResults={wikiResults}
-             updateEnergizer={this.updateEnergizer}
-             onClose={this.onDialogClose}
-           />
-         </div>
-
-      )}
-
-      {openSearchModal && (
-       <div>
-         <SearchPage
-           doSearch={this.doSearch}
-           onClose={this.onDialogClose}
-           statesList={statesList}
-         />
-       </div>
-      )}
-
-      {openChartModal &&  (
-       <div>
-         <ChartPage
-           statesWithCounts = {statesWithCounts}
-           doSearch={this.doSearch}
-           onClose={this.onDialogClose}
-         />
-       </div>
-      )}
+                <Button
+                  className={cx(classes.actionButton)}
+                  color="primary"
+                  variant="contained"
+                  onClick={this.onClearSearch}
+                >
+                  Clear
+                </Button>
 
 
 
 
+            </div>
 
 
-      </div>
+            {openListModal && (
+              <div>
+                <ExpansionList
+                  energizers={filteredEnergizers}
+                  onEditEnergizer={this.onEditEnergizer}
+                  onStartScrapeWiki = {this.onStartScrapeWiki}
+                />
+
+              </div>
+              )}
+
+            {openEditModal && (
+              <div>
+                <EnergizerProfile
+                  energizer={energizerUnderEdit}
+                  updateEnergizer={this.updateEnergizer}
+                  createEnergizer={this.createEnergizer}
+                  onClose={this.onDialogClose}
+                />
+
+              </div>
+            )}
+
+
+              {openReviewWikiModal && (
+              <div>
+                <ReviewWikiResults
+                  energizer={energizerUnderEdit}
+                  wikiResults={wikiResults}
+                  updateEnergizer={this.updateEnergizer}
+                  onClose={this.onDialogClose}
+                />
+              </div>
+
+            )}
+
+            {openSearchModal && (
+            <div>
+              <SearchPage
+                doSearch={this.doSearch}
+                onClose={this.onDialogClose}
+                statesList={statesList}
+              />
+            </div>
+            )}
+
+            {openChartModal &&  (
+            <div>
+              <ChartPage
+                statesWithCounts = {statesWithCounts}
+                doSearch={this.doSearch}
+                onClose={this.onDialogClose}
+              />
+            </div>
+            )}
+
+
+
+
+
+
+            </div>
+         )}
+    </CurrentUserConsumer>
     );
   }
 }
+
+Energizers.contextType = CurrentUserContext;
+
 
 const styles = () => ({
   root: {
