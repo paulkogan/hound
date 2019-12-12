@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
+import Cookies from 'universal-cookie';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
-import { CurrentUserConsumer } from '../../contexts/CurrentUserContext.jsx';
-import CurrentUserContext  from '../../contexts/CurrentUserContext.jsx';
+import CurrentUserContext, { CurrentUserConsumer, CurrentUserProvider }   from '../../contexts/CurrentUserContext.jsx';
 import ExpansionList from './components/ExpansionList';
 import EnergizerProfile from './components/EnergizerProfile';
 import ReviewWikiResults from './components/ReviewWikiResults';
@@ -72,6 +74,8 @@ let statesList = [
 
 class Energizers extends Component {
 
+
+
   state = {
     isLoading: true,
     openEditModal:false,
@@ -85,25 +89,31 @@ class Energizers extends Component {
     filteredEnergizers: [],
     statesWithCounts: [],
     searchTerm: " ",
-    stateCurrentUser: {}
+    stateCurrentUser: {}, 
+    cookieUser: null
   }
 
-  componentWillMount() {
-    const { currentUser } = this.context;
-    const { history } = this.props;
 
-    if (!currentUser) {
-      history.push('/search');
+ 
+  async componentDidMount() {
+    const { history } = this.props;
+    const { currentUser } = this.context;
+    console.log("In Ener", currentUser.email)
+
+    const cookies = new Cookies();
+    const cookieUser = cookies.get('userEmail') || ""; 
+
+    //if (!currentUser.email) {
+    if (cookieUser==="") {
+      history.push('/login');
       return;
     }
+    this.setState({ 
+      stateCurrentUser:currentUser,
+      cookieUser
+    });
 
-    this.setState({ stateCurrentUser:currentUser });
-  }
-
-
-
-  async componentDidMount() {
-      this.refreshEnergizers()
+    this.refreshEnergizers()
   }
 
 
@@ -274,19 +284,43 @@ onDialogClose = () => {
     const { classes } = this.props;
     const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
-      openEditModal, openReviewWikiModal, state} = this.state;
+      openEditModal, openReviewWikiModal, stateCurrentUser, cookieUser} = this.state;
 
     //console.log("in index render", JSON.stringify(statesWithCounts,null,4))
 
 
     return (
+
+      <div className={cx(classes.root)}>
+
+             <div>
+                    "from Cookie" {JSON.stringify(cookieUser)}
+              </div>
+
+
       <CurrentUserConsumer>
-         {({ currentUser }) => (
-            <div className={cx(classes.root)}>
-                <div>
+        {({ currentUser }) => (
+              <div>
                     "from Consumer" {JSON.stringify(currentUser)}
-                </div>
-                 
+                    "from State-context" {JSON.stringify(stateCurrentUser)}
+              </div>
+        )}                   
+        </CurrentUserConsumer>
+
+
+
+        <CurrentUserProvider>
+        <CurrentUserContext.Consumer>
+        {(context) => (
+              <div>
+                    "from Provider/Consumer" {JSON.stringify(context.currentUser)}
+                    "from State-context" {JSON.stringify(stateCurrentUser)}
+              </div>
+        )}  
+        </CurrentUserContext.Consumer>
+        </CurrentUserProvider>
+
+ 
               <div className={cx(classes.actions)}>
                     <Button
                       color="primary"
@@ -328,7 +362,7 @@ onDialogClose = () => {
                   Clear
                 </Button>
 
-
+  
 
 
             </div>
@@ -390,17 +424,10 @@ onDialogClose = () => {
             </div>
             )}
 
-
-
-
-
-
             </div>
-         )}
-    </CurrentUserConsumer>
-    );
-  }
-}
+         )} 
+  } //component
+
 
 Energizers.contextType = CurrentUserContext;
 

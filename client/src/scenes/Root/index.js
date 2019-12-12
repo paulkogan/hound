@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { createMuiTheme } from '@material-ui/core/styles';
 import Energizers from '../Energizers';
+import Cookies from 'universal-cookie';
 import Login from '../Login';
 import Navigation from '../../components/Navigation';
-import {CurrentUserProvider} from '../../contexts/CurrentUserContext.jsx';
+import CurrentUserContext, {CurrentUserProvider} from '../../contexts/CurrentUserContext.jsx';
 //import * as api from 'services/api';
 
 const theme = createMuiTheme({
@@ -31,18 +32,6 @@ const theme = createMuiTheme({
   },
 });
 
-//simple component
-const showDate = () => {
-    let date = new Date();
-    let hours = date.getHours().toString();
-    let minutes = date.getMinutes().toString();
-  return (
-
-       <div> Time: {hours}:{minutes}</div>
-  )
-
-}
-
 
 class Root extends Component {
 
@@ -51,7 +40,7 @@ class Root extends Component {
     currentUser: {},
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     try {
       this.setState({ isLoading: true });
       //const currentUser = await this.fetchCurrentUser();
@@ -65,27 +54,35 @@ class Root extends Component {
   attemptToFetchCurrentUser = async () => {
     try {
       //const currentUser = await api.fetchCurrentUser();
-      const currentUser = {email: "root@root.com"}
+      const currentUser = {email: null}
+
       this.setState({ currentUser });
-    } catch {
+
+    } catch (err) {
+        console.log("ERROR IN ROOT"+err)
       // no-op; not being logged in is not an error state
     }
   }
 
 
-
+  handleLogout = () => {
+    console.log("logout")
+    const cookies = new Cookies();
+    cookies.set('userEmail', "", { path: '/' }); 
+    window.location.reload();  
+  }
 
   render() {
     const {currentUser} = this.state;      
-
+    console.log("IN ROOT ", currentUser.email)
+    //OK value DOES work!
     return (
         <div>
           <CurrentUserProvider value={currentUser}>
              <SnackbarProvider maxSnack={3}>
               <Router>
-                        <Navigation />
+                        <Navigation handleLogout = {this.handleLogout}/>
                         <Route  path="/" exact component = {Energizers} />
-                        <Route  path="/new"  component = {showDate} />
                         <Route  path="/list"  component = {Energizers} />
                         <Route  path="/login"  component = {Login} />
               </Router>
@@ -96,6 +93,8 @@ class Root extends Component {
           )
      } //render
 };
+
+//Root.contextType = CurrentUserContext;
 
 export default Root;
 

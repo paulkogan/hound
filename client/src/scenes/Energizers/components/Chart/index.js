@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-
 //import d3-geo from 'd3-geo'
 import * as topojson from 'topojson';
 import * as d3 from 'd3'
 import { withStyles } from '@material-ui/core/styles';
-import * as cx from 'classnames'
 import PropTypes from 'prop-types';
-
-import Button from '@material-ui/core/Button';
-
-
 
 class Chart extends Component {
 
@@ -23,10 +17,8 @@ class Chart extends Component {
 
   async componentDidMount() {
 
-    const {statesWithCounts} = this.props;
-    //console.log("in chart obj: ",statesWithCounts)
+
      let responseStates = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json')
-    // let responseStates = await fetch('https://d3js.org/us-10m.v1.json')
      let usData = await responseStates.json();
      this.setState({usData})
      console.log("CDM-US", this.state.usData)
@@ -40,7 +32,7 @@ class Chart extends Component {
 
 drawStatesMap = async () =>  {
 
-    const {usData, congressData, currentState} = this.state
+    const {usData, currentState} = this.state
     const {statesWithCounts, doSearch, onClose} = this.props;
 
     var width = 1000;
@@ -69,7 +61,7 @@ drawStatesMap = async () =>  {
            .attr("fill", d => {
                 let stateColor = "lightslategrey"
                 statesWithCounts.forEach(eState => {
-                      if (d.properties.name == eState.stateName) {
+                      if (d.properties.name === eState.stateName) {
                           stateColor = "orange"
                       }
                 })
@@ -100,9 +92,6 @@ drawStatesMap = async () =>  {
 
 
   render() {
-    const { onClose } = this.props;
-
-
     return (
       <div>
 

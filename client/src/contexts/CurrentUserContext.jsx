@@ -13,14 +13,6 @@ export class CurrentUserProvider extends Component {
     this.setCurrentUser(currentUser);
   }
 
-  componentDidUpdate({ value: oldCurrentUser }) {
-    const { value: currentUser } = this.props;
-
-    if (currentUser.id !== oldCurrentUser.id) {
-      this.setCurrentUser(currentUser);
-    }
-  }
-
   setCurrentUser = (currentUser) => {
       this.setState((state) => ({
         ...state,

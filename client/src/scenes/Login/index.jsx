@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import queryString from 'query-string';
-import Link from '@material-ui/core/Link';
+import Cookies from 'universal-cookie';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-
+import { withSnackbar } from 'notistack';
 import CurrentUserContext from '../../contexts/CurrentUserContext.jsx';
 //import CardForm from 'components/CardForm';
 import * as api from '../../services/api';
@@ -17,21 +16,49 @@ class Login extends Component {
     password: '',
   }
 
+
+  async componentDidMount() {
+    const { history } = this.props;
+
+    const cookies = new Cookies();
+    const cookieUser = cookies.get('userEmail') || ""; 
+
+    //if (!currentUser.email) {
+    if (cookieUser==="") {
+      history.push('/login');
+      return;
+    }
+    this.setState({ 
+      cookieUser:cookieUser
+    });
+  }
+
+  
   handleSubmit = async () => {
     const { history } = this.props;
     const { setCurrentUser } = this.context;
     const { email, password } = this.state;
+    const cookies = new Cookies();
+    const localPass = await process.env.REACT_APP_LOCAL_PASS
+    console.log("LOCAL PASS", localPass)
+  
     let currentUser
-    console.log("EMAIL",email)
     // await api.loginUser({ email, password });
     //const currentUser = await api.fetchCurrentUser();
-    if (password === 'zzz') {
-      currentUser = {email}    
+    if (password === localPass) {
+      currentUser = {email}  
+      //1 minute * 60 min * 6 = 6 hours
+      cookies.set('userEmail', email, { path: '/',  expires: new Date(Date.now()+60000*60*6)} );
+      this.props.enqueueSnackbar('Welcome to Hound!')     
     } else {
-       currentUser = {email: "not logged in"}    
+       currentUser = {email: ""} 
+       cookies.set('userEmail', "", { path: '/' });
+       this.props.enqueueSnackbar('Bad Login')     
     }  
+  
      setCurrentUser(currentUser);
      history.push("/");
+     window.location.reload();  
   }
 
   redirect = () => {
@@ -54,6 +81,7 @@ class Login extends Component {
     return (
       <div className={classes.outerContainer} >
         
+
         <div className={classes.innerContainer} >
         {"Please login: "}
             <FormControl className={classes.formControl} margin="normal">
@@ -83,8 +111,6 @@ class Login extends Component {
             </Button>
         </div>
         
-
-
       </div>
     );
   }
@@ -133,4 +159,9 @@ const styles = () => ({
 
 Login.contextType = CurrentUserContext;
 
-export default withStyles(styles)(Login);
+export default withSnackbar(withStyles(styles)(Login));
+
+
+{/* <div>
+"from Cookie" {JSON.stringify(this.state.cookieUser)}
+</div> */}
