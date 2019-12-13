@@ -1,18 +1,41 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
+import Cookies from 'universal-cookie';
 import { AppBar } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import { withStyles } from '@material-ui/core/styles';
 
 import './styles.css';
 
-const Navigation = (classes) => {
+class Navigation extends Component {
+
+  state = {
+    cookieUser: null
+  }
+
+
+   //const  = (classes) => {
   //const { id: currentUserId, name: currentUserName } = currentUser;
   //const currentUserExists = Boolean(currentUserId);
-const houndVersion = process.env.REACT_APP_VERSION
-//const { classes } = this.props;
+ 
+  async componentDidMount() { 
+      const cookies = new Cookies();
+      let cookieUser = cookies.get('userEmail'); 
+      if (cookieUser == "") cookieUser = null; 
+      this.setState({ 
+        cookieUser
+      });
+  }
+
+render () {
+  const { classes } = this.props;
+  const { cookieUser } = this.state;
+
+  const houndVersion = process.env.REACT_APP_VERSION
   return (
+  
     <AppBar position="sticky" className="navigation">
       <Toolbar className="toolbar">
           <Link className="home-link" component={RouterLink} to="/">
@@ -22,14 +45,34 @@ const houndVersion = process.env.REACT_APP_VERSION
                       Energizer Hound
                 </div>
 
+
             <div className="version">
-                  <b>ver. {houndVersion}</b>
+                  <b>ver. {houndVersion}</b>                
             </div>
+
+
+
+    
+          {cookieUser && (
+            <div>
+                <Button
+                    className={classes.actionButton}
+                    color="primary"
+                    variant="contained"
+                    onClick={this.props.handleLogout}
+                  >
+                    Logout
+                  </Button>
+            </div>  
+          )}
+
+
       </Toolbar>
     </AppBar>
   );
 };
 
+} //component
  const styles = () => ({
 
  })
@@ -121,3 +164,19 @@ export default withStyles(styles)(Navigation);
 //     </Link>
 //   </div>
 // )}
+
+
+
+
+//{/* <div>
+/* <RouterLink to="/login">
+    <Button
+        className={classes.actionButton}
+        color="primary"
+        variant="contained"
+      >
+        Login
+      </Button>
+  </RouterLink>
+</div>   */
+//) : ( */}
