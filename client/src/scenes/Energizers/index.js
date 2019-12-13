@@ -284,43 +284,10 @@ onDialogClose = () => {
     const { classes } = this.props;
     const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
-      openEditModal, openReviewWikiModal, stateCurrentUser, cookieUser} = this.state;
-
-    //console.log("in index render", JSON.stringify(statesWithCounts,null,4))
-
+      openEditModal, openReviewWikiModal} = this.state;
 
     return (
-
-      <div className={cx(classes.root)}>
-
-             <div>
-                    "from Cookie" {JSON.stringify(cookieUser)}
-              </div>
-
-
-      <CurrentUserConsumer>
-        {({ currentUser }) => (
-              <div>
-                    "from Consumer" {JSON.stringify(currentUser)}
-                    "from State-context" {JSON.stringify(stateCurrentUser)}
-              </div>
-        )}                   
-        </CurrentUserConsumer>
-
-
-
-        <CurrentUserProvider>
-        <CurrentUserContext.Consumer>
-        {(context) => (
-              <div>
-                    "from Provider/Consumer" {JSON.stringify(context.currentUser)}
-                    "from State-context" {JSON.stringify(stateCurrentUser)}
-              </div>
-        )}  
-        </CurrentUserContext.Consumer>
-        </CurrentUserProvider>
-
- 
+        <div className={cx(classes.root)}>
               <div className={cx(classes.actions)}>
                     <Button
                       color="primary"
@@ -361,9 +328,6 @@ onDialogClose = () => {
                 >
                   Clear
                 </Button>
-
-  
-
 
             </div>
 
@@ -517,3 +481,30 @@ export default withSnackbar(withStyles(styles)(Energizers));
           //        this.setState({ filteredEnergizers: Energizers });
           //      }
           //    };
+
+          // <CurrentUserProvider>
+          // <CurrentUserContext.Consumer>
+          // {(context) => (
+          //       <div>
+          //             "from Provider/Consumer" {JSON.stringify(context.currentUser)}
+          //             "from State-context" {JSON.stringify(stateCurrentUser)}
+          //       </div>
+          // )}  
+          // </CurrentUserContext.Consumer>
+          // </CurrentUserProvider>
+
+
+
+//       <div>
+//              "from Cookie" {JSON.stringify(cookieUser)}
+//        </div>
+
+
+// <CurrentUserConsumer>
+//  {({ currentUser }) => (
+//        <div>
+//              "from Consumer" {JSON.stringify(currentUser)}
+//              "from State-context" {JSON.stringify(stateCurrentUser)}
+//        </div>
+//  )}                   
+//  </CurrentUserConsumer>

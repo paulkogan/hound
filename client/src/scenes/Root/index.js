@@ -74,8 +74,6 @@ class Root extends Component {
 
   render() {
     const {currentUser} = this.state;      
-    console.log("IN ROOT ", currentUser.email)
-    //OK value DOES work!
     return (
         <div>
           <CurrentUserProvider value={currentUser}>
