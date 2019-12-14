@@ -120,7 +120,8 @@ class Energizers extends Component {
 async refreshEnergizers() {
 
   this.setState({ isLoading: true });
-  const energizers = await api.fetchEnergizers();
+  let energizers = await api.fetchEnergizers()
+  energizers.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1);
   this.setState({ isLoading: false,
                   energizers,
                   filteredEnergizers: energizers
@@ -181,12 +182,16 @@ async refreshEnergizers() {
       const {energizers}  = this.state
       let filteredEnergizers = statesOnly ?
       energizers.filter (ezr => {
-              return ezr.bornState.includes(searchTerm) || ezr.homeState.includes(searchTerm)
+              return (ezr.bornState && ezr.bornState.includes(searchTerm)) || (ezr.homeState && ezr.homeState.includes(searchTerm))
       })   :
       energizers.filter (ezr => {
-              return ezr.bornState.includes(searchTerm) || ezr.homeState.includes(searchTerm) || ezr.currentState.includes(searchTerm) ||
-              ezr.bio.includes(searchTerm) || ezr.earlyLife.includes(searchTerm) || ezr.education.includes(searchTerm)
-             || ezr.playsWith.includes(searchTerm)
+              return (ezr.bornState && ezr.bornState.includes(searchTerm)) || 
+              (ezr.homeState && ezr.homeState.includes(searchTerm)) || 
+              (ezr.currentState && ezr.currentState.includes(searchTerm)) ||
+              (ezr.bio && ezr.bio.includes(searchTerm)) || 
+              (ezr.earlyLife && ezr.earlyLife.includes(searchTerm)) || 
+              (ezr.education && ezr.education.includes(searchTerm)) || 
+              (ezr.playsWith && ezr.playsWith.includes(searchTerm))
       })
 
 
