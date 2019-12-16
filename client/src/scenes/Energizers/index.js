@@ -245,6 +245,20 @@ async refreshEnergizers() {
     }
   };
 
+  deleteEnergizer = async energizer => {
+    try {
+      await api.deleteEnergizer(energizer);
+      this.onDialogClose() 
+      this.refreshEnergizers();
+      this.props.enqueueSnackbar('Energizer deleted!');
+    } catch {
+       this.props.enqueueSnackbar(
+         'Oops, something went wrong. Please Try again'
+       );
+    }
+  };
+
+
 
 
   onClearSearch = () => {
@@ -271,18 +285,6 @@ async refreshEnergizers() {
     });
   };
   
-
-onDialogClose = () => {
-  this.setState({
-    openListModal: true,
-    openEditModal: false,
-    openReviewWikiModal: false,
-    energizerUnderEdit: {},
-    openSearchModal: false,
-    openChartModal: false
-  });
-};
-
 
 
   render() {
@@ -354,6 +356,7 @@ onDialogClose = () => {
                   energizer={energizerUnderEdit}
                   updateEnergizer={this.updateEnergizer}
                   createEnergizer={this.createEnergizer}
+                  deleteEnergizer={this.deleteEnergizer}
                   onClose={this.onDialogClose}
                 />
 

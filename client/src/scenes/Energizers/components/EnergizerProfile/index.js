@@ -110,7 +110,7 @@ class EnergizerProfile extends Component {
 
 
   render() {
-    const { classes, onClose } = this.props;
+    const { energizer, classes, onClose, deleteEnergizer } = this.props;
 
     return (
       <Dialog open fullWidth onClose={ onClose } maxWidth={ 'lg' }>
@@ -290,6 +290,8 @@ class EnergizerProfile extends Component {
           </DialogContent>
 
           <DialogActions>
+          
+              <Button color="primary" variant="contained" onClick={() => deleteEnergizer(energizer)}>Delete</Button>
               <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
               <Button color="primary" variant="contained" type="submit">Save</Button>
           </DialogActions>
@@ -303,6 +305,7 @@ EnergizerProfile.propTypes = {
   energizer: PropTypes.object,
   createEnergizer: PropTypes.func.isRequired,
   updateEnergizer: PropTypes.func.isRequired,
+  deleteEnergizer: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

@@ -41,3 +41,7 @@ export const fetchEnergizers = async () => {
   export const updateEnergizer = async params => {
     return apiClient.post('/api/energizers/update', params);
   };
+
+  export const deleteEnergizer = async params => {
+    return apiClient.post('/api/energizers/delete', params);
+  };
