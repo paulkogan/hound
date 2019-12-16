@@ -1,6 +1,7 @@
 const express = require('express');
 const Energizer = require('../../models/energizer');
 const router = express.Router();
+require('dotenv').config();
 
 //list all energizers
 router.get('/', async (req, res) => {
@@ -37,6 +38,36 @@ router.get('/', async (req, res) => {
       error: err.message,
     });
   }
+});
+
+//list all energizers
+router.get('/env', async (req, res) => {
+  try {
+   res.status(200).json({
+        version: process.env.NODE_ENV
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: 'Unable to get env',
+      error: err.message,
+    });
+  }
+});
+
+// delete energizer
+router.post('/delete', async (req, res) => {
+  const {id: energizerId, lastName} = req.body;
+  try {
+    await Energizer.query().delete().where('id', energizerId);
+
+  } catch (err) {
+    console.log('error........');
+    console.log(err);
+    res.status(422).json({ message: 'Unable to delete Energizer' });
+  }
+  res.status(200).json({ message: 'deleted energizer '+lastName });
+
 });
 
 // create energizer

@@ -33,8 +33,8 @@ router.post('/', async (req, res) => {
 
     let education= $('th:contains("Education")').next().text()
     let almaMater = $('th:contains("Alma")').next().text()
-    let bornTown= $('th:contains("Born")').next().find('a').first().text()
-    let bornState= $('th:contains("Born")').next().find('a').last().text()
+    let bornTown= $('th:contains("Born")').next().find('a').not('a:contains([)').first().text()
+    let bornState= $('th:contains("Born")').next().find('a').not('a:contains([)').last().text()
     let ele= $('.mw-parser-output').find('#Early_life_and_education').parent().next().text()
 
     let earlyLife= $('.mw-parser-output').find('#Early_life').parent().next().text()

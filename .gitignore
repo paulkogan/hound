@@ -1,0 +1,8 @@
+#gitignore
+node_modules/
+z-old/
+config.json
+Archive*
+iralog*
+*.zip
+.env*
