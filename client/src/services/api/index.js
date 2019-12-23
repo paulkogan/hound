@@ -17,6 +17,14 @@ const apiClient = axios.create({
 });
 
 
+export const readUploadList= async params => {
+  console.log("IN API, sending the upload:", params)
+  const result = await apiClient.post(`/api/uploadlist/`,params)
+  console.log("IN API, list upload result:", result.data)
+  return result.data
+};
+
+
 
 export const scrapeWikiUrl = async params => {
     console.log("IN API, scrape request:", params)

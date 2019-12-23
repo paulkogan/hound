@@ -11,6 +11,8 @@ import EnergizerProfile from './components/EnergizerProfile';
 import ReviewWikiResults from './components/ReviewWikiResults';
 import SearchPage from './components/Search';
 import ChartPage from './components/Chart';
+import UploadPage from './components/Upload';
+
 import * as cx from 'classnames';
 import * as api from '../../services/api';
 
@@ -83,6 +85,7 @@ class Energizers extends Component {
     openReviewWikiModal:false,
     openSearchModal:false,
     openChartModal:false,
+    openUploadModal:false,
     energizerUnderEdit : {},
     wikiResults: {},
     energizers: [],
@@ -98,7 +101,7 @@ class Energizers extends Component {
   async componentDidMount() {
     const { history } = this.props;
     const { currentUser } = this.context;
-    console.log("In Ener", currentUser.email)
+   
 
     const cookies = new Cookies();
     const cookieUser = cookies.get('userEmail') || ""; 
@@ -142,6 +145,11 @@ async refreshEnergizers() {
   onOpenSearch = () => {
       this.setState({ openSearchModal: !this.state.openSearchModal });
   };
+
+  onOpenUpload = () => {
+    this.setState({ openUploadModal: !this.state.openUploadModal });
+};
+
 
   onOpenChart = async () => {
       const statesMap = new Map()
@@ -281,7 +289,8 @@ async refreshEnergizers() {
       openReviewWikiModal: false,
       energizerUnderEdit: {},
       openSearchModal: false,
-      openChartModal: false
+      openChartModal: false,
+      openUploadModal: false
     });
   };
   
@@ -291,7 +300,7 @@ async refreshEnergizers() {
     const { classes } = this.props;
     const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
-      openEditModal, openReviewWikiModal} = this.state;
+      openEditModal, openUploadModal, openReviewWikiModal} = this.state;
 
     return (
         <div className={cx(classes.root)}>
@@ -303,6 +312,16 @@ async refreshEnergizers() {
                     >
                       Add Energizer
                     </Button>
+
+                    <Button
+                      className={cx(classes.actionButton)}
+                      color="primary"
+                      variant="contained"
+                      onClick={this.onOpenUpload}
+                    >
+                      Upload List
+                    </Button>
+
 
                     <Button
                     className={cx(classes.actionButton)}
@@ -395,6 +414,15 @@ async refreshEnergizers() {
               />
             </div>
             )}
+
+            {openUploadModal &&  (
+            <div>
+              <UploadPage
+                onClose={this.onDialogClose}
+              />
+            </div>
+            )}  
+
 
             </div>
          )} 
