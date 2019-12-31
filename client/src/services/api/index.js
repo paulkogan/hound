@@ -18,9 +18,14 @@ const apiClient = axios.create({
 
 
 export const readUploadList= async params => {
+
+  const postConfig = {
+    headers: { 'content-type': 'multipart/form-data' }
+}
+
   console.log("IN API, sending the upload:", params)
-  const result = await apiClient.post(`/api/uploadlist/`,params)
-  console.log("IN API, list upload result:", result.data)
+  const result = await apiClient.post(`/api/uploadlist/`,params, postConfig)
+  //console.log("IN API, list upload result:", result.data)
   return result.data
 };
 

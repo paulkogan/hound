@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import * as api from '../../../../services/api';
-
+import XLSX from 'xlsx';
 
 const styles = () => ({
   input: {
@@ -42,39 +42,51 @@ class UploadPage extends Component {
     super(props);
 
     this.state = {
-        selectedFile: null, 
-        fileName: null,
-        uploadResults: null,
+        selectedFile: "", 
+        fileName: " - ? - ",
+        listData: null,
         openReviewUploadResultsModal:false
     };
   }
 
-  readFile = async () => {
-     console.log("Reading.... ",this.state.selectedFile.name) 
+  processFile = async () => {
 
-     try {
-        let data = new FormData()
-        data.append('file', this.state.selectedFile) 
-        data.append('name', this.state.fileName) 
-        let uploadResults = await api.readUploadList(data);
-        console.log("UPLOAD RESULTS", uploadResults)
-        this.props.enqueueSnackbar('List Read!');
-        await this.setState({
-            uploadResults,
-            openReviewUploadResultsModal: true
-          });
-      } catch {
-         this.props.enqueueSnackbar(
-          'Oops, something went wrong with list upload. Please Try again'
-         );
-      }
+
+        var reader = new FileReader();
+        reader.onload = async (file) =>  { //needs to be arrow function
+            try {
+                        var data = file.target.result;
+                        let readData = XLSX.read(data, {type: 'binary'});
+                        const wsname = readData.SheetNames[0];
+                        const ws = readData.Sheets[wsname];
+                        let listData= XLSX.utils.sheet_to_json(ws, {header:1});
+                        console.log("JSONData", listData) 
+                        this.setState({
+                            listData,
+                            openReviewUploadResultsModal: true
+                        });
+                        this.props.enqueueSnackbar('List Read!');
+            } catch {
+                this.props.enqueueSnackbar(
+                    'Oops, something went wrong while reading the list. Please Try again'
+            )}
+
+        };
+        reader.readAsBinaryString(this.state.selectedFile)
+    
+        
+
+
  
   }; //readFile
 
 
   onOpenFileSelector = (event) => {
+    event.preventDefault();
     let fileObj = event.target.files[0];
-    console.log("NAME ", event.target.files[0].name) 
+    console.log("IN Open File Selector, selected: ", fileObj.name) 
+
+
     this.setState({
         selectedFile:fileObj, 
         fileName: event.target.files[0].name
@@ -102,7 +114,8 @@ class UploadPage extends Component {
             type="file" 
             onChange={this.onOpenFileSelector} 
          />
-     
+
+
           <DialogContent>
 
 
@@ -111,8 +124,7 @@ class UploadPage extends Component {
           <DialogActions>
         
               <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
-              <Button color="primary" variant="contained" onClick={this.readFile}>Read File</Button>
-              <Button color="primary" variant="contained" type="submit">Save</Button>
+              <Button color="primary" variant="contained" onClick={this.processFile}>Process {this.state.fileName}</Button>
           </DialogActions>
       </Dialog>
     );
@@ -121,3 +133,41 @@ class UploadPage extends Component {
 
 
 export default withSnackbar(withStyles(styles)(UploadPage));
+
+
+
+// try {
+//     //this is useless, just sending the name 
+//     let data = new FormData()
+//     data.append('englist', this.state.selectedFile, this.state.fileName) 
+//     let uploadResults = await api.readUploadList(data);
+//     console.log("UPLOAD RESULTS", uploadResults)
+//     this.props.enqueueSnackbar('List Read!');
+//     await this.setState({
+//         uploadResults,
+//         openReviewUploadResultsModal: true
+//       });
+//   } catch {
+//      this.props.enqueueSnackbar(
+//       'Oops, something went wrong with list upload. Please Try again'
+//      );
+//   }
+
+// }; //readFile
+
+
+
+{/* <form          
+action='http://localhost:5000/api/uploadlist' 
+method='post' 
+encType="multipart/form-data"
+>
+
+<input 
+type="file" 
+name="englist"
+onChange={this.onOpenFileSelector} 
+/>
+
+<input type="submit" />
+</form> */}
