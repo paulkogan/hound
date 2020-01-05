@@ -6,3 +6,4 @@ Archive*
 iralog*
 *.zip
 .env*
+.env.development

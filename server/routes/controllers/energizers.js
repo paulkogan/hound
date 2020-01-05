@@ -27,7 +27,8 @@ router.get('/', async (req, res) => {
         gender: energizer.gender,
         occupation: energizer.occupation,
         education: energizer.education,
-        bio: energizer.bio
+        bio: energizer.bio,
+        agencyRep: energizer.rep_1
       })
     )
     });
@@ -62,7 +63,7 @@ router.post('/delete', async (req, res) => {
     await Energizer.query().delete().where('id', energizerId);
 
   } catch (err) {
-    console.log('error........');
+    console.log('error on delete......');
     console.log(err);
     res.status(422).json({ message: 'Unable to delete Energizer' });
   }
@@ -71,78 +72,63 @@ router.post('/delete', async (req, res) => {
 });
 
 // create energizer
-router.post('/create', async (req, res) => {
+router.post('/uploadlist', async (req, res) => {
   const {
-    firstName, lastName, occupation, wikiPage
+    enzlist
   } = req.body;
 
-  console.log(`/Controllers/energizers/CREATE  - ${JSON.stringify(req.body, null, 4)}`);
+  console.log(`/Controllers/energizers/UPLOAD-LIST  - ${JSON.stringify(req.body, null, 4)}`);
+
+  enzlist.forEach(async (enz) => {
+        try {
+            await Energizer.create(enz);
+        } catch (err) {
+            console.log('error uploading list........');
+            console.log(err);
+            res.status(422).json({ message: 'Unable to make list Energizer' });
+        }
+
+  })
+
+  res.status(200).json({ message: 'new enz LIST added ok' });
+
+});
+
+
+
+
+// create energizer
+router.post('/create', async (req, res) => {
+  const {
+    newEnz
+  } = req.body;
+
+  console.log(`/Controllers/energizers/CREATE  - ${JSON.stringify(newEnz, null, 4)}`);
 
 
   try {
 
-    await Energizer.create({
-        firstName,
-        lastName,
-        occupation,
-        wikiPage,
-    });
+    await Energizer.create(newEnz);
   } catch (err) {
-    console.log('error........');
+    console.log('error on create........');
     console.log(err);
     res.status(422).json({ message: 'Unable to make Energizer' });
   }
-  res.status(200).json({ message: 'new provider ok' });
+  res.status(200).json({ message: 'new energizer ok' });
 });
 
 
 // update energizer
 router.post('/update', async (req, res) => {
-  const {
-    id,
-    firstName,
-    lastName,
-    wikiPage,
-    homeState,
-    homeTown,
-    bornState,
-    bornTown,
-    currentTown,
-    currentState,
-    earlyLife,
-    playsWith,
-    ethnicity,
-    gender,
-    occupation,
-    education,
-    bio
-  } = req.body;
+  const {updatedEnz} = req.body;
 
-console.log(`/Controllers/energizers/UPDATE  - ${JSON.stringify(req.body, null, 4)}`);
+console.log(`/Controllers/energizers/UPDATE body  - ${JSON.stringify(req.body, null, 4)}`);
 
   try {
-    const provider = await Energizer.update({
-      id,
-      firstName,
-      lastName,
-      wikiPage,
-      homeState,
-      homeTown,
-      bornState,
-      bornTown,
-      currentTown,
-      currentState,
-      earlyLife,
-      playsWith,
-      ethnicity,
-      gender,
-      occupation,
-      education,
-      bio
-    });
+    const provider = await Energizer.update(updatedEnz);
 
   } catch (err) {
-    console.log('error........');
+    console.log('error on update........');
     console.log(err);
     res.status(422).json({ message: 'Unable to update Energizer' });
   }

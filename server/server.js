@@ -2,11 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const server = express();
+const fileUpload = require('express-fileupload');
+
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 server.use(cookieParser());
-
+server.use(fileUpload());
 
 module.exports = server;
 

@@ -101,8 +101,8 @@ class ReviewWikiResults extends Component {
       wikiPage: energizer.wikiPage || '',
       homeTown: energizer.homeTown || '',
       homeState: energizer.homeState || '',
-      bornTown: wikiResults.bornTown || wikiResults.birthPlaceTown || energizer.bornTown|| '',
-      bornState: wikiResults.bornState || wikiResults.birthPlaceState || energizer.bornState|| '',
+      bornTown: wikiResults.bornTown || wikiResults.birthPlaceTown || wikiResults.originTown || energizer.bornTown  || '',
+      bornState: wikiResults.bornState || wikiResults.birthPlaceState || wikiResults.originState || energizer.bornState || '',
       currentTown: energizer.currentTown|| '',
       currentState: energizer.currentState|| '',
       education: wikiResults.almaMater || wikiResults.education || energizer.education || '',
@@ -200,6 +200,10 @@ class ReviewWikiResults extends Component {
                   <div>
                          Birthplace: { wikiResults.birthPlaceTown }, { wikiResults.birthPlaceState }
                   </div>
+                  <div>
+                         Origin: { wikiResults.originTown }, { wikiResults.originState }
+                  </div>
+
                   <div>
                          Education: { wikiResults.education }
                   </div>

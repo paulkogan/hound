@@ -27,6 +27,18 @@ fieldSmall: {
     textAlign: 'left',
     contentAlign: 'left'
   },
+  fieldMedium: {
+    fontSize: '12px',
+    lineHeight: '14px',
+    color: '#606A74',
+    fontWeight: 'normal',
+    maxWidth: '100%',
+    margin: '0px',
+    padding: '0px',
+    textAlign: 'left',
+    contentAlign: 'left'
+  },
+
   fieldBig: {
       fontSize: '12px',
       lineHeight: '14px',
@@ -44,24 +56,26 @@ class EnergizerProfile extends Component {
 
     const { energizer } = this.props;
 
-    this.state = {
-      firstName: energizer.firstName || '',
-      lastName: energizer.lastName || '',
-      wikiPage: energizer.wikiPage || '',
-      homeTown: energizer.homeTown || '',
-      homeState: energizer.homeState || '',
-      bornTown: energizer.bornTown || '',
-      bornState: energizer.bornState || '',
-      currentTown : energizer.currentTown || '',
-      currentState : energizer.currentState || '',
-      earlyLife: energizer.earlyLife || '',
-      playsWith: energizer.playsWith || '',
-      ethnicity: energizer.ethnicity|| '',
-      gender: energizer.gender || '',
-      occupation: energizer.occupation || '',
-      education: energizer.education || '',
-      bio: energizer.bio || '',
-    };
+      this.state = {
+        firstName: energizer.firstName || '',
+        lastName: energizer.lastName || '',
+        wikiPage: energizer.wikiPage || '',
+        homeTown: energizer.homeTown || '',
+        homeState: energizer.homeState || '',
+        bornTown: energizer.bornTown || '',
+        bornState: energizer.bornState || '',
+        currentTown : energizer.currentTown || '',
+        currentState : energizer.currentState || '',
+        earlyLife: energizer.earlyLife || '',
+        playsWith: energizer.playsWith || '',
+        ethnicity: energizer.ethnicity|| '',
+        gender: energizer.gender || '',
+        occupation: energizer.occupation || '',
+        education: energizer.education || '',
+        bio: energizer.bio || '',
+        agencyRep: energizer.agencyRep || ''
+      };
+    
   }
 
   onSubmit = () => {
@@ -71,8 +85,24 @@ class EnergizerProfile extends Component {
       createEnergizer({
         firstName: this.state.firstName,
         lastName: this.state.lastName,
+        wikiPage: this.state.wikiPage,
+        homeTown: this.state.homeTown,
+        homeState: this.state.homeState,
+        bornTown: this.state.bornTown,
+        bornState: this.state.bornState,
+        currentTown : this.state.currentTown,
+        currentState : this.state.currentState,
+        earlyLife: this.state.earlyLife,
+        playsWith: this.state.playsWith,
+        ethnicity: this.state.ethnicity,
+        gender: this.state.gender,
         occupation: this.state.occupation,
-        wikiPage: this.state.wikiPage
+        education: this.state.education,
+        bio: this.state.bio,
+        agencyRep: this.state.agencyRep
+
+
+
       }))
       : (
       updateEnergizer({
@@ -84,16 +114,16 @@ class EnergizerProfile extends Component {
         homeState: this.state.homeState,
         bornTown: this.state.bornTown,
         bornState: this.state.bornState,
-        currentTown : this.state.currentTown || '',
-        currentState : this.state.currentState || '',
-        earlyLife: this.state.earlyLife || '',
-        playsWith: this.state.playsWith || '',
-        ethnicity: this.state.ethnicity|| '',
-        gender: this.state.gender || '',
+        currentTown : this.state.currentTown,
+        currentState : this.state.currentState,
+        earlyLife: this.state.earlyLife,
+        playsWith: this.state.playsWith,
+        ethnicity: this.state.ethnicity,
+        gender: this.state.gender,
         occupation: this.state.occupation,
         education: this.state.education,
-        bio: this.state.bio
-
+        bio: this.state.bio,
+        agencyRep: this.state.agencyRep
       }))
 
     this.props.onClose();
@@ -104,7 +134,6 @@ class EnergizerProfile extends Component {
   }
 
   onChange = e => {
-    //console.log("On Change: name: ", e.target.name, "value:", e.target.value)
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -116,7 +145,7 @@ class EnergizerProfile extends Component {
       <Dialog open fullWidth onClose={ onClose } maxWidth={ 'lg' }>
           <DialogTitle>
             {this.isEmpty(this.props.energizer) ?
-                "New Energizer - add * fields only" : "Update Energizer"}
+                "New Energizer - * fields required" : "Update Energizer"}
          </DialogTitle>
 
 
@@ -167,8 +196,6 @@ class EnergizerProfile extends Component {
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
-
-
         </div>
 
         <div className={ cx(classes.fieldBig) } >
@@ -251,9 +278,8 @@ class EnergizerProfile extends Component {
 
 
 
-
+            <div className={ cx(classes.fieldMedium) } >
             <TextValidator
-              fullWidth
               label="Education"
               value={ this.state.education}
               variant="outlined"
@@ -261,6 +287,43 @@ class EnergizerProfile extends Component {
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
+       
+       
+          <TextValidator
+              label="Agency/Representation"
+              value={ this.state.agencyRep}
+              variant="outlined"
+              name="agencyRep"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+          <TextValidator
+              label="Ethnicity"
+              value={ this.state.ethnicity}
+              variant="outlined"
+              name="ethnicity"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+          <TextValidator
+              label="Gender"
+              value={ this.state.gender}
+              variant="outlined"
+              name="gender"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+
+
+
+          </div>
+
+
+
+
 
             <TextValidator
               fullWidth

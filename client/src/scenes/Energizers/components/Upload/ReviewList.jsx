@@ -8,7 +8,7 @@ import * as cx from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 
 const ReviewList = props => {
-    const {classes, rowsList, columnMap, onClose, sendList} = props;
+    const {classes, rowsList, columnMap, onClose, sendUploadList} = props;
     //const [currentList, updateList] = useState(rawList)
 
     const renderEnergizerRow = (enzRow) => {
@@ -48,12 +48,11 @@ const ReviewList = props => {
                         </table>
                     </div>
 
-
             </DialogContent>
 
             <DialogActions>
                 <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
-                <Button color="primary" variant="contained" onClick={sendList}>Accept List</Button>
+                <Button color="primary" variant="contained" onClick={() => sendUploadList(rowsList)}>Accept List</Button>
             </DialogActions>
         </Dialog>
       );

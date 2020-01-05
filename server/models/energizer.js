@@ -5,35 +5,88 @@ class Energizer extends Model {
     return 'energizers';
   }
 
-  static async create({firstName,lastName, occupation, wikiPage }) {
+
+  // firstName	 energizer.first_name,	
+  // lastName	 energizer.last_name,	
+  // wikiPage	 energizer.wiki_page,	
+  // bornState	 energizer.born_state,	
+  // bornTown	 energizer.born_town,	
+  // homeState	 energizer.home_state,	
+  // homeTown	 energizer.home_town,	
+  // currentTown	 energizer.current_town,	
+  // currentState	 energizer.current_state,	
+  // earlyLife	 energizer.early_life,	
+  // playsWith	 energizer.plays_with,	
+  // ethnicity	 energizer.ethnicity,	
+  // gender	 energizer.gender,	
+  // occupation	 energizer.occupation,	
+  // education	 energizer.education,	
+  // bio	 energizer.bio	
+  // agencyRep	 energizer.rep_11	 
+
+
+
+
+  static async create(enz) {
+
+    console.log("IN MODEL : creating "+JSON.stringify(enz,null,4))
+
+    const {
+      ethnicity=null, 
+      gender=null, 
+      occupation=null, 
+      education=null } = enz
+
+
     return Energizer.query().insert({
-      first_name:firstName,
-      last_name: lastName,
+      first_name: enz.firstName || null,
+      last_name: enz.lastName || null,
+      wiki_page: enz.wikiPage || null,
+      born_state: enz.bornState || null,
+      born_town: enz.bornTown || null,
+      home_state: enz.homeState || null,
+      home_town: enz.homeTown || null,
+      current_town: enz.currentTown || null,
+      current_state: enz.currentState || null,
+      plays_with: enz.playsWith || null,
+      rep_1: enz.agencyRep || null,
+      ethnicity,
+      gender,
       occupation,
-      wiki_page: wikiPage
+      education
     }).returning('*');
   }
 
-  static async update({id, firstName,lastName,  wikiPage,
-    homeState, homeTown,  bornState, bornTown, currentTown, currentState, earlyLife, playsWith,
-    ethnicity, gender, occupation, education, bio }) {
+
+  static async update(updatedEnz) {
+
+    console.log("IN MODEL : UPDATING "+JSON.stringify(updatedEnz,null,4))
+    const {
+      id,
+      bio=null,
+      ethnicity=null, 
+      gender=null, 
+      occupation=null, 
+      education=null } = updatedEnz
+
     return Energizer.query().findById(id).patch({
-      first_name:firstName,
-      last_name: lastName,
-      wiki_page: wikiPage,
-      home_state: homeState,
-      home_town: homeTown,
-      born_state: bornState,
-      born_town: bornTown,
-      current_town: currentTown,
-      current_state: currentState,
-      early_life: earlyLife,
-      plays_with: playsWith,
+      first_name:updatedEnz.firstName,
+      last_name: updatedEnz.lastName,
+      wiki_page: updatedEnz.wikiPage,
+      home_state: updatedEnz.homeState,
+      home_town: updatedEnz.homeTown,
+      born_state: updatedEnz.bornState,
+      born_town: updatedEnz.bornTown,
+      current_town: updatedEnz.currentTown,
+      current_state: updatedEnz.currentState,
+      early_life: updatedEnz.earlyLife,
+      plays_with: updatedEnz.playsWith,
+      rep_1: updatedEnz.agencyRep,
       ethnicity,
       gender,
       occupation,
       education,
-      bio
+      bio,  
     }).returning('*');
   }
 
@@ -45,7 +98,9 @@ class Energizer extends Model {
     static async getById(id) {
       return Energizer.query().findById(id);
     }
+  }
 
+  module.exports = Energizer;
 
   // static get relationMappings() {
   //   return {
@@ -137,6 +192,4 @@ class Energizer extends Model {
 //   }
 
 
-}
 
-module.exports = Energizer;

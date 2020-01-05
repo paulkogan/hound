@@ -120,7 +120,7 @@ class Energizers extends Component {
   }
 
 
-async refreshEnergizers() {
+refreshEnergizers = async () => {
 
   this.setState({ isLoading: true });
   let energizers = await api.fetchEnergizers()
@@ -230,8 +230,9 @@ async refreshEnergizers() {
 
 
   updateEnergizer = async energizer => {
+    console.log("FRONT end Update energizer", +JSON.stringify(energizer,null,4));
     try {
-      await api.updateEnergizer(energizer);
+      await api.updateEnergizer({updatedEnz:energizer});
       this.refreshEnergizers();
       this.props.enqueueSnackbar('Energizer updated!');
     } catch {
@@ -243,7 +244,7 @@ async refreshEnergizers() {
 
   createEnergizer = async energizer => {
     try {
-      await api.createEnergizer(energizer);
+      await api.createEnergizer({newEnz:energizer});
       this.refreshEnergizers();
       this.props.enqueueSnackbar('Energizer created!');
     } catch {
@@ -252,8 +253,6 @@ async refreshEnergizers() {
        );
     }
   };
-
-
 
 
   deleteEnergizer = async energizer => {
@@ -269,7 +268,32 @@ async refreshEnergizers() {
     }
   };
 
+  sendUploadList= async (enzList) => {
 
+    let enzListWithWiki = enzList.map(enz => {
+          if (!enz.wikiPage || enz.wikiPage.length <10 ) {
+              let capFirst = enz.firstName.charAt(0).toUpperCase()+enz.firstName.substring(1);
+              let capLast = enz.lastName.charAt(0).toUpperCase()+enz.lastName.substring(1);
+              let autoWiki = "https://en.wikipedia.org/wiki/"+capFirst+"_"+capLast
+              console.log (autoWiki)
+              enz.wikiPage = autoWiki 
+          }
+          return enz
+    })
+
+
+    try {
+      await api.sendUploadList({enzlist: enzListWithWiki});
+      this.props.enqueueSnackbar('Energizer List Added!');
+      this.refreshEnergizers();
+      this.onDialogClose()
+
+    } catch {
+       this.props.enqueueSnackbar(
+         'Oops, something went wrong with adding the List.'
+       );
+    }
+  };
 
 
   onClearSearch = () => {
@@ -422,6 +446,7 @@ async refreshEnergizers() {
             <div>
               <UploadPage
                 onClose={this.onDialogClose}
+                sendUploadList = {this.sendUploadList}
               />
             </div>
             )}  

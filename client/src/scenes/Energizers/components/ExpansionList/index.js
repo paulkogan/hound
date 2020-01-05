@@ -103,10 +103,10 @@ class ExpansionList extends Component {
                             <Grid item xs={4} lg={4}>
                               <div className={cx(classes.panelDetailsSection)}>
                                 <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                                  Name
+                                  Wiki
                                 </h4>
                                 <span className={cx(classes.panelDetailsSectionText)}>
-                                    {energizer.firstName} {energizer.lastName}
+                                    {energizer.wikiPage} 
                                 </span>
                               </div>
                             </Grid>
@@ -114,10 +114,10 @@ class ExpansionList extends Component {
                             <Grid item xs={4} lg={4}>
                               <div className={cx(classes.panelDetailsSection)}>
                                 <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                                  Occupation
+                                  Plays With
                                 </h4>
                                 <span className={cx(classes.panelDetailsSectionText)}>
-                                  {energizer.occupation || '--'}
+                                  {energizer.playsWith}
                                 </span>
                               </div>
                             </Grid>
@@ -126,9 +126,10 @@ class ExpansionList extends Component {
                             <Grid item xs={4} lg={4}>
                               <div className={cx(classes.panelDetailsSection)}>
                                 <h4 className={cx(classes.panelDetailsSectionTitle)}>
+                                  Education
                                 </h4>
                                 <span className={cx(classes.panelDetailsSectionText)}>
-                                  {'--'}
+                                     {energizer.education}
                                 </span>
                               </div>
                             </Grid>

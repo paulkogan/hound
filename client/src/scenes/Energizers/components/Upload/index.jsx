@@ -125,18 +125,6 @@ class UploadPage extends Component {
         
   }
 
-  sendUploadList= async () => {
-    try {
-      await api.sendUploadList({"enzlist":this.state.cleanUploadList});
-      this.refreshEnergizers();
-      this.props.enqueueSnackbar('Energizer List Added!');
-    } catch {
-       this.props.enqueueSnackbar(
-         'Oops, something went wrong with adding the List.'
-       );
-    }
-  };
-
 
 
 
@@ -152,7 +140,7 @@ class UploadPage extends Component {
 
 
   render() {
-    const {  onClose } = this.props;
+    const {  onClose, sendUploadList } = this.props;
     const {  cleanUploadList,  shownColumnList, openReviewListModal } = this.state;
 
     return (
@@ -180,7 +168,7 @@ class UploadPage extends Component {
               <ReviewList
                 onClose={onClose}
                 rowsList={cleanUploadList}
-                sendList={this.sendUploadList}
+                sendUploadList={sendUploadList}
                 columnMap = {shownColumnList}
               />
             </div>
