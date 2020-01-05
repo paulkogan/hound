@@ -17,7 +17,7 @@ const ReviewList = props => {
 
             <tr key={enzRow.index}>
                 {columnMap.map((header, index)=> {
-                    return <td key={index}>{enzRow[header.toString()]}</td>
+                    return <td key={index} className={classes.reviewCell}>{enzRow[header.toString()]}</td>
                 })}
             </tr>
         )
@@ -37,7 +37,7 @@ const ReviewList = props => {
                             <tbody>
                                <tr>
                                {columnMap.map((header, index)=>{
-                                     return <td key={index}>{header}</td>
+                                     return <td key={index} className={classes.headerCell} >{header}</td>
                                 })}
                                </tr>
                                {rowsList.map(enzRow =>{
@@ -64,18 +64,37 @@ const styles = () => ({
     root: {
       padding: '24px 30px',
     },
+
     tableContainer: {
       width: "90%",
       textAlign: "left",
       padding: '10px',
-      border: '2px solid red',
+      border: '0px solid red',
     },
     reviewTable: {
         width: "100%",
         textAlign: "left",
         padding: '10px',
-        border: '2px solid blue',
+        border: '0px solid blue',
+        borderCollapse: 'collapse',
+        cellSpacing: "0px", 
+        cellPadding: "0px"
       },
+
+      reviewCell: {
+        padding: '5px',  
+        paddingLeft: '10px',
+        paddingRight: '10px',
+        border: '1px solid green',
+      },
+
+      headerCell: {
+        padding: '5px',
+        border: '3px solid purple',
+      },
+
+
+
 
     title: {
       fontWeight: 'normal',

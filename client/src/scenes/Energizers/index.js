@@ -253,6 +253,9 @@ async refreshEnergizers() {
     }
   };
 
+
+
+
   deleteEnergizer = async energizer => {
     try {
       await api.deleteEnergizer(energizer);

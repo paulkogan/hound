@@ -38,14 +38,16 @@ export const scrapeWikiUrl = async params => {
     return result.data.wikiFound
 };
 
-
-
 export const fetchEnergizers = async () => {
     const result = await apiClient.get(`/api/energizers/`);
     //console.log(result.data.data[0])
     return result.data.data
 };
 
+
+  export const sendUploadList = async uploadList => {
+    return apiClient.post('/api/energizers/uploadlist', uploadList);
+  };
 
   export const createEnergizer = async params => {
     return apiClient.post('/api/energizers/create', params);

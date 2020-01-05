@@ -63,11 +63,10 @@ class UploadPage extends Component {
     columnMap[14]='twitter'
     columnMap[16]='imdb'
 
-    let usedColumnMap = []
-    let usedColumns = [0,1,2,3,4,5,6,7,8,12,15,17]
-    
-    columnMap.forEach((header, index) => {
-        if (usedColumns.includes(index)) usedColumnMap.push(header)
+    let shownColumnList = []
+    let shownColumnOrder = [0,1,2,3,7,8,15,12,6,4,5,17]
+    shownColumnOrder.forEach((pos) => {
+        shownColumnList.push(columnMap[pos])
     })
 
 
@@ -77,7 +76,7 @@ class UploadPage extends Component {
         cleanUploadList: [],
         openReviewListModal:false,
         columnMap, 
-        usedColumnMap
+        shownColumnList
     };
   }
 
@@ -126,6 +125,20 @@ class UploadPage extends Component {
         
   }
 
+  sendUploadList= async () => {
+    try {
+      await api.sendUploadList({"enzlist":this.state.cleanUploadList});
+      this.refreshEnergizers();
+      this.props.enqueueSnackbar('Energizer List Added!');
+    } catch {
+       this.props.enqueueSnackbar(
+         'Oops, something went wrong with adding the List.'
+       );
+    }
+  };
+
+
+
 
   onOpenFileSelector = (event) => {
     event.preventDefault();
@@ -137,14 +150,10 @@ class UploadPage extends Component {
     })
   }
 
-sendList = () => {
-    console.log("Sending List")
-}
-
 
   render() {
-    const {  onClose, sendList } = this.props;
-    const {  cleanUploadList, columnMap, usedColumnMap, openReviewListModal } = this.state;
+    const {  onClose } = this.props;
+    const {  cleanUploadList,  shownColumnList, openReviewListModal } = this.state;
 
     return (
       <Dialog open fullWidth onClose={ onClose } maxWidth={ 'lg' }>
@@ -171,9 +180,8 @@ sendList = () => {
               <ReviewList
                 onClose={onClose}
                 rowsList={cleanUploadList}
-                sendList={sendList}
-                columnMap = {usedColumnMap}
-
+                sendList={this.sendUploadList}
+                columnMap = {shownColumnList}
               />
             </div>
             )}
@@ -181,8 +189,7 @@ sendList = () => {
 
           </DialogContent>
 
-          <DialogActions>
-        
+          <DialogActions>       
               <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
               <Button color="primary" variant="contained" onClick={this.readFile}>Process {this.state.fileName}</Button>
           </DialogActions>
@@ -196,24 +203,6 @@ export default withSnackbar(withStyles(styles)(UploadPage));
 
 
 
-// try {
-//     //this is useless, just sending the name 
-//     let data = new FormData()
-//     data.append('englist', this.state.selectedFile, this.state.fileName) 
-//     let uploadResults = await api.readUploadList(data);
-//     console.log("UPLOAD RESULTS", uploadResults)
-//     this.props.enqueueSnackbar('List Read!');
-//     await this.setState({
-//         uploadResults,
-//         openReviewUploadResultsModal: true
-//       });
-//   } catch {
-//      this.props.enqueueSnackbar(
-//       'Oops, something went wrong with list upload. Please Try again'
-//      );
-//   }
-
-// }; //readFile
 
 
 
