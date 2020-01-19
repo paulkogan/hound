@@ -156,8 +156,11 @@ class ReviewWikiResults extends Component {
                 Review Wiki Results
          </DialogTitle>
 
-
     <ValidatorForm ref="form" onSubmit={ this.onSubmit }>
+      <DialogActions>
+            <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
+            <Button color="primary" variant="contained" type="submit">Save</Button>
+      </DialogActions>
       <DialogContent>
 
      <div className = { cx(classes.parentCont) }>
@@ -321,10 +324,7 @@ class ReviewWikiResults extends Component {
 
           </DialogContent>
 
-          <DialogActions>
-            <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
-            <Button color="primary" variant="contained" type="submit">Save</Button>
-          </DialogActions>
+ 
         </ValidatorForm>
       </Dialog>
     );

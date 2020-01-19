@@ -35,11 +35,16 @@ class Energizer extends Model {
       ethnicity=null, 
       gender=null, 
       occupation=null, 
-      education=null } = enz
+      education=null, 
+      birthday=null,
+      solicitor=null,
+      notes=null
+    } = enz
 
 
     return Energizer.query().insert({
       first_name: enz.firstName || null,
+      middle_name: enz.middleName || null,
       last_name: enz.lastName || null,
       wiki_page: enz.wikiPage || null,
       born_state: enz.bornState || null,
@@ -53,7 +58,18 @@ class Energizer extends Model {
       ethnicity,
       gender,
       occupation,
-      education
+      education,
+      birthday,
+      solicitor,
+      notes,
+      home_zipcode: enz.homeZipcode || null,
+      high_school: enz.highSchool || null,
+      imdb_link: enz.imdbLink || null,
+      social_1: enz.social1 || null,
+      social_2: enz.social2 || null,
+      social_3: enz.social3 || null,
+      stat_1: enz.stat1 || null,
+      stat_2: enz.stat2 || null
     }).returning('*');
   }
 
@@ -67,10 +83,15 @@ class Energizer extends Model {
       ethnicity=null, 
       gender=null, 
       occupation=null, 
-      education=null } = updatedEnz
+      education=null, 
+      birthday=null,
+      solicitor=null,
+      notes=null  
+    } = updatedEnz
 
     return Energizer.query().findById(id).patch({
       first_name:updatedEnz.firstName,
+      middle_name: updatedEnz.middleName,
       last_name: updatedEnz.lastName,
       wiki_page: updatedEnz.wikiPage,
       home_state: updatedEnz.homeState,
@@ -86,7 +107,17 @@ class Energizer extends Model {
       gender,
       occupation,
       education,
-      bio,  
+      birthday,
+      solicitor,
+      notes, 
+      home_zipcode: updatedEnz.homeZipcode,
+      high_school: updatedEnz.highSchool,
+      imdb_link: updatedEnz.imdbLink,
+      social_1: updatedEnz.social1,
+      social_2: updatedEnz.social2,
+      social_3: updatedEnz.social3,
+      stat_1: updatedEnz.stat1,
+      stat_2: updatedEnz.stat2
     }).returning('*');
   }
 

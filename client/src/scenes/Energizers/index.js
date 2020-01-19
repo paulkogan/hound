@@ -271,13 +271,17 @@ refreshEnergizers = async () => {
   sendUploadList= async (enzList) => {
 
     let enzListWithWiki = enzList.map(enz => {
+         
           if (!enz.wikiPage || enz.wikiPage.length <10 ) {
-              let capFirst = enz.firstName.charAt(0).toUpperCase()+enz.firstName.substring(1);
-              let capLast = enz.lastName.charAt(0).toUpperCase()+enz.lastName.substring(1);
+              let capFirst = enz.firstName.charAt(0).toUpperCase()
+              if(enz.firstName.length > 0) capFirst+=enz.firstName.substring(1);
+              let capLast = enz.lastName.charAt(0).toUpperCase()
+              if(enz.lastName.length > 0) capLast+=enz.lastName.substring(1);
               let autoWiki = "https://en.wikipedia.org/wiki/"+capFirst+"_"+capLast
-              console.log (autoWiki)
+              console.log ("ADDING ", autoWiki)
               enz.wikiPage = autoWiki 
           }
+          console.log("SEND UPLOAD-LIST AFTER -", enz)
           return enz
     })
 

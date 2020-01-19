@@ -83,7 +83,7 @@ class UploadPage extends Component {
   readFile = async () => {
         var reader = new FileReader();
         reader.onload = async (file) =>  { //needs to be arrow function
-            try {
+          //  try {
                         var data = file.target.result;
                         let readData = XLSX.read(data, {type: 'binary'});
                         const wsname = readData.SheetNames[0];
@@ -97,10 +97,10 @@ class UploadPage extends Component {
                             openReviewListModal: true
                         });
                         this.props.enqueueSnackbar('List Read!');
-            } catch {
-                this.props.enqueueSnackbar(
-                    'Oops, something went wrong while reading the list. Please Try again'
-            )}
+            // } catch {
+            //     this.props.enqueueSnackbar(
+            //         'Oops, something went wrong while reading the list. Please Try again'
+            // )}
 
         };
         reader.readAsBinaryString(this.state.selectedFile) 
@@ -115,10 +115,14 @@ class UploadPage extends Component {
             let newEnergizer={}    
             newEnergizer["index"] = index
             for (let col =0;col<row.length;col++) {
-                newEnergizer[columnMap[col+1]] = row[col]
+                let value = row[col] ? row[col].toString() : ""
+                newEnergizer[columnMap[col+1]] = value
             }
-           //console.log(newEnergizer)
-           results.push(newEnergizer)
+           console.log(newEnergizer)
+           if (newEnergizer.firstName && newEnergizer.lastName) {
+               results.push(newEnergizer)
+           }
+           
         })
         results.shift()//remove headers
         return results
