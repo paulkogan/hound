@@ -115,7 +115,7 @@ router.post('/create', async (req, res) => {
     newEnz
   } = req.body;
 
-  console.log(`/Controllers/energizers/CREATE  - ${JSON.stringify(newEnz, null, 4)}`);
+  console.log(`/Controllers/energizers/CREATE-BODY  - ${JSON.stringify(req.body, null, 4)}`);
 
 
   try {

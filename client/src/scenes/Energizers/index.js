@@ -243,6 +243,8 @@ refreshEnergizers = async () => {
   };
 
   createEnergizer = async energizer => {
+    console.log("IN API CREATE", JSON.stringify(energizer,null,4))
+
     try {
       await api.createEnergizer({newEnz:energizer});
       this.refreshEnergizers();
@@ -417,7 +419,7 @@ refreshEnergizers = async () => {
               {openReviewWikiModal && (
               <div>
                 <ReviewWikiResults
-                  energizer={energizerUnderEdit}
+                  energizer={energizerUnderEdit.energizer}
                   wikiResults={wikiResults}
                   updateEnergizer={this.updateEnergizer}
                   onClose={this.onDialogClose}

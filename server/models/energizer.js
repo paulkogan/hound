@@ -6,27 +6,6 @@ class Energizer extends Model {
   }
 
 
-  // firstName	 energizer.first_name,	
-  // lastName	 energizer.last_name,	
-  // wikiPage	 energizer.wiki_page,	
-  // bornState	 energizer.born_state,	
-  // bornTown	 energizer.born_town,	
-  // homeState	 energizer.home_state,	
-  // homeTown	 energizer.home_town,	
-  // currentTown	 energizer.current_town,	
-  // currentState	 energizer.current_state,	
-  // earlyLife	 energizer.early_life,	
-  // playsWith	 energizer.plays_with,	
-  // ethnicity	 energizer.ethnicity,	
-  // gender	 energizer.gender,	
-  // occupation	 energizer.occupation,	
-  // education	 energizer.education,	
-  // bio	 energizer.bio	
-  // agencyRep	 energizer.rep_11	 
-
-
-
-
   static async create(enz) {
 
     console.log("IN MODEL : creating "+JSON.stringify(enz,null,4))
@@ -59,10 +38,10 @@ class Energizer extends Model {
       gender,
       occupation,
       education,
-      birthday,
       solicitor,
+      birthday,
       notes,
-      home_zipcode: enz.homeZipcode || null,
+      home_zipcode: parseInt(enz.homeZipcode) || null,
       high_school: enz.highSchool || null,
       imdb_link: enz.imdbLink || null,
       social_1: enz.social1 || null,
@@ -89,35 +68,37 @@ class Energizer extends Model {
       notes=null  
     } = updatedEnz
 
+
     return Energizer.query().findById(id).patch({
-      first_name:updatedEnz.firstName,
-      middle_name: updatedEnz.middleName,
-      last_name: updatedEnz.lastName,
-      wiki_page: updatedEnz.wikiPage,
-      home_state: updatedEnz.homeState,
-      home_town: updatedEnz.homeTown,
-      born_state: updatedEnz.bornState,
-      born_town: updatedEnz.bornTown,
-      current_town: updatedEnz.currentTown,
-      current_state: updatedEnz.currentState,
-      early_life: updatedEnz.earlyLife,
-      plays_with: updatedEnz.playsWith,
-      rep_1: updatedEnz.agencyRep,
+      first_name:updatedEnz.firstName || null,
+      middle_name: updatedEnz.middleName || null,
+      last_name: updatedEnz.lastName || null,
+      wiki_page: updatedEnz.wikiPage || null,
+      home_state: updatedEnz.homeState || null,
+      home_town: updatedEnz.homeTown || null,
+      born_state: updatedEnz.bornState || null,
+      born_town: updatedEnz.bornTown || null,
+      current_town: updatedEnz.currentTown || null,
+      current_state: updatedEnz.currentState || null,
+      early_life: updatedEnz.earlyLife || null,
+      plays_with: updatedEnz.playsWith || null,
+      rep_1: updatedEnz.agencyRep || null,
       ethnicity,
       gender,
       occupation,
       education,
-      birthday,
       solicitor,
+      birthday,
       notes, 
-      home_zipcode: updatedEnz.homeZipcode,
-      high_school: updatedEnz.highSchool,
-      imdb_link: updatedEnz.imdbLink,
-      social_1: updatedEnz.social1,
-      social_2: updatedEnz.social2,
-      social_3: updatedEnz.social3,
-      stat_1: updatedEnz.stat1,
-      stat_2: updatedEnz.stat2
+      home_zipcode: parseInt(updatedEnz.homeZipcode) || null,
+      high_school: updatedEnz.highSchool || null,
+      imdb_link: updatedEnz.imdbLink || null,
+      social_1: updatedEnz.social1 || null,
+      social_2: updatedEnz.social2 || null,
+      social_3: updatedEnz.social3 || null,
+      stat_1: updatedEnz.stat1 || null,
+      stat_2: updatedEnz.stat2 || null
+
     }).returning('*');
   }
 
@@ -132,6 +113,11 @@ class Energizer extends Model {
   }
 
   module.exports = Energizer;
+
+
+
+
+
 
   // static get relationMappings() {
   //   return {
