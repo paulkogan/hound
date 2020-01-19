@@ -80,50 +80,102 @@ class EnergizerProfile extends Component {
 
   onSubmit = () => {
     const { energizer, createEnergizer, updateEnergizer } = this.props;
+    const { 
+      firstName,
+      middleName,
+      lastName,
+      wikiPage,
+      homeTown,
+      homeState,
+      bornTown,
+      bornState,
+      currentTown,
+      currentState,
+      earlyLife,
+      bio,
+      playsWith,
+      agencyRep,
+      ethnicity,
+      gender,
+      occupation,
+      education,
+      birthday,
+      solicitor,
+      notes,
+      homeZipcode,
+      highSchool,
+      imdbLink,
+      social1,
+      social2,
+      social3,
+      stat1,
+      stat2
+    } = this.state;
 
     this.isEmpty(energizer) ? (
       createEnergizer({
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        wikiPage: this.state.wikiPage,
-        homeTown: this.state.homeTown,
-        homeState: this.state.homeState,
-        bornTown: this.state.bornTown,
-        bornState: this.state.bornState,
-        currentTown : this.state.currentTown,
-        currentState : this.state.currentState,
-        earlyLife: this.state.earlyLife,
-        playsWith: this.state.playsWith,
-        ethnicity: this.state.ethnicity,
-        gender: this.state.gender,
-        occupation: this.state.occupation,
-        education: this.state.education,
-        bio: this.state.bio,
-        agencyRep: this.state.agencyRep
-
-
-
+        firstName,
+        middleName,
+        lastName,
+        wikiPage,
+        homeTown,
+        homeState,
+        bornTown,
+        bornState,
+        currentTown,
+        currentState,
+        earlyLife,
+        bio,
+        playsWith,
+        agencyRep,
+        ethnicity,
+        gender,
+        occupation,
+        education,
+        birthday,
+        solicitor,
+        notes,
+        homeZipcode,
+        highSchool,
+        imdbLink,
+        social1,
+        social2,
+        social3,
+        stat1,
+        stat2
       }))
       : (
       updateEnergizer({
         id: energizer.id,
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        wikiPage: this.state.wikiPage,
-        homeTown: this.state.homeTown,
-        homeState: this.state.homeState,
-        bornTown: this.state.bornTown,
-        bornState: this.state.bornState,
-        currentTown : this.state.currentTown,
-        currentState : this.state.currentState,
-        earlyLife: this.state.earlyLife,
-        playsWith: this.state.playsWith,
-        ethnicity: this.state.ethnicity,
-        gender: this.state.gender,
-        occupation: this.state.occupation,
-        education: this.state.education,
-        bio: this.state.bio,
-        agencyRep: this.state.agencyRep
+        firstName,
+        middleName,
+        lastName,
+        wikiPage,
+        homeTown,
+        homeState,
+        bornTown,
+        bornState,
+        currentTown,
+        currentState,
+        earlyLife,
+        bio,
+        playsWith,
+        agencyRep,
+        ethnicity,
+        gender,
+        occupation,
+        education,
+        birthday,
+        solicitor,
+        notes,
+        homeZipcode,
+        highSchool,
+        imdbLink,
+        social1,
+        social2,
+        social3,
+        stat1,
+        stat2
       }))
 
     this.props.onClose();
@@ -315,10 +367,6 @@ class EnergizerProfile extends Component {
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
-
-
-
-
           </div>
 
 

@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
       data: energizers.map(energizer => ({
         id: energizer.id,
         firstName: energizer.first_name,
+        middleName: energizer.middle_name,
         lastName: energizer.last_name,
         wikiPage: energizer.wiki_page,
         bornState: energizer.born_state,
@@ -22,13 +23,24 @@ router.get('/', async (req, res) => {
         currentTown: energizer.current_town,
         currentState: energizer.current_state,
         earlyLife: energizer.early_life,
+        bio: energizer.bio,
         playsWith: energizer.plays_with,
+        agencyRep: energizer.rep_1,
         ethnicity: energizer.ethnicity,
         gender: energizer.gender,
         occupation: energizer.occupation,
         education: energizer.education,
-        bio: energizer.bio,
-        agencyRep: energizer.rep_1
+        birthday: energizer.birthday,
+        solicitor: energizer.solicitor,
+        notes: energizer.notes,
+        homeZipcode: energizer.home_zipcode,
+        highSchool: energizer.high_school,
+        imdbLink: energizer.imdb_link,
+        social1: energizer.social_1,
+        social2: energizer.social_2,
+        social3: energizer.social_3,
+        stat1: energizer.stat_1, 
+        stat2: energizer.stat_2      
       })
     )
     });
