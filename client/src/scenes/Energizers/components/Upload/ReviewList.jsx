@@ -4,7 +4,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
-import * as cx from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 
 const ReviewList = props => {
@@ -159,18 +158,3 @@ const styles = () => ({
 
 export default withStyles(styles)(ReviewList);
 
-
-{/* <tr key={enzRow.index}>
-<td >{enzRow.index}</td> 
-<td>{enzRow.firstName}</td> 
-<td>{enzRow.lastName}</td>  
-<td>{enzRow.occupation}</td>  
-<td>{enzRow.ethnicity}</td>      
-<td>{enzRow.gender}</td>      
-<td>{enzRow.agencyRep}</td>   
-<td>{enzRow.bornTown}</td>  
-<td>{enzRow.bornState}</td>
-<td>{enzRow.education}</td>
-<td>{enzRow.playsWith}</td>
-<td>{enzRow.wikiPage}</td>                       
-</tr> */}

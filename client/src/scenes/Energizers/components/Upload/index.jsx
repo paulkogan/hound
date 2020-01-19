@@ -43,28 +43,32 @@ class UploadPage extends Component {
     super(props);
 
     let columnMap = []
-    columnMap[0]='index' 
+    columnMap[0]='index'
     columnMap[1]='firstName'
-    columnMap[2]='lastName'
-    columnMap[3]='occupation'
-    columnMap[4]='ethnicity'
-    columnMap[5]='gender'
+    columnMap[2]='middleName'
+    columnMap[3]='lastName'
+    columnMap[4]='occupation'
+    columnMap[5]='playsWith'
     columnMap[6]='agencyRep'
     columnMap[7]='bornTown'
     columnMap[8]='bornState'
-    columnMap[12]='education'
-    columnMap[15]='playsWith'
-    columnMap[17]='wikiPage'
-    //=====not included===== 
-    columnMap[9]='zipCode'
-    columnMap[10]='bornCountry'
+    columnMap[9]='homeZipcode'
+    columnMap[10]='education'
     columnMap[11]='highSchool'
-    columnMap[13]='instagram'
-    columnMap[14]='twitter'
-    columnMap[16]='imdb'
+    columnMap[12]='imdbLink'
+    columnMap[13]='social1'  //'facebook'
+    columnMap[14]='social2'  //'instagram'
+    columnMap[15]='social3'  //'twitter'
+    columnMap[16]='wikiPage'
+    columnMap[17]='ethnicity'
+    columnMap[18]='gender'
+    columnMap[19]='birthday'
+    columnMap[20]='solicitor'
+    columnMap[21]='notes'
+    columnMap[22]='stat1'
 
     let shownColumnList = []
-    let shownColumnOrder = [0,1,2,3,7,8,15,12,6,4,5,17]
+    let shownColumnOrder = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
     shownColumnOrder.forEach((pos) => {
         shownColumnList.push(columnMap[pos])
     })
@@ -119,7 +123,7 @@ class UploadPage extends Component {
                 newEnergizer[columnMap[col+1]] = value
             }
            console.log(newEnergizer)
-           if (newEnergizer.firstName && newEnergizer.lastName) {
+           if (newEnergizer.occupation) {
                results.push(newEnergizer)
            }
            
