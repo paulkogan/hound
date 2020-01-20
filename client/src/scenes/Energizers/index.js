@@ -86,7 +86,8 @@ class Energizers extends Component {
     openSearchModal:false,
     openChartModal:false,
     openUploadModal:false,
-    energizerUnderEdit : {},
+    energizerUnderEdit: {},
+    sortByLatest:true,
     wikiResults: {},
     energizers: [],
     filteredEnergizers: [],
@@ -124,7 +125,11 @@ refreshEnergizers = async () => {
 
   this.setState({ isLoading: true });
   let energizers = await api.fetchEnergizers()
-  energizers.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1);
+  this.state.sortByLatest ? 
+      energizers.sort((a, b) => (b.createdAt > a.createdAt) ? 1 : -1)
+  :
+      energizers.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1)
+
   this.setState({ isLoading: false,
                   energizers,
                   filteredEnergizers: energizers
@@ -210,7 +215,7 @@ refreshEnergizers = async () => {
   onStartScrapeWiki = async  energizer  => {
       try {
         let wikiResults = await api.scrapeWikiUrl(energizer);
-        console.log("FRONTEND", wikiResults)
+        console.log("WikiResults on FRONTEND", wikiResults)
         this.props.enqueueSnackbar('Got Wiki Page')
         await this.setState({
           energizerUnderEdit: energizer,
@@ -230,7 +235,7 @@ refreshEnergizers = async () => {
 
 
   updateEnergizer = async energizer => {
-    console.log("FRONT end Update energizer", +JSON.stringify(energizer,null,4));
+    console.log("FRONT end Update energizer", JSON.stringify(energizer,null,4));
     try {
       await api.updateEnergizer({updatedEnz:energizer});
       this.refreshEnergizers();
@@ -243,7 +248,7 @@ refreshEnergizers = async () => {
   };
 
   createEnergizer = async energizer => {
-    console.log("IN API CREATE", JSON.stringify(energizer,null,4))
+    console.log("FRONT end CREATE energizer", JSON.stringify(energizer,null,4))
 
     try {
       await api.createEnergizer({newEnz:energizer});
@@ -283,7 +288,7 @@ refreshEnergizers = async () => {
               console.log ("ADDING ", autoWiki)
               enz.wikiPage = autoWiki 
           }
-          console.log("SEND UPLOAD-LIST AFTER -", enz)
+          //console.log("SEND UPLOAD-LIST AFTER -", enz)
           return enz
     })
 
@@ -333,7 +338,7 @@ refreshEnergizers = async () => {
     const { classes } = this.props;
     const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
-      openEditModal, openUploadModal, openReviewWikiModal} = this.state;
+      openEditModal, openUploadModal, openReviewWikiModal, sortByLatest} = this.state;
 
     return (
         <div className={cx(classes.root)}>
@@ -397,6 +402,7 @@ refreshEnergizers = async () => {
                   energizers={filteredEnergizers}
                   onEditEnergizer={this.onEditEnergizer}
                   onStartScrapeWiki = {this.onStartScrapeWiki}
+                  sortByLatest = {sortByLatest}
                 />
 
               </div>

@@ -48,6 +48,16 @@ fieldSmall: {
       margin: '0px',
     },
 
+    timestamp: {
+      fontSize: '12px',
+      lineHeight: '20px',
+      color: 'red',
+      fontWeight: 'normal',
+      maxWidth: '100%',
+      marginLeft: '10px',
+    },
+
+
 });
 
 class EnergizerProfile extends Component {
@@ -156,6 +166,8 @@ class EnergizerProfile extends Component {
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
+
+             <span className={ cx(classes.timestamp) }>{energizer.createdAt ? energizer.createdAt.substring(0,10)+" "+energizer.createdAt.substring(12,16) : "no timestamp"} </span>
           </div>  
 
           <div>    

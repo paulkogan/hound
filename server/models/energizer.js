@@ -7,9 +7,7 @@ class Energizer extends Model {
 
 
   static async create(enz) {
-
     console.log("IN MODEL : creating "+JSON.stringify(enz,null,4))
-
     const {
       ethnicity=null, 
       gender=null, 
@@ -54,7 +52,6 @@ class Energizer extends Model {
 
 
   static async update(updatedEnz) {
-
     console.log("IN MODEL : UPDATING "+JSON.stringify(updatedEnz,null,4))
     const {
       id,

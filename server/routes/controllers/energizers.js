@@ -40,7 +40,8 @@ router.get('/', async (req, res) => {
         social2: energizer.social_2,
         social3: energizer.social_3,
         stat1: energizer.stat_1, 
-        stat2: energizer.stat_2      
+        stat2: energizer.stat_2,
+        createdAt: energizer.created_at     
       })
     )
     });

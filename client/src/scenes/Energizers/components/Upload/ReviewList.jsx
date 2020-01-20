@@ -36,6 +36,9 @@ const ReviewList = props => {
                             <tbody>
                                <tr>
                                {columnMap.map((header, index)=>{
+                                     if (header==='social1') header='facebook'
+                                     if (header==='social2') header='instagram'
+                                     if (header==='social3') header='twitter'
                                      return <td key={index} className={classes.headerCell} >{header}</td>
                                 })}
                                </tr>

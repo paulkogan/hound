@@ -122,7 +122,7 @@ class UploadPage extends Component {
                 let value = row[col] ? row[col].toString() : ""
                 newEnergizer[columnMap[col+1]] = value
             }
-           console.log(newEnergizer)
+           //console.log(newEnergizer)
            if (newEnergizer.occupation) {
                results.push(newEnergizer)
            }
