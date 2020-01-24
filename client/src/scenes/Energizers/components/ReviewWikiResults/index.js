@@ -90,47 +90,64 @@ class ReviewWikiResults extends Component {
   constructor(props) {
     super(props);
 
-    const { energizer:enerObj, wikiResults} = this.props;
-    console.log("In Review Wiki: "+JSON.stringify(enerObj,null,4) )
-    const { energizer } = enerObj;
+    const { energizer, wikiResults} = this.props;
+    //const { energizer:enerObj, wikiResults} = this.props;
+   // let energizer = enerObj.energizer
+
+    console.log("In Review Wiki up to: "+JSON.stringify(energizer,null,4) )
+ 
 
     this.state = {
+      id: energizer.id,
       firstName: energizer.firstName || '',
+      middleName: energizer.middleName || '',
       lastName: energizer.lastName || '',
       occupation: energizer.occupation || '',
       wikiPage: energizer.wikiPage || '',
       homeTown: energizer.homeTown || '',
       homeState: energizer.homeState || '',
-      bornTown: wikiResults.bornTown || wikiResults.birthPlaceTown || energizer.bornTown|| '',
-      bornState: wikiResults.bornState || wikiResults.birthPlaceState || energizer.bornState|| '',
+      bornTown: wikiResults.bornTown || wikiResults.birthPlaceTown || wikiResults.originTown || energizer.bornTown  || '',
+      bornState: wikiResults.bornState || wikiResults.birthPlaceState || wikiResults.originState || energizer.bornState || '',
       currentTown: energizer.currentTown|| '',
       currentState: energizer.currentState|| '',
+      highSchool: energizer.highSchool || '',
       education: wikiResults.almaMater || wikiResults.education || energizer.education || '',
       bio: wikiResults.bio || energizer.bio || '',
-      earlyLife: wikiResults.earlyLife || energizer.earlyLife || ''
+      earlyLife: wikiResults.earlyLife || energizer.earlyLife || '',
+      playsWith: energizer.playsWith || '',
+      agencyRep: energizer.agencyRep || '',
+      ethnicity: energizer.ethnicity|| '',
+      gender: energizer.gender || '',
+      occupation: energizer.occupation || '',
+      birthday: energizer.birthday || '',
+      solicitor: energizer.solicitor || '',
+      notes: energizer.notes || '',
+      homeZipcode: energizer.homeZipcode || '',
+      imdbLink: energizer.imdbLink || '',
+      social1: energizer.social1 || '',
+      social2: energizer.social2 || '',
+      social3: energizer.social3 || '',
+      stat1: energizer.stat1 || '' 
     };
   }
 
+
+
+
+
+
   onSubmit = () => {
-    const { energizer, updateEnergizer } = this.props;
+    const { energizer,updateEnergizer} = this.props;
+    console.log("REVIEW WIKI  : baseEnergizer "+JSON.stringify(energizer ,null,4))
 
+    let enerFields = {...this.state}
+    let updatedEnergizer  = {
+      ...enerFields  
+    }
 
-      updateEnergizer({
-        id: energizer.energizer.id,
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        occupation: this.state.occupation,
-        wikiPage: this.state.wikiPage,
-        homeTown: this.state.homeTown,
-        homeState: this.state.homeState,
-        bornTown: this.state.bornTown,
-        bornState: this.state.bornState,
-        currentTown: this.state.currentTown,
-        currentState: this.state.currentState,
-        bio: this.state.bio,
-        earlyLife: this.state.earlyLife,
-        education: this.state.education,
-      })
+    console.log("REVIEW WIKI  : updatedEnergizer "+JSON.stringify(updatedEnergizer ,null,4))
+
+    updateEnergizer ({...this.state})
 
     this.props.onClose();
   }
@@ -146,9 +163,7 @@ class ReviewWikiResults extends Component {
 
 
   render() {
-    const { classes, onClose, wikiResults, energizer:enerObj } = this.props;
-    const { energizer } = enerObj;
-
+    const { classes, onClose, wikiResults, energizer} = this.props;
 
     return (
       <Dialog open fullWidth onClose={ onClose } maxWidth={ 'lg' }>
@@ -156,8 +171,11 @@ class ReviewWikiResults extends Component {
                 Review Wiki Results
          </DialogTitle>
 
-
     <ValidatorForm ref="form" onSubmit={ this.onSubmit }>
+      <DialogActions>
+            <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
+            <Button color="primary" variant="contained" type="submit">Save</Button>
+      </DialogActions>
       <DialogContent>
 
      <div className = { cx(classes.parentCont) }>
@@ -200,6 +218,10 @@ class ReviewWikiResults extends Component {
                   <div>
                          Birthplace: { wikiResults.birthPlaceTown }, { wikiResults.birthPlaceState }
                   </div>
+                  <div>
+                         Origin: { wikiResults.originTown }, { wikiResults.originState }
+                  </div>
+
                   <div>
                          Education: { wikiResults.education }
                   </div>
@@ -276,12 +298,21 @@ class ReviewWikiResults extends Component {
           />
      </div>
 
-     <div className={ cx(classes.fieldMed) } >
+     <div className={ cx(classes.fieldSmall) } >
             <TextValidator
               label="Education"
               value={ this.state.education}
               variant="outlined"
               name="education"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+            <TextValidator
+              label="High School"
+              value={ this.state.highSchool}
+              variant="outlined"
+              name="highSchool"
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
@@ -317,10 +348,7 @@ class ReviewWikiResults extends Component {
 
           </DialogContent>
 
-          <DialogActions>
-            <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
-            <Button color="primary" variant="contained" type="submit">Save</Button>
-          </DialogActions>
+ 
         </ValidatorForm>
       </Dialog>
     );

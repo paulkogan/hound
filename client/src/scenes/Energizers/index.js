@@ -11,6 +11,8 @@ import EnergizerProfile from './components/EnergizerProfile';
 import ReviewWikiResults from './components/ReviewWikiResults';
 import SearchPage from './components/Search';
 import ChartPage from './components/Chart';
+import UploadPage from './components/Upload';
+
 import * as cx from 'classnames';
 import * as api from '../../services/api';
 
@@ -83,7 +85,9 @@ class Energizers extends Component {
     openReviewWikiModal:false,
     openSearchModal:false,
     openChartModal:false,
-    energizerUnderEdit : {},
+    openUploadModal:false,
+    energizerUnderEdit: {},
+    sortByLatest:true,
     wikiResults: {},
     energizers: [],
     filteredEnergizers: [],
@@ -98,7 +102,7 @@ class Energizers extends Component {
   async componentDidMount() {
     const { history } = this.props;
     const { currentUser } = this.context;
-    console.log("In Ener", currentUser.email)
+   
 
     const cookies = new Cookies();
     const cookieUser = cookies.get('userEmail') || ""; 
@@ -117,10 +121,15 @@ class Energizers extends Component {
   }
 
 
-async refreshEnergizers() {
+refreshEnergizers = async () => {
 
   this.setState({ isLoading: true });
-  const energizers = await api.fetchEnergizers();
+  let energizers = await api.fetchEnergizers()
+  this.state.sortByLatest ? 
+      energizers.sort((a, b) => (b.createdAt > a.createdAt) ? 1 : -1)
+  :
+      energizers.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1)
+
   this.setState({ isLoading: false,
                   energizers,
                   filteredEnergizers: energizers
@@ -141,6 +150,11 @@ async refreshEnergizers() {
   onOpenSearch = () => {
       this.setState({ openSearchModal: !this.state.openSearchModal });
   };
+
+  onOpenUpload = () => {
+    this.setState({ openUploadModal: !this.state.openUploadModal });
+};
+
 
   onOpenChart = async () => {
       const statesMap = new Map()
@@ -181,12 +195,16 @@ async refreshEnergizers() {
       const {energizers}  = this.state
       let filteredEnergizers = statesOnly ?
       energizers.filter (ezr => {
-              return ezr.bornState.includes(searchTerm) || ezr.homeState.includes(searchTerm)
+              return (ezr.bornState && ezr.bornState.includes(searchTerm)) || (ezr.homeState && ezr.homeState.includes(searchTerm))
       })   :
       energizers.filter (ezr => {
-              return ezr.bornState.includes(searchTerm) || ezr.homeState.includes(searchTerm) || ezr.currentState.includes(searchTerm) ||
-              ezr.bio.includes(searchTerm) || ezr.earlyLife.includes(searchTerm) || ezr.education.includes(searchTerm)
-             || ezr.playsWith.includes(searchTerm)
+              return (ezr.bornState && ezr.bornState.includes(searchTerm)) || 
+              (ezr.homeState && ezr.homeState.includes(searchTerm)) || 
+              (ezr.currentState && ezr.currentState.includes(searchTerm)) ||
+              (ezr.bio && ezr.bio.includes(searchTerm)) || 
+              (ezr.earlyLife && ezr.earlyLife.includes(searchTerm)) || 
+              (ezr.education && ezr.education.includes(searchTerm)) || 
+              (ezr.playsWith && ezr.playsWith.includes(searchTerm))
       })
 
 
@@ -197,7 +215,7 @@ async refreshEnergizers() {
   onStartScrapeWiki = async  energizer  => {
       try {
         let wikiResults = await api.scrapeWikiUrl(energizer);
-        console.log("FRONTEND", wikiResults)
+        console.log("WikiResults on FRONTEND", wikiResults)
         this.props.enqueueSnackbar('Got Wiki Page')
         await this.setState({
           energizerUnderEdit: energizer,
@@ -217,8 +235,9 @@ async refreshEnergizers() {
 
 
   updateEnergizer = async energizer => {
+    console.log("FRONT end Update energizer", JSON.stringify(energizer,null,4));
     try {
-      await api.updateEnergizer(energizer);
+      await api.updateEnergizer({updatedEnz:energizer});
       this.refreshEnergizers();
       this.props.enqueueSnackbar('Energizer updated!');
     } catch {
@@ -229,8 +248,10 @@ async refreshEnergizers() {
   };
 
   createEnergizer = async energizer => {
+    console.log("FRONT end CREATE energizer", JSON.stringify(energizer,null,4))
+
     try {
-      await api.createEnergizer(energizer);
+      await api.createEnergizer({newEnz:energizer});
       this.refreshEnergizers();
       this.props.enqueueSnackbar('Energizer created!');
     } catch {
@@ -240,6 +261,50 @@ async refreshEnergizers() {
     }
   };
 
+
+  deleteEnergizer = async energizer => {
+    try {
+      await api.deleteEnergizer(energizer);
+      this.onDialogClose() 
+      this.refreshEnergizers();
+      this.props.enqueueSnackbar('Energizer deleted!');
+    } catch {
+       this.props.enqueueSnackbar(
+         'Oops, something went wrong. Please Try again'
+       );
+    }
+  };
+
+  sendUploadList= async (enzList) => {
+
+    let enzListWithWiki = enzList.map(enz => {
+         
+          if (!enz.wikiPage || enz.wikiPage.length <10 ) {
+              let capFirst = enz.firstName.charAt(0).toUpperCase()
+              if(enz.firstName.length > 0) capFirst+=enz.firstName.substring(1);
+              let capLast = enz.lastName.charAt(0).toUpperCase()
+              if(enz.lastName.length > 0) capLast+=enz.lastName.substring(1);
+              let autoWiki = "https://en.wikipedia.org/wiki/"+capFirst+"_"+capLast
+              console.log ("ADDING ", autoWiki)
+              enz.wikiPage = autoWiki 
+          }
+          //console.log("SEND UPLOAD-LIST AFTER -", enz)
+          return enz
+    })
+
+
+    try {
+      await api.sendUploadList({enzlist: enzListWithWiki});
+      this.props.enqueueSnackbar('Energizer List Added!');
+      this.refreshEnergizers();
+      this.onDialogClose()
+
+    } catch {
+       this.props.enqueueSnackbar(
+         'Oops, something went wrong with adding the List.'
+       );
+    }
+  };
 
 
   onClearSearch = () => {
@@ -262,29 +327,18 @@ async refreshEnergizers() {
       openReviewWikiModal: false,
       energizerUnderEdit: {},
       openSearchModal: false,
-      openChartModal: false
+      openChartModal: false,
+      openUploadModal: false
     });
   };
   
-
-onDialogClose = () => {
-  this.setState({
-    openListModal: true,
-    openEditModal: false,
-    openReviewWikiModal: false,
-    energizerUnderEdit: {},
-    openSearchModal: false,
-    openChartModal: false
-  });
-};
-
 
 
   render() {
     const { classes } = this.props;
     const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
-      openEditModal, openReviewWikiModal} = this.state;
+      openEditModal, openUploadModal, openReviewWikiModal, sortByLatest} = this.state;
 
     return (
         <div className={cx(classes.root)}>
@@ -296,6 +350,16 @@ onDialogClose = () => {
                     >
                       Add Energizer
                     </Button>
+
+                    <Button
+                      className={cx(classes.actionButton)}
+                      color="primary"
+                      variant="contained"
+                      onClick={this.onOpenUpload}
+                    >
+                      Upload List
+                    </Button>
+
 
                     <Button
                     className={cx(classes.actionButton)}
@@ -338,6 +402,7 @@ onDialogClose = () => {
                   energizers={filteredEnergizers}
                   onEditEnergizer={this.onEditEnergizer}
                   onStartScrapeWiki = {this.onStartScrapeWiki}
+                  sortByLatest = {sortByLatest}
                 />
 
               </div>
@@ -349,6 +414,7 @@ onDialogClose = () => {
                   energizer={energizerUnderEdit}
                   updateEnergizer={this.updateEnergizer}
                   createEnergizer={this.createEnergizer}
+                  deleteEnergizer={this.deleteEnergizer}
                   onClose={this.onDialogClose}
                 />
 
@@ -359,7 +425,7 @@ onDialogClose = () => {
               {openReviewWikiModal && (
               <div>
                 <ReviewWikiResults
-                  energizer={energizerUnderEdit}
+                  energizer={energizerUnderEdit.energizer}
                   wikiResults={wikiResults}
                   updateEnergizer={this.updateEnergizer}
                   onClose={this.onDialogClose}
@@ -387,6 +453,16 @@ onDialogClose = () => {
               />
             </div>
             )}
+
+            {openUploadModal &&  (
+            <div>
+              <UploadPage
+                onClose={this.onDialogClose}
+                sendUploadList = {this.sendUploadList}
+              />
+            </div>
+            )}  
+
 
             </div>
          )} 

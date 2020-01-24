@@ -4,7 +4,8 @@ const server = require('../server');
 const EnergizersController = require('./controllers/energizers');
 const CurrentUserController = require('./controllers/current-users');
 const WebScrapeController = require('./controllers/webscrapes');
-// Public APIs
+//const UploadListController = require('./controllers/listuploads');
+
 
 
 // Middleware
@@ -12,9 +13,9 @@ const WebScrapeController = require('./controllers/webscrapes');
 //server.use('/api', currentUserMiddleware);
 
 // Private Routes
-//server.use('/list', EnergizersController);
 server.use('/api/current-user', CurrentUserController);
 server.use('/api/energizers', EnergizersController);
 server.use('/api/webscrape', WebScrapeController);
+//server.use('/api/uploadlist', UploadListController);
 
 module.exports = server;

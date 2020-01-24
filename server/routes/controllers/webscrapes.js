@@ -33,13 +33,16 @@ router.post('/', async (req, res) => {
 
     let education= $('th:contains("Education")').next().text()
     let almaMater = $('th:contains("Alma")').next().text()
-    let bornTown= $('th:contains("Born")').next().find('a').first().text()
-    let bornState= $('th:contains("Born")').next().find('a').last().text()
+    let bornTown= $('th:contains("Born")').next().find('a').not('a:contains([)').first().text()
+    let bornState= $('th:contains("Born")').next().find('a').not('a:contains([)').last().text()
+    let originTown= $('th:contains("Origin")').next().find('a').not('a:contains([)').first().text()
+    let originState= $('th:contains("Origin")').next().find('a').not('a:contains([)').last().text()
+
     let ele= $('.mw-parser-output').find('#Early_life_and_education').parent().next().text()
 
     let earlyLife= $('.mw-parser-output').find('#Early_life').parent().next().text()
-    let birthPlaceTown = "no match"
-    let birthPlaceState = "no match"
+    let birthPlaceTown;
+    let birthPlaceState;
 
   //early life ==============
     var bigEarly = $('.mw-parser-output').find('#Early_life').parent().nextUntil('h2', "p")
@@ -76,8 +79,8 @@ router.post('/', async (req, res) => {
 
     if (birthPlaceTitle && birthPlaceTitle.indexOf(",")>0 ) {
           let birthPlaceArr = birthPlaceTitle.split(",")
-          birthPlaceTown = birthPlaceArr[0].trim() || "no match"
-          birthPlaceState = birthPlaceArr[1].trim() || "no match"
+          birthPlaceTown = birthPlaceArr[0].trim() 
+          birthPlaceState = birthPlaceArr[1].trim()
     }
 
 
@@ -87,6 +90,13 @@ router.post('/', async (req, res) => {
         bornState = bornArr[1].trim()
     }
 
+    if (originTown && originTown.indexOf(",")>0) {
+      let originArr = originTown.split(",")
+      originTown = originArr[0].trim()
+      originState = originArr[1].trim()
+  }
+
+
     wikiFound = {
                      birthPlaceTown,
                      birthPlaceState,
@@ -94,10 +104,12 @@ router.post('/', async (req, res) => {
                      almaMater,
                      bornTown,
                      bornState,
-                     earlyLife: bigEarlyText|| earlyLife || ele || "no match",
+                     originTown,
+                     originState,
+                     earlyLife: bigEarlyText|| earlyLife || ele || "",
                      bio: topBio
     }
-    //console.log("wikiFound:  ", wikiFound);
+    console.log("wikiFound:  ", wikiFound);
     //return wikiFound -- need to return witha 200 status
     res.status(200).json({ message: 'OK wiki', wikiFound});
     

@@ -5,35 +5,97 @@ class Energizer extends Model {
     return 'energizers';
   }
 
-  static async create({firstName,lastName, occupation, wikiPage }) {
-    return Energizer.query().insert({
-      first_name:firstName,
-      last_name: lastName,
-      occupation,
-      wiki_page: wikiPage
-    }).returning('*');
-  }
 
-  static async update({id, firstName,lastName,  wikiPage,
-    homeState, homeTown,  bornState, bornTown, currentTown, currentState, earlyLife, playsWith,
-    ethnicity, gender, occupation, education, bio }) {
-    return Energizer.query().findById(id).patch({
-      first_name:firstName,
-      last_name: lastName,
-      wiki_page: wikiPage,
-      home_state: homeState,
-      home_town: homeTown,
-      born_state: bornState,
-      born_town: bornTown,
-      current_town: currentTown,
-      current_state: currentState,
-      early_life: earlyLife,
-      plays_with: playsWith,
+  static async create(enz) {
+    console.log("IN MODEL : creating "+JSON.stringify(enz,null,4))
+    const {
+      ethnicity=null, 
+      gender=null, 
+      occupation=null, 
+      education=null, 
+      birthday=null,
+      solicitor=null,
+      notes=null
+    } = enz
+
+
+    return Energizer.query().insert({
+      first_name: enz.firstName || null,
+      middle_name: enz.middleName || null,
+      last_name: enz.lastName || null,
+      wiki_page: enz.wikiPage || null,
+      born_state: enz.bornState || null,
+      born_town: enz.bornTown || null,
+      home_state: enz.homeState || null,
+      home_town: enz.homeTown || null,
+      current_town: enz.currentTown || null,
+      current_state: enz.currentState || null,
+      plays_with: enz.playsWith || null,
+      rep_1: enz.agencyRep || null,
       ethnicity,
       gender,
       occupation,
       education,
-      bio
+      solicitor,
+      birthday,
+      notes,
+      home_zipcode: parseInt(enz.homeZipcode) || null,
+      high_school: enz.highSchool || null,
+      imdb_link: enz.imdbLink || null,
+      social_1: enz.social1 || null,
+      social_2: enz.social2 || null,
+      social_3: enz.social3 || null,
+      stat_1: enz.stat1 || null,
+      stat_2: enz.stat2 || null
+    }).returning('*');
+  }
+
+
+  static async update(updatedEnz) {
+    console.log("IN MODEL : UPDATING "+JSON.stringify(updatedEnz,null,4))
+    const {
+      id,
+      bio=null,
+      ethnicity=null, 
+      gender=null, 
+      occupation=null, 
+      education=null, 
+      birthday=null,
+      solicitor=null,
+      notes=null  
+    } = updatedEnz
+
+
+    return Energizer.query().findById(id).patch({
+      first_name:updatedEnz.firstName || null,
+      middle_name: updatedEnz.middleName || null,
+      last_name: updatedEnz.lastName || null,
+      wiki_page: updatedEnz.wikiPage || null,
+      home_state: updatedEnz.homeState || null,
+      home_town: updatedEnz.homeTown || null,
+      born_state: updatedEnz.bornState || null,
+      born_town: updatedEnz.bornTown || null,
+      current_town: updatedEnz.currentTown || null,
+      current_state: updatedEnz.currentState || null,
+      early_life: updatedEnz.earlyLife || null,
+      plays_with: updatedEnz.playsWith || null,
+      rep_1: updatedEnz.agencyRep || null,
+      ethnicity,
+      gender,
+      occupation,
+      education,
+      solicitor,
+      birthday,
+      notes, 
+      home_zipcode: parseInt(updatedEnz.homeZipcode) || null,
+      high_school: updatedEnz.highSchool || null,
+      imdb_link: updatedEnz.imdbLink || null,
+      social_1: updatedEnz.social1 || null,
+      social_2: updatedEnz.social2 || null,
+      social_3: updatedEnz.social3 || null,
+      stat_1: updatedEnz.stat1 || null,
+      stat_2: updatedEnz.stat2 || null
+
     }).returning('*');
   }
 
@@ -45,6 +107,13 @@ class Energizer extends Model {
     static async getById(id) {
       return Energizer.query().findById(id);
     }
+  }
+
+  module.exports = Energizer;
+
+
+
+
 
 
   // static get relationMappings() {
@@ -137,6 +206,4 @@ class Energizer extends Model {
 //   }
 
 
-}
 
-module.exports = Energizer;

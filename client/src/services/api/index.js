@@ -17,6 +17,19 @@ const apiClient = axios.create({
 });
 
 
+export const readUploadList= async params => {
+
+  const postConfig = {
+    headers: { 'content-type': 'multipart/form-data' }
+}
+
+  console.log("IN API, sending the upload:", params)
+  const result = await apiClient.post(`/api/uploadlist/`,params, postConfig)
+  //console.log("IN API, list upload result:", result.data)
+  return result.data
+};
+
+
 
 export const scrapeWikiUrl = async params => {
     console.log("IN API, scrape request:", params)
@@ -25,8 +38,6 @@ export const scrapeWikiUrl = async params => {
     return result.data.wikiFound
 };
 
-
-
 export const fetchEnergizers = async () => {
     const result = await apiClient.get(`/api/energizers/`);
     //console.log(result.data.data[0])
@@ -34,10 +45,18 @@ export const fetchEnergizers = async () => {
 };
 
 
+  export const sendUploadList = async uploadList => {
+    return apiClient.post('/api/energizers/uploadlist', uploadList);
+  };
+
   export const createEnergizer = async params => {
     return apiClient.post('/api/energizers/create', params);
   };
 
   export const updateEnergizer = async params => {
     return apiClient.post('/api/energizers/update', params);
+  };
+
+  export const deleteEnergizer = async params => {
+    return apiClient.post('/api/energizers/delete', params);
   };
