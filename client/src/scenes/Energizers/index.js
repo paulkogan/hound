@@ -166,6 +166,14 @@ refreshEnergizers = async () => {
             } else {
                   statesMap.set(enzr.bornState,1)
             }
+
+            if(statesMap.has(enzr.homeState)) {
+              statesMap.set(enzr.homeState,statesMap.get(enzr.homeState)+1)
+            } else {
+              statesMap.set(enzr.homeState,1)
+            }
+
+
       })
 
 

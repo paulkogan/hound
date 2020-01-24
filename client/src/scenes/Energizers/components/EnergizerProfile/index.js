@@ -183,7 +183,7 @@ class EnergizerProfile extends Component {
             />
 
             <TextValidator
-              label="Plays With (band/team)"
+              label="Band/Team/Show"
               value={ this.state.playsWith}
               variant="outlined"
               name="playsWith"

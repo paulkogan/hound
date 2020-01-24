@@ -114,7 +114,7 @@ class ExpansionList extends Component {
                             <Grid item xs={4} lg={4}>
                               <div className={cx(classes.panelDetailsSection)}>
                                 <h4 className={cx(classes.panelDetailsSectionTitle)}>
-                                  Plays With
+                                  Band/Team/Show
                                 </h4>
                                 <span className={cx(classes.panelDetailsSectionText)}>
                                   {energizer.playsWith}
@@ -140,9 +140,9 @@ class ExpansionList extends Component {
                               Born Town
                             </h4>
                             <span className={cx(classes.panelDetailsSectionText)}>
-                              {energizer.bornTown ?
-                                energizer.bornTown+ ", "+energizer.bornState : "  "
-                              }
+                              {energizer.bornTown&& (energizer.bornTown+", ")}
+                              {energizer.bornState&& (energizer.bornState)}
+                              
                             </span>
                           </div>
                         </Grid>
@@ -155,9 +155,8 @@ class ExpansionList extends Component {
                               Home Town
                             </h4>
                             <span className={cx(classes.panelDetailsSectionText)}>
-                              {energizer.homeTown ?
-                                energizer.homeTown+ ", "+energizer.homeState : "  "
-                              }
+                              {energizer.homeTown&& (energizer.homeTown+", ")}
+                              {energizer.homeState&& (energizer.homeState)}
                             </span>
                           </div>
                         </Grid>
