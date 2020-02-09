@@ -20,21 +20,21 @@ const styles = () => ({
   },
   title: {
     fontWeight: 'normal',
-    fontSize: '24px',
+    fontSize: '20px',
     lineHeight: '19px',
     color: '#1C1C1C',
     paddingBottom: '0px',
   },
   energizerTitle: {
-    fontSize: '16px',
-    lineHeight: '20px',
-    fontWeight: 'normal',
+    fontSize: '14px',
+    lineHeight: '16px',
+    fontWeight: 'bold',
     paddingRight: '5px',
     margin: "0px"
   },
   energizerSubTitle: {
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: '14px',
+    lineHeight: '16px',
     fontWeight: 'normal',
     color: '#494949',
     textTransform: 'capitalize',
@@ -42,6 +42,7 @@ const styles = () => ({
   },
   panelDetails: {
     borderTop: '1px solid rgba(96,106,116,0.4)',
+
     padding: '0px 0',
     textAlign: "left",
   },
@@ -76,6 +77,10 @@ const styles = () => ({
     textAlign: 'right',
     paddingTop: '24px',
   },
+  countDiv: {
+    textAlign: 'right',
+    paddingBottom: '10px',
+  },
 });
 
 class ExpansionList extends Component {
@@ -85,6 +90,7 @@ class ExpansionList extends Component {
     if (energizers.length > 0) {
      return (
       <div className={cx(classes.panelContainer)}>
+        <div className={cx(classes.countDiv)}> Energizers Found: {energizers.length}</div>
         {energizers.map(energizer  => {
           return (
             <ExpansionPanel key={energizer.id}>
@@ -197,9 +203,6 @@ class ExpansionList extends Component {
                 >
                   Pull from WikiPage
                 </Button>
-
-
-
 
               </ExpansionPanelActions>
             </ExpansionPanel>
