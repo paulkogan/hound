@@ -52,23 +52,25 @@ class UploadPage extends Component {
     columnMap[6]='agencyRep'
     columnMap[7]='bornTown'
     columnMap[8]='bornState'
-    columnMap[9]='homeZipcode'
-    columnMap[10]='education'
-    columnMap[11]='highSchool'
-    columnMap[12]='imdbLink'
-    columnMap[13]='social1'  //'facebook'
-    columnMap[14]='social2'  //'instagram'
-    columnMap[15]='social3'  //'twitter'
-    columnMap[16]='wikiPage'
-    columnMap[17]='ethnicity'
-    columnMap[18]='gender'
-    columnMap[19]='birthday'
-    columnMap[20]='solicitor'
-    columnMap[21]='notes'
-    columnMap[22]='stat1'
+    columnMap[9]='homeTown'
+    columnMap[10]='homeState'
+    columnMap[11]='homeZipcode'
+    columnMap[12]='education'
+    columnMap[13]='highSchool'
+    columnMap[14]='imdbLink'
+    columnMap[15]='social1'  //'facebook'
+    columnMap[16]='social2'  //'instagram'
+    columnMap[17]='social3'  //'twitter'
+    columnMap[18]='wikiPage'
+    columnMap[19]='ethnicity'
+    columnMap[20]='gender'
+    columnMap[21]='birthday'
+    columnMap[22]='solicitor'
+    columnMap[23]='notes'
+    columnMap[24]='stat1'
 
     let shownColumnList = []
-    let shownColumnOrder = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+    let shownColumnOrder = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
     shownColumnOrder.forEach((pos) => {
         shownColumnList.push(columnMap[pos])
     })

@@ -15,6 +15,10 @@ import UploadPage from './components/Upload';
 
 import * as cx from 'classnames';
 import * as api from '../../services/api';
+import * as utils from '../../services/utils';
+
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 let statesList = [
   'Alabama',
@@ -92,7 +96,7 @@ class Energizers extends Component {
     energizers: [],
     filteredEnergizers: [],
     statesWithCounts: [],
-    searchTerm: " ",
+    searchTerm: "",
     stateCurrentUser: {}, 
     cookieUser: null
   }
@@ -120,6 +124,27 @@ class Energizers extends Component {
     this.refreshEnergizers()
   }
 
+  downloadCSV = async () => {
+      const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+      //const fileExtension = '.xlsx';
+
+
+      let fileName = "energizers"
+      if (this.state.searchTerm.length > 1) {
+        fileName = fileName + "-"+this.state.searchTerm
+      }
+      fileName.concat(".csv")
+      let csvData = this.state.filteredEnergizers;
+
+      const ws = XLSX.utils.json_to_sheet(csvData);
+      const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const data = new Blob([excelBuffer], {type: fileType});
+      FileSaver.saveAs(data, fileName);
+  }
+
+
+  
 
 refreshEnergizers = async () => {
 
@@ -166,6 +191,14 @@ refreshEnergizers = async () => {
             } else {
                   statesMap.set(enzr.bornState,1)
             }
+
+            if(statesMap.has(enzr.homeState)) {
+              statesMap.set(enzr.homeState,statesMap.get(enzr.homeState)+1)
+            } else {
+              statesMap.set(enzr.homeState,1)
+            }
+
+
       })
 
 
@@ -193,19 +226,28 @@ refreshEnergizers = async () => {
 
   doSearch = async (searchTerm, statesOnly) => {
       const {energizers}  = this.state
+      
+      let altState = (searchTerm.length === 2) ? utils.fullStateFromAcr(searchTerm) 
+         : utils.AcrFromFullState(searchTerm) 
       let filteredEnergizers = statesOnly ?
-      energizers.filter (ezr => {
-              return (ezr.bornState && ezr.bornState.includes(searchTerm)) || (ezr.homeState && ezr.homeState.includes(searchTerm))
-      })   :
-      energizers.filter (ezr => {
-              return (ezr.bornState && ezr.bornState.includes(searchTerm)) || 
-              (ezr.homeState && ezr.homeState.includes(searchTerm)) || 
-              (ezr.currentState && ezr.currentState.includes(searchTerm)) ||
-              (ezr.bio && ezr.bio.includes(searchTerm)) || 
-              (ezr.earlyLife && ezr.earlyLife.includes(searchTerm)) || 
-              (ezr.education && ezr.education.includes(searchTerm)) || 
-              (ezr.playsWith && ezr.playsWith.includes(searchTerm))
-      })
+          energizers.filter (ezr => {
+                  return ezr.bornState && ezr.bornState.includes(searchTerm) || 
+                  ezr.homeState && ezr.homeState.includes(searchTerm) ||
+                  ezr.bornState && altState && ezr.bornState.includes(altState) || 
+                  ezr.homeState && altState && ezr.homeState.includes(altState) 
+          })   :
+          energizers.filter (ezr => {
+                  return ezr.bornState && ezr.bornState.includes(searchTerm) || 
+                  ezr.homeState && ezr.homeState.includes(searchTerm) || 
+                  ezr.currentState && ezr.currentState.includes(searchTerm) ||
+                  ezr.bornState && altState && ezr.bornState.includes(altState) || 
+                  ezr.homeState && altState && ezr.homeState.includes(altState) ||
+                  ezr.currentState && altState && ezr.currentState.includes(altState) ||
+                  ezr.bio && ezr.bio.includes(searchTerm) || 
+                  ezr.earlyLife && ezr.earlyLife.includes(searchTerm) || 
+                  ezr.education && ezr.education.includes(searchTerm) || 
+                  ezr.playsWith && ezr.playsWith.includes(searchTerm)
+          })
 
 
       this.setState({ searchTerm, filteredEnergizers });
@@ -338,7 +380,7 @@ refreshEnergizers = async () => {
     const { classes } = this.props;
     const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
-      openEditModal, openUploadModal, openReviewWikiModal, sortByLatest} = this.state;
+      openEditModal, openUploadModal, openReviewWikiModal, isLoading, sortByLatest} = this.state;
 
     return (
         <div className={cx(classes.root)}>
@@ -365,10 +407,20 @@ refreshEnergizers = async () => {
                     className={cx(classes.actionButton)}
                     color="primary"
                     variant="contained"
+                    onClick={this.downloadCSV}
+                  >
+                    Get CSV
+                  </Button>
+
+                    <Button
+                    className={cx(classes.actionButton)}
+                    color="primary"
+                    variant="contained"
                     onClick={this.onOpenChart}
                   >
                     States Map
                   </Button>
+       
 
                   <Button
                   className={cx(classes.actionButton)}
@@ -395,17 +447,20 @@ refreshEnergizers = async () => {
 
             </div>
 
-
+            
             {openListModal && (
+              
               <div>
+                {!isLoading ? 
                 <ExpansionList
                   energizers={filteredEnergizers}
                   onEditEnergizer={this.onEditEnergizer}
                   onStartScrapeWiki = {this.onStartScrapeWiki}
                   sortByLatest = {sortByLatest}
-                />
+                /> : <div> Loading... </div>
+  }
+              </div> 
 
-              </div>
               )}
 
             {openEditModal && (
@@ -533,54 +588,3 @@ const styles = () => ({
 export default withSnackbar(withStyles(styles)(Energizers));
 
 
-
-          //  <div>
-          //    {JSON.stringify(filteredEnergizers,null,4)}
-          //  </div>
-           //
-
-
-           //search
-          //  CICDSearch= event => {
-          //      const { energizers } = this.state;
-          //      const searchedEnergizerName = event.target.value.toLowerCase();
-           //
-          //      if (searchedEnergizerName) {
-          //        this.setState({
-          //          filteredEnergizers: energizers.filter(
-          //            energizer =>
-          //              energizer.name &&
-          //              energizer.name.toLowerCase().includes(searchedEnergizerName)
-          //          ),
-          //        });
-          //      } else {
-          //        this.setState({ filteredEnergizers: Energizers });
-          //      }
-          //    };
-
-          // <CurrentUserProvider>
-          // <CurrentUserContext.Consumer>
-          // {(context) => (
-          //       <div>
-          //             "from Provider/Consumer" {JSON.stringify(context.currentUser)}
-          //             "from State-context" {JSON.stringify(stateCurrentUser)}
-          //       </div>
-          // )}  
-          // </CurrentUserContext.Consumer>
-          // </CurrentUserProvider>
-
-
-
-//       <div>
-//              "from Cookie" {JSON.stringify(cookieUser)}
-//        </div>
-
-
-// <CurrentUserConsumer>
-//  {({ currentUser }) => (
-//        <div>
-//              "from Consumer" {JSON.stringify(currentUser)}
-//              "from State-context" {JSON.stringify(stateCurrentUser)}
-//        </div>
-//  )}                   
-//  </CurrentUserConsumer>

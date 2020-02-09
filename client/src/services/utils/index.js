@@ -1,33 +1,99 @@
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import { flatten } from 'lodash';
 
-const moment = extendMoment(Moment);
 
-const slotLength = 20;
+let shortStateKeys = {
+  "AL": "Alabama",
+  "AK": "Alaska",
+  "AS": "American Samoa",
+  "AZ": "Arizona",
+  "AR": "Arkansas",
+  "CA": "California",
+  "CO": "Colorado",
+  "CT": "Connecticut",
+  "DE": "Delaware",
+  "DC": "District Of Columbia",
+  "FM": "Federated States Of Micronesia",
+  "FL": "Florida",
+  "GA": "Georgia",
+  "GU": "Guam",
+  "HI": "Hawaii",
+  "ID": "Idaho",
+  "IL": "Illinois",
+  "IN": "Indiana",
+  "IA": "Iowa",
+  "KS": "Kansas",
+  "KY": "Kentucky",
+  "LA": "Louisiana",
+  "ME": "Maine",
+  "MH": "Marshall Islands",
+  "MD": "Maryland",
+  "MA": "Massachusetts",
+  "MI": "Michigan",
+  "MN": "Minnesota",
+  "MS": "Mississippi",
+  "MO": "Missouri",
+  "MT": "Montana",
+  "NE": "Nebraska",
+  "NV": "Nevada",
+  "NH": "New Hampshire",
+  "NJ": "New Jersey",
+  "NM": "New Mexico",
+  "NY": "New York",
+  "NC": "North Carolina",
+  "ND": "North Dakota",
+  "MP": "Northern Mariana Islands",
+  "OH": "Ohio",
+  "OK": "Oklahoma",
+  "OR": "Oregon",
+  "PW": "Palau",
+  "PA": "Pennsylvania",
+  "PR": "Puerto Rico",
+  "RI": "Rhode Island",
+  "SC": "South Carolina",
+  "SD": "South Dakota",
+  "TN": "Tennessee",
+  "TX": "Texas",
+  "UT": "Utah",
+  "VT": "Vermont",
+  "VI": "Virgin Islands",
+  "VA": "Virginia",
+  "WA": "Washington",
+  "WV": "West Virginia",
+  "WI": "Wisconsin",
+  "WY": "Wyoming"
+}
 
-export const createSlots = availability => {
-  return Object.keys(availability).reduce((accum, availabilityDate) => {
-    const entries = availability[availabilityDate] || [];
-    return {
-      ...accum,
-      [availabilityDate]: flatten(
-        entries.map(entry => {
-          const slotStart = moment(entry.start);
-          const slotEnd = moment(entry.end);
-          const slotRange = moment.range(slotStart, slotEnd);
-          return Array.from(
-            slotRange.by('minute', { excludeEnd: true, step: slotLength })
-          ).map(slot => ({
-            ...entry,
-            start: slot,
-            end: moment(slot).add(slotLength, 'minutes'),
-          }));
-        })
-      ).slice(0, 5),
-    };
-  }, {});
-};
+
+
+export const fullStateFromAcr = (stateAcr) => {
+  return shortStateKeys[stateAcr] || null
+}
+
+
+export const AcrFromFullState = (stateFull) => {
+  let fullStateKeys = invert(shortStateKeys)
+  return fullStateKeys[stateFull] || null
+}
+
+
+
+function invert(obj) {
+  var result = {};
+  var keys = Object.keys(obj);
+  for (var i = 0, length = keys.length; i < length; i++) {
+      if (result[obj[keys[i]]] instanceof Array) {
+          result[obj[keys[i]]].push(keys[i])
+      } else if (result[obj[keys[i]]]) {
+          var temp = result[obj[keys[i]]];
+          result[obj[keys[i]]] = [temp, keys[i]];
+      } else {
+          result[obj[keys[i]]]=keys[i];
+      }
+  }
+  return result;
+}
+
+
+
 
 export const formatPhoneNumber = phoneNumberString => {
   var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
