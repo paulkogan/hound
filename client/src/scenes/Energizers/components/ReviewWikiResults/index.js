@@ -274,6 +274,17 @@ class ReviewWikiResults extends Component {
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
+
+            <TextValidator
+                label="Home Zip"
+                value={ this.state.homeZipcode}
+                variant="outlined"
+                name="homeZipcode"
+                validators={ ['isNumber'] }
+                errorMessages={ ['Needs tp be a Zip']}
+                onChange={this.onChange}
+                className={ cx(classes.input) }
+              />
        </div>
 
 
@@ -298,7 +309,7 @@ class ReviewWikiResults extends Component {
           />
      </div>
 
-     <div className={ cx(classes.fieldSmall) } >
+     <div className={ cx(classes.fieldMed) } >
             <TextValidator
               label="Education"
               value={ this.state.education}
@@ -316,7 +327,33 @@ class ReviewWikiResults extends Component {
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
-    </div>
+
+
+
+          <TextValidator
+              label="Band/Team/Show"
+              value={ this.state.playsWith}
+              variant="outlined"
+              name="playsWith"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+ 
+
+          <TextValidator
+              label="Birthday"
+              value={ this.state.birthday}
+              variant="outlined"
+              name="birthday"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+
+
+     </div>
+
 
             <TextValidator
               fullWidth
@@ -342,7 +379,93 @@ class ReviewWikiResults extends Component {
               className={ cx(classes.input) }
             />
 
+      <div className={ cx(classes.fieldMed) } >
+            <TextValidator
+              label="IMDB Link"
+              value={ this.state.imdbLink}
+              variant="outlined"
+              name="imdbLink"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+       
+       
+          <TextValidator
+              label="Facebook"
+              value={ this.state.social1}
+              variant="outlined"
+              name="social1"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
 
+          <TextValidator
+              label="Instagram"
+              value={ this.state.social2}
+              variant="outlined"
+              name="social2"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+
+          <TextValidator
+              label="Twitter"
+              value={ this.state.social3}
+              variant="outlined"
+              name="social3"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+      </div>
+
+
+      <div className={ cx(classes.fieldMed)} >
+          <TextValidator
+              label="Solicitor"
+              value={ this.state.solicitor}
+              variant="outlined"
+              name="solicitor"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+          <TextValidator
+              label="Agency/Representation"
+              value={ this.state.agencyRep}
+              variant="outlined"
+              name="agencyRep"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+          <TextValidator
+              label="Ethnicity"
+              value={ this.state.ethnicity}
+              variant="outlined"
+              name="ethnicity"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+          <TextValidator
+              label="Gender"
+              value={ this.state.gender}
+              variant="outlined"
+              name="gender"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+
+        <TextValidator
+              label="Key Stat"
+              value={ this.state.stat1}
+              variant="outlined"
+              name="stat1"
+              onChange={this.onChange}
+              className={ cx(classes.input) }
+            />
+      </div>
 
 
 

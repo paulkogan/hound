@@ -120,8 +120,10 @@ class Energizers extends Component {
       stateCurrentUser:currentUser,
       cookieUser
     });
+    if (this.state.energizers.length < 1) {
+      this.refreshEnergizers()
+    }
 
-    this.refreshEnergizers()
   }
 
   downloadCSV = async () => {
@@ -228,25 +230,30 @@ refreshEnergizers = async () => {
       const {energizers}  = this.state
       
       let altState = (searchTerm.length === 2) ? utils.fullStateFromAcr(searchTerm) 
-         : utils.AcrFromFullState(searchTerm) 
+         : utils.AcrFromFullState(searchTerm)
       let filteredEnergizers = statesOnly ?
           energizers.filter (ezr => {
-                  return ezr.bornState && ezr.bornState.includes(searchTerm) || 
-                  ezr.homeState && ezr.homeState.includes(searchTerm) ||
-                  ezr.bornState && altState && ezr.bornState.includes(altState) || 
-                  ezr.homeState && altState && ezr.homeState.includes(altState) 
+                  return ezr.bornState && ezr.bornState.toUpperCase() == searchTerm.toUpperCase() || 
+                  ezr.homeState && ezr.homeState.toUpperCase() == searchTerm.toUpperCase() ||
+                  ezr.bornState && altState && ezr.bornState.toUpperCase() == altState.toUpperCase()  || 
+                  ezr.homeState && altState && ezr.homeState.toUpperCase() == altState.toUpperCase() 
           })   :
           energizers.filter (ezr => {
-                  return ezr.bornState && ezr.bornState.includes(searchTerm) || 
-                  ezr.homeState && ezr.homeState.includes(searchTerm) || 
-                  ezr.currentState && ezr.currentState.includes(searchTerm) ||
-                  ezr.bornState && altState && ezr.bornState.includes(altState) || 
-                  ezr.homeState && altState && ezr.homeState.includes(altState) ||
-                  ezr.currentState && altState && ezr.currentState.includes(altState) ||
+                  return ezr.bornState && ezr.bornState.toUpperCase() == searchTerm.toUpperCase() || 
+                  ezr.homeState && ezr.homeState.toUpperCase() == searchTerm.toUpperCase() ||
+                  ezr.currentState && ezr.currentState.toUpperCase() == searchTerm.toUpperCase() ||
+                  ezr.bornState && altState && ezr.bornState.toUpperCase() == altState.toUpperCase()  || 
+                  ezr.homeState && altState && ezr.homeState.toUpperCase() == altState.toUpperCase()  ||
+                  ezr.currentState && altState && ezr.currentState.toUpperCase() == altState.toUpperCase()  ||
+                  ezr.bornTown && ezr.bornTown.includes(searchTerm) || 
+                  ezr.homeTown && ezr.homeTown.includes(searchTerm) || 
                   ezr.bio && ezr.bio.includes(searchTerm) || 
                   ezr.earlyLife && ezr.earlyLife.includes(searchTerm) || 
                   ezr.education && ezr.education.includes(searchTerm) || 
-                  ezr.playsWith && ezr.playsWith.includes(searchTerm)
+                  ezr.highSchool && ezr.highSchool.includes(searchTerm) || 
+                  ezr.playsWith && ezr.playsWith.includes(searchTerm) ||
+                  ezr.firstName && ezr.firstName.includes(searchTerm) ||
+                  ezr.lastName && ezr.lastName.includes(searchTerm)
           })
 
 
@@ -257,7 +264,7 @@ refreshEnergizers = async () => {
   onStartScrapeWiki = async  energizer  => {
       try {
         let wikiResults = await api.scrapeWikiUrl(energizer);
-        console.log("WikiResults on FRONTEND", wikiResults)
+        //console.log("WikiResults on FRONTEND", wikiResults)
         this.props.enqueueSnackbar('Got Wiki Page')
         await this.setState({
           energizerUnderEdit: energizer,
@@ -280,11 +287,11 @@ refreshEnergizers = async () => {
     console.log("FRONT end Update energizer", JSON.stringify(energizer,null,4));
     try {
       await api.updateEnergizer({updatedEnz:energizer});
-      this.refreshEnergizers();
+      //this.refreshEnergizers();
       this.props.enqueueSnackbar('Energizer updated!');
     } catch {
        this.props.enqueueSnackbar(
-        'Oops, something went wrong. Please Try again'
+        'Oops, something went wrong with the Update. Please Try again'
        );
     }
   };
@@ -357,7 +364,7 @@ refreshEnergizers = async () => {
       energizerUnderEdit: {},
       openSearchModal: false,
       openChartModal: false,
-      searchTerm: " ",
+      searchTerm: "",
       filteredEnergizers: this.state.energizers
     });
   };
@@ -409,7 +416,7 @@ refreshEnergizers = async () => {
                     variant="contained"
                     onClick={this.downloadCSV}
                   >
-                    Get CSV
+                    Download List
                   </Button>
 
                     <Button

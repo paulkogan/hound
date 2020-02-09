@@ -383,7 +383,7 @@ class EnergizerProfile extends Component {
               onChange={this.onChange}
               className={ cx(classes.input) }
             />
-          </div>
+      </div>
 
 
       <div className={ cx(classes.fieldMedium) } >

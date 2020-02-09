@@ -62,7 +62,7 @@ drawStatesMap = async () =>  {
                 let stateColor = "lightslategrey"
                 statesWithCounts.forEach(eState => {
                       if (d.properties.name === eState.stateName) {
-                          stateColor = "orange"
+                          stateColor = "#304371"
                       }
                 })
                 return stateColor
