@@ -96,15 +96,19 @@ class ExpansionList extends Component {
             <ExpansionPanel key={energizer.id}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <h2 className={cx(classes.energizerTitle)}>
-                  {energizer.firstName} {energizer.lastName}
+                  {energizer.firstName} {energizer.middleName} {energizer.lastName}
                 </h2>
                 <h3 className={cx(classes.energizerSubTitle)}>
                   ({energizer.occupation})
                 </h3>
+               
               </ExpansionPanelSummary>
 
 
               <ExpansionPanelDetails className={cx(classes.panelDetails)}>
+       
+
+
                 <Grid container justify={'center'}>
                             <Grid item xs={4} lg={4}>
                               <div className={cx(classes.panelDetailsSection)}>
@@ -219,3 +223,15 @@ class ExpansionList extends Component {
 }
 
 export default withStyles(styles)(ExpansionList);
+
+
+{/* <Grid container justify={'center'}>
+<Grid item xs={4} lg={4}>
+  <div className={cx(classes.panelDetailsSection)}>
+    {JSON.stringify(energizer,null,4)}
+  </div>  
+</Grid>                
+</Grid>   
+
+ <span className={ cx(classes.timestamp) }>{energizer.createdAt ? energizer.createdAt.substring(0,10)+" "+energizer.createdAt.substring(12,16) : "no timestamp"} </span>
+*/}

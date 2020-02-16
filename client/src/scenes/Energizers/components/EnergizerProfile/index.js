@@ -102,7 +102,7 @@ class EnergizerProfile extends Component {
   onSubmit = () => {
     const { energizer, createEnergizer, updateEnergizer } = this.props;
     let enerFields = {...this.state}
-    console.log("PROFILE FORM  : enerFields "+JSON.stringify(enerFields ,null,4))
+    console.log("PROFILE FORM onSubmit : enerFields "+JSON.stringify(enerFields ,null,4))
     this.isEmpty(energizer) ? createEnergizer(enerFields)
       : updateEnergizer ({
         id: energizer.id,
@@ -133,10 +133,15 @@ class EnergizerProfile extends Component {
 
 
 
-        <ValidatorForm ref="form" onSubmit={ this.onSubmit }>
-          <DialogContent>
+      <ValidatorForm ref="form" onSubmit={ this.onSubmit }>
+        <DialogActions>
+          
+          <Button color="primary" variant="contained" onClick={() => deleteEnergizer(energizer)}>Delete</Button>
+          <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
+          <Button color="primary" variant="contained" type="submit">Save</Button>
+        </DialogActions>
 
-
+        <DialogContent>
         <div className={ cx(classes.fieldSmall) } >
             <TextValidator
               label="First Name *"
@@ -439,12 +444,7 @@ class EnergizerProfile extends Component {
 
           </DialogContent>
 
-          <DialogActions>
-          
-              <Button color="primary" variant="contained" onClick={() => deleteEnergizer(energizer)}>Delete</Button>
-              <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
-              <Button color="primary" variant="contained" type="submit">Save</Button>
-          </DialogActions>
+
         </ValidatorForm>
       </Dialog>
     );

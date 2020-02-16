@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
+import Switch from '@material-ui/core/Switch';
 import Cookies from 'universal-cookie';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
@@ -74,6 +75,19 @@ let statesList = [
 ]
 
 
+const compareLast = (a, b) => {
+  // Use toUpperCase() to ignore character casing
+  const aLast = a.lastName ? a.lastName.toUpperCase() : "";
+  const bLast = b.lastName ? b.lastName.toUpperCase() : "";
+
+  let comparison = 0;
+  if (aLast > bLast) {
+    comparison = 1;
+  } else if (aLast < bLast) {
+    comparison = -1;
+  }
+  return comparison;
+}
 
 
 
@@ -91,7 +105,7 @@ class Energizers extends Component {
     openChartModal:false,
     openUploadModal:false,
     energizerUnderEdit: {},
-    sortByLatest:true,
+    sortByAlpha:false,
     wikiResults: {},
     energizers: [],
     filteredEnergizers: [],
@@ -145,24 +159,67 @@ class Energizers extends Component {
       FileSaver.saveAs(data, fileName);
   }
 
+sortArrayAlphaOrDate = (enzArray) => {
+  if (this.state.sortByAlpha) {
+    enzArray.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1)
+  } else {
+    enzArray.sort((a, b) => {
+       if (!b.createdAt) return -1
+       if (!a.createdAt) return 1
+       if (b.createdAt > a.createdAt) {
+         return 1
+       } else {
+         return -1
+       }
+    })   
+  }
+  return enzArray
+}
 
-  
 
 refreshEnergizers = async () => {
 
-  this.setState({ isLoading: true });
-  let energizers = await api.fetchEnergizers()
-  this.state.sortByLatest ? 
-      energizers.sort((a, b) => (b.createdAt > a.createdAt) ? 1 : -1)
-  :
-      energizers.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1)
+    this.setState({ isLoading: true });
+    let energizers = this.sortArrayAlphaOrDate(await api.fetchEnergizers()) 
 
-  this.setState({ isLoading: false,
-                  energizers,
-                  filteredEnergizers: energizers
-  });
-
+    this.setState({ 
+      isLoading: false,
+      energizers,
+      filteredEnergizers: energizers 
+    });
 }
+
+
+
+
+onChangeSort = async () => {
+
+    this.setState({ 
+      isLoading: true,
+      sortByAlpha: !this.state.sortByAlpha,
+    });
+    await this.render()    
+
+    if (this.state.filteredEnergizers.length < this.state.energizers.length) {
+      let filteredEnergizers =  this.sortArrayAlphaOrDate(this.state.filteredEnergizers)
+      this.setState({ 
+                  filteredEnergizers,
+                  isLoading: false
+      });
+
+
+    } else {  //no filter  sort all
+      let energizers = await this.sortArrayAlphaOrDate(this.state.energizers)
+      this.setState({ 
+                  energizers,
+                  isLoading: false
+      });
+    }
+
+};
+
+
+
 
 
   onEditEnergizer = ({ energizer }) => {
@@ -181,6 +238,8 @@ refreshEnergizers = async () => {
   onOpenUpload = () => {
     this.setState({ openUploadModal: !this.state.openUploadModal });
 };
+
+
 
 
   onOpenChart = async () => {
@@ -284,14 +343,24 @@ refreshEnergizers = async () => {
 
 
   updateEnergizer = async energizer => {
-    console.log("FRONT end Update energizer", JSON.stringify(energizer,null,4));
+    
     try {
-      await api.updateEnergizer({updatedEnz:energizer});
-      //this.refreshEnergizers();
+      let response = await api.updateEnergizer({updatedEnz:energizer});
+      //console.log("FRONT end Update energizer resp", JSON.stringify(response,null,4));
+      let updatedEnergizer = response.data
+      let newFilteredEnergizers = this.state.filteredEnergizers
+      let updateIndex = newFilteredEnergizers.findIndex(enz => enz.id === updatedEnergizer.id)
+      newFilteredEnergizers.splice(updateIndex, 1, updatedEnergizer );
+      this.setState({ 
+        filteredEnergizers: newFilteredEnergizers
+      });
+
+
       this.props.enqueueSnackbar('Energizer updated!');
-    } catch {
+
+    } catch (err) {
        this.props.enqueueSnackbar(
-        'Oops, something went wrong with the Update. Please Try again'
+        'Oops, something went wrong with the Update. Please Try again'+err
        );
     }
   };
@@ -357,6 +426,7 @@ refreshEnergizers = async () => {
 
 
   onClearSearch = () => {
+    this.refreshEnergizers()
     this.setState({
       openListModal: true,
       openEditModal: false,
@@ -364,8 +434,7 @@ refreshEnergizers = async () => {
       energizerUnderEdit: {},
       openSearchModal: false,
       openChartModal: false,
-      searchTerm: "",
-      filteredEnergizers: this.state.energizers
+      searchTerm: ""
     });
   };
   
@@ -387,7 +456,7 @@ refreshEnergizers = async () => {
     const { classes } = this.props;
     const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
-      openEditModal, openUploadModal, openReviewWikiModal, isLoading, sortByLatest} = this.state;
+      openEditModal, openUploadModal, openReviewWikiModal, isLoading, sortByAlpha} = this.state;
 
     return (
         <div className={cx(classes.root)}>
@@ -452,6 +521,11 @@ refreshEnergizers = async () => {
                   Clear
                 </Button>
 
+                <Switch 
+                  checked={sortByAlpha}
+                  onChange={this.onChangeSort} 
+                  value={sortByAlpha} 
+                /> &alpha;
             </div>
 
             
@@ -463,7 +537,7 @@ refreshEnergizers = async () => {
                   energizers={filteredEnergizers}
                   onEditEnergizer={this.onEditEnergizer}
                   onStartScrapeWiki = {this.onStartScrapeWiki}
-                  sortByLatest = {sortByLatest}
+                  sortByAlpha = {sortByAlpha}
                 /> : <div> Loading... </div>
   }
               </div> 
