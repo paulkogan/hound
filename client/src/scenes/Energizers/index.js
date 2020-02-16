@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
+import Switch from '@material-ui/core/Switch';
 import Cookies from 'universal-cookie';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
@@ -74,6 +75,19 @@ let statesList = [
 ]
 
 
+const compareLast = (a, b) => {
+  // Use toUpperCase() to ignore character casing
+  const aLast = a.lastName ? a.lastName.toUpperCase() : "";
+  const bLast = b.lastName ? b.lastName.toUpperCase() : "";
+
+  let comparison = 0;
+  if (aLast > bLast) {
+    comparison = 1;
+  } else if (aLast < bLast) {
+    comparison = -1;
+  }
+  return comparison;
+}
 
 
 
@@ -91,7 +105,7 @@ class Energizers extends Component {
     openChartModal:false,
     openUploadModal:false,
     energizerUnderEdit: {},
-    sortByLatest:true,
+    sortByAlpha:false,
     wikiResults: {},
     energizers: [],
     filteredEnergizers: [],
@@ -120,8 +134,10 @@ class Energizers extends Component {
       stateCurrentUser:currentUser,
       cookieUser
     });
+    if (this.state.energizers.length < 1) {
+      this.refreshEnergizers()
+    }
 
-    this.refreshEnergizers()
   }
 
   downloadCSV = async () => {
@@ -143,24 +159,67 @@ class Energizers extends Component {
       FileSaver.saveAs(data, fileName);
   }
 
+sortArrayAlphaOrDate = (enzArray) => {
+  if (this.state.sortByAlpha) {
+    enzArray.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1)
+  } else {
+    enzArray.sort((a, b) => {
+       if (!b.createdAt) return -1
+       if (!a.createdAt) return 1
+       if (b.createdAt > a.createdAt) {
+         return 1
+       } else {
+         return -1
+       }
+    })   
+  }
+  return enzArray
+}
 
-  
 
 refreshEnergizers = async () => {
 
-  this.setState({ isLoading: true });
-  let energizers = await api.fetchEnergizers()
-  this.state.sortByLatest ? 
-      energizers.sort((a, b) => (b.createdAt > a.createdAt) ? 1 : -1)
-  :
-      energizers.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1)
+    this.setState({ isLoading: true });
+    let energizers = this.sortArrayAlphaOrDate(await api.fetchEnergizers()) 
 
-  this.setState({ isLoading: false,
-                  energizers,
-                  filteredEnergizers: energizers
-  });
-
+    this.setState({ 
+      isLoading: false,
+      energizers,
+      filteredEnergizers: energizers 
+    });
 }
+
+
+
+
+onChangeSort = async () => {
+
+    this.setState({ 
+      isLoading: true,
+      sortByAlpha: !this.state.sortByAlpha,
+    });
+    await this.render()    
+
+    if (this.state.filteredEnergizers.length < this.state.energizers.length) {
+      let filteredEnergizers =  this.sortArrayAlphaOrDate(this.state.filteredEnergizers)
+      this.setState({ 
+                  filteredEnergizers,
+                  isLoading: false
+      });
+
+
+    } else {  //no filter  sort all
+      let energizers = await this.sortArrayAlphaOrDate(this.state.energizers)
+      this.setState({ 
+                  energizers,
+                  isLoading: false
+      });
+    }
+
+};
+
+
+
 
 
   onEditEnergizer = ({ energizer }) => {
@@ -179,6 +238,8 @@ refreshEnergizers = async () => {
   onOpenUpload = () => {
     this.setState({ openUploadModal: !this.state.openUploadModal });
 };
+
+
 
 
   onOpenChart = async () => {
@@ -228,25 +289,30 @@ refreshEnergizers = async () => {
       const {energizers}  = this.state
       
       let altState = (searchTerm.length === 2) ? utils.fullStateFromAcr(searchTerm) 
-         : utils.AcrFromFullState(searchTerm) 
+         : utils.AcrFromFullState(searchTerm)
       let filteredEnergizers = statesOnly ?
           energizers.filter (ezr => {
-                  return ezr.bornState && ezr.bornState.includes(searchTerm) || 
-                  ezr.homeState && ezr.homeState.includes(searchTerm) ||
-                  ezr.bornState && altState && ezr.bornState.includes(altState) || 
-                  ezr.homeState && altState && ezr.homeState.includes(altState) 
+                  return ezr.bornState && ezr.bornState.toUpperCase() == searchTerm.toUpperCase() || 
+                  ezr.homeState && ezr.homeState.toUpperCase() == searchTerm.toUpperCase() ||
+                  ezr.bornState && altState && ezr.bornState.toUpperCase() == altState.toUpperCase()  || 
+                  ezr.homeState && altState && ezr.homeState.toUpperCase() == altState.toUpperCase() 
           })   :
           energizers.filter (ezr => {
-                  return ezr.bornState && ezr.bornState.includes(searchTerm) || 
-                  ezr.homeState && ezr.homeState.includes(searchTerm) || 
-                  ezr.currentState && ezr.currentState.includes(searchTerm) ||
-                  ezr.bornState && altState && ezr.bornState.includes(altState) || 
-                  ezr.homeState && altState && ezr.homeState.includes(altState) ||
-                  ezr.currentState && altState && ezr.currentState.includes(altState) ||
+                  return ezr.bornState && ezr.bornState.toUpperCase() == searchTerm.toUpperCase() || 
+                  ezr.homeState && ezr.homeState.toUpperCase() == searchTerm.toUpperCase() ||
+                  ezr.currentState && ezr.currentState.toUpperCase() == searchTerm.toUpperCase() ||
+                  ezr.bornState && altState && ezr.bornState.toUpperCase() == altState.toUpperCase()  || 
+                  ezr.homeState && altState && ezr.homeState.toUpperCase() == altState.toUpperCase()  ||
+                  ezr.currentState && altState && ezr.currentState.toUpperCase() == altState.toUpperCase()  ||
+                  ezr.bornTown && ezr.bornTown.includes(searchTerm) || 
+                  ezr.homeTown && ezr.homeTown.includes(searchTerm) || 
                   ezr.bio && ezr.bio.includes(searchTerm) || 
                   ezr.earlyLife && ezr.earlyLife.includes(searchTerm) || 
                   ezr.education && ezr.education.includes(searchTerm) || 
-                  ezr.playsWith && ezr.playsWith.includes(searchTerm)
+                  ezr.highSchool && ezr.highSchool.includes(searchTerm) || 
+                  ezr.playsWith && ezr.playsWith.includes(searchTerm) ||
+                  ezr.firstName && ezr.firstName.includes(searchTerm) ||
+                  ezr.lastName && ezr.lastName.includes(searchTerm)
           })
 
 
@@ -257,7 +323,7 @@ refreshEnergizers = async () => {
   onStartScrapeWiki = async  energizer  => {
       try {
         let wikiResults = await api.scrapeWikiUrl(energizer);
-        console.log("WikiResults on FRONTEND", wikiResults)
+        //console.log("WikiResults on FRONTEND", wikiResults)
         this.props.enqueueSnackbar('Got Wiki Page')
         await this.setState({
           energizerUnderEdit: energizer,
@@ -277,14 +343,24 @@ refreshEnergizers = async () => {
 
 
   updateEnergizer = async energizer => {
-    console.log("FRONT end Update energizer", JSON.stringify(energizer,null,4));
+    
     try {
-      await api.updateEnergizer({updatedEnz:energizer});
-      this.refreshEnergizers();
+      let response = await api.updateEnergizer({updatedEnz:energizer});
+      //console.log("FRONT end Update energizer resp", JSON.stringify(response,null,4));
+      let updatedEnergizer = response.data
+      let newFilteredEnergizers = this.state.filteredEnergizers
+      let updateIndex = newFilteredEnergizers.findIndex(enz => enz.id === updatedEnergizer.id)
+      newFilteredEnergizers.splice(updateIndex, 1, updatedEnergizer );
+      this.setState({ 
+        filteredEnergizers: newFilteredEnergizers
+      });
+
+
       this.props.enqueueSnackbar('Energizer updated!');
-    } catch {
+
+    } catch (err) {
        this.props.enqueueSnackbar(
-        'Oops, something went wrong. Please Try again'
+        'Oops, something went wrong with the Update. Please Try again'+err
        );
     }
   };
@@ -350,6 +426,7 @@ refreshEnergizers = async () => {
 
 
   onClearSearch = () => {
+    this.refreshEnergizers()
     this.setState({
       openListModal: true,
       openEditModal: false,
@@ -357,8 +434,7 @@ refreshEnergizers = async () => {
       energizerUnderEdit: {},
       openSearchModal: false,
       openChartModal: false,
-      searchTerm: " ",
-      filteredEnergizers: this.state.energizers
+      searchTerm: ""
     });
   };
   
@@ -380,7 +456,7 @@ refreshEnergizers = async () => {
     const { classes } = this.props;
     const { statesWithCounts, filteredEnergizers, searchTerm, wikiResults,
       openListModal, openChartModal, openSearchModal, energizerUnderEdit,
-      openEditModal, openUploadModal, openReviewWikiModal, isLoading, sortByLatest} = this.state;
+      openEditModal, openUploadModal, openReviewWikiModal, isLoading, sortByAlpha} = this.state;
 
     return (
         <div className={cx(classes.root)}>
@@ -409,7 +485,7 @@ refreshEnergizers = async () => {
                     variant="contained"
                     onClick={this.downloadCSV}
                   >
-                    Get CSV
+                    Download List
                   </Button>
 
                     <Button
@@ -445,6 +521,11 @@ refreshEnergizers = async () => {
                   Clear
                 </Button>
 
+                <Switch 
+                  checked={sortByAlpha}
+                  onChange={this.onChangeSort} 
+                  value={sortByAlpha} 
+                /> &alpha;
             </div>
 
             
@@ -456,7 +537,7 @@ refreshEnergizers = async () => {
                   energizers={filteredEnergizers}
                   onEditEnergizer={this.onEditEnergizer}
                   onStartScrapeWiki = {this.onStartScrapeWiki}
-                  sortByLatest = {sortByLatest}
+                  sortByAlpha = {sortByAlpha}
                 /> : <div> Loading... </div>
   }
               </div> 
