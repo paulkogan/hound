@@ -8,6 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
 import CurrentUserContext, { CurrentUserConsumer, CurrentUserProvider }   from '../../contexts/CurrentUserContext.jsx';
 import ExpansionList from './components/ExpansionList';
+import SlimList from './components/SlimList';
 import EnergizerProfile from './components/EnergizerProfile';
 import ReviewWikiResults from './components/ReviewWikiResults';
 import SearchPage from './components/Search';
@@ -533,7 +534,7 @@ onChangeSort = async () => {
               
               <div>
                 {!isLoading ? 
-                <ExpansionList
+                <SlimList
                   energizers={filteredEnergizers}
                   onEditEnergizer={this.onEditEnergizer}
                   onStartScrapeWiki = {this.onStartScrapeWiki}

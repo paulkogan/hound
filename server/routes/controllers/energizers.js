@@ -3,6 +3,45 @@ const Energizer = require('../../models/energizer');
 const router = express.Router();
 require('dotenv').config();
 
+function mapEnz (energizer) {
+   return {
+    id: energizer.id,
+    firstName: energizer.first_name,
+    middleName: energizer.middle_name,
+    lastName: energizer.last_name,
+    wikiPage: energizer.wiki_page,
+    bornState: energizer.born_state,
+    bornTown: energizer.born_town,
+    homeState: energizer.home_state,
+    homeTown: energizer.home_town,
+    currentTown: energizer.current_town,
+    currentState: energizer.current_state,
+    earlyLife: energizer.early_life,
+    bio: energizer.bio,
+    playsWith: energizer.plays_with,
+    agencyRep: energizer.rep_1,
+    ethnicity: energizer.ethnicity,
+    gender: energizer.gender,
+    occupation: energizer.occupation,
+    education: energizer.education,
+    birthday: energizer.birthday,
+    solicitor: energizer.solicitor,
+    notes: energizer.notes,
+    homeZipcode: energizer.home_zipcode,
+    highSchool: energizer.high_school,
+    imdbLink: energizer.imdb_link,
+    social1: energizer.social_1,
+    social2: energizer.social_2,
+    social3: energizer.social_3,
+    stat1: energizer.stat_1, 
+    stat2: energizer.stat_2,
+    createdAt: energizer.created_at     
+  }
+
+}
+
+
+
 //list all energizers
 router.get('/', async (req, res) => {
   try {
@@ -84,7 +123,6 @@ router.post('/delete', async (req, res) => {
 
 });
 
-// create energizer
 router.post('/uploadlist', async (req, res) => {
   const {
     enzlist
@@ -127,26 +165,25 @@ router.post('/create', async (req, res) => {
     console.log(err);
     res.status(422).json({ message: 'Unable to make Energizer' });
   }
-  res.status(200).json({ message: 'new energizer ok' });
+  res.status(200).json({ 
+    message: 'new energizer ok'
+   });
 });
 
 
 // update energizer
 router.post('/update', async (req, res) => {
   const {updatedEnz} = req.body;
-
-console.log(`/Controllers/energizers/UPDATE body  - ${JSON.stringify(req.body, null, 4)}`);
-
   try {
-    const provider = await Energizer.update(updatedEnz);
-
+    const energizer = mapEnz(await Energizer.update(updatedEnz));
+    console.log(`/Controllers/energizers/UPDATE result  10 - ${JSON.stringify(energizer, null, 4)}`);
+    res.status(200).json(energizer);
   } catch (err) {
     console.log('error on update........');
     console.log(err);
     res.status(422).json({ message: 'Unable to update Energizer' });
   }
 
-  res.status(200).json({ message: 'updated energizer ok' });
 });
 
 
