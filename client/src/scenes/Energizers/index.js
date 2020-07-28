@@ -2,12 +2,9 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Switch from '@material-ui/core/Switch';
 import Cookies from 'universal-cookie';
-import { Link as RouterLink } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
 import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
 import CurrentUserContext, { CurrentUserConsumer, CurrentUserProvider }   from '../../contexts/CurrentUserContext.jsx';
-import ExpansionList from './components/ExpansionList';
 import SlimList from './components/SlimList';
 import EnergizerProfile from './components/EnergizerProfile';
 import ReviewWikiResults from './components/ReviewWikiResults';
@@ -106,7 +103,7 @@ class Energizers extends Component {
     openChartModal:false,
     openUploadModal:false,
     energizerUnderEdit: {},
-    sortByAlpha:false,
+    sortByAlpha:true,
     wikiResults: {},
     energizers: [],
     filteredEnergizers: [],
