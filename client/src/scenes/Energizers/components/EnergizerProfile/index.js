@@ -144,13 +144,11 @@ class EnergizerProfile extends Component {
         <DialogContent>
         <div className={ cx(classes.fieldSmall) } >
             <TextValidator
-              label="First Name *"
+              label="First Name"
               value={ this.state.firstName }
               variant="outlined"
               name="firstName"
               onChange={this.onChange}
-              validators={ ['required'] }
-              errorMessages={ ['Required'] }
               className={ cx(classes.input) }
             />
 
@@ -164,11 +162,13 @@ class EnergizerProfile extends Component {
             />
 
             <TextValidator
-              label="Last Name"
+              label="Last Name *"
               value={ this.state.lastName }
               variant="outlined"
               name="lastName"
               onChange={this.onChange}
+              validators={ ['required'] }
+              errorMessages={ ['Required']}
               className={ cx(classes.input) }
             />
 

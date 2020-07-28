@@ -38,8 +38,11 @@ export const scrapeWikiUrl = async params => {
     return result.data.wikiFound
 };
 
-export const fetchEnergizers = async () => {
-    const result = await apiClient.get(`/api/energizers/`);
+export const fetchEnergizers = async (sortByAlpha) => {
+    console.log("IN API and sort alpha is ", sortByAlpha)
+    const result = sortByAlpha ? await apiClient.get(`/api/energizers/alpha`) : await apiClient.get(`/api/energizers/`) 
+    //const result = await apiClient.post(`/api/energizers/`,sortParams)
+    //const result = apiClient.post(`/api/energizers/`,sortParams)
     //console.log(result.data.data[0])
     return result.data.data
 };

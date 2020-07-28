@@ -51,6 +51,15 @@ class Energizer extends Model {
   }
 
 
+  static async updateDirect(directEnz) {
+    console.log("IN MODEL : UPDATING DIRECT"+JSON.stringify(directEnz,null,4))
+    return Energizer.query().findById(directEnz.id).patch(directEnz).returning('*');
+  }
+
+
+
+
+
   static async update(updatedEnz) {
     console.log("IN MODEL : UPDATING "+JSON.stringify(updatedEnz,null,4))
     const {
@@ -100,8 +109,10 @@ class Energizer extends Model {
   }
 
 
-    static async all() {
-      return Energizer.query();
+    static async all(sortByAlpha) {
+      console.log("SORTBYALPHA is ", sortByAlpha)
+      //return sortByAlpha ? Energizer.query().orderBy('last_name') : Energizer.query().orderBy('created_at')
+      return sortByAlpha ? Energizer.query().orderBy('last_name') : Energizer.query().orderBy('created_at')
     }
 
     static async getById(id) {
