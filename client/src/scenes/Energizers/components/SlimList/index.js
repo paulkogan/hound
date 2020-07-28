@@ -34,12 +34,21 @@ const styles = () => ({
 
   frontBox: {
     textAlign: 'left',
-    paddingLeft: '10px',
+    paddingLeft: '5px',
     width: "60%",
-    border: '0px solid red',
     float: 'left',
     margin: "0px",
-    clear: "both"
+    clear: "both", 
+    border: '0px solid blue',
+  },
+  slimNum: {
+    fontSize: '14px',
+    lineHeight: '16px',
+    paddingRight: '5px',
+    paddingTop: '10px',
+    width: "35px",
+    border: '0px solid purple',
+    float: 'left',
   },
   slimName: {
     fontSize: '14px',
@@ -47,7 +56,7 @@ const styles = () => ({
     fontWeight: 'bold',
     paddingRight: '5px',
     paddingTop: '10px',
-    width: "200px",
+    width: "250px",
     border: '0px solid green',
     float: 'left',
   },
@@ -100,12 +109,15 @@ class SlimList extends Component {
       <div className={cx(classes.panelContainer)}>
         <div className={cx(classes.countDiv)}> Energizers Found: {energizers.length}</div>
 
-        {energizers.map(energizer  => {
+        {energizers.map((energizer, index)  => {
           return (
             <div className={cx(classes.slimBox)} key={energizer.id} >
                 <div className={cx(classes.frontBox)}>
+                   <div className={cx(classes.slimNum)}>
+                      {index+1}.
+                    </div>
                     <div className={cx(classes.slimName)}>
-                        {energizer.firstName} {energizer.middleName} {energizer.lastName}
+                      {energizer.firstName} {energizer.middleName} {energizer.lastName}
                     </div>
                     <div className={cx(classes.slimInfo)}>
                             <div className={cx(classes.townInfo)}>

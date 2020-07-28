@@ -39,50 +39,12 @@ function mapEnz (energizer) {
   }
 
 }
-
-
-
-//list all energizers
+//all energizers by created date
 router.get('/', async (req, res) => {
   try {
-   const energizers = await Energizer.all();
-     //console.log("Controllers/Energizers/list -> EXAMPLE", JSON.stringify(energizers[0],null,4))
-     //console.log("Controllers/Energizers/list -> length", energizers.length)
+   const energizers = await Energizer.all(false);
    res.status(200).json({
-      data: energizers.map(energizer => ({
-        id: energizer.id,
-        firstName: energizer.first_name,
-        middleName: energizer.middle_name,
-        lastName: energizer.last_name,
-        wikiPage: energizer.wiki_page,
-        bornState: energizer.born_state,
-        bornTown: energizer.born_town,
-        homeState: energizer.home_state,
-        homeTown: energizer.home_town,
-        currentTown: energizer.current_town,
-        currentState: energizer.current_state,
-        earlyLife: energizer.early_life,
-        bio: energizer.bio,
-        playsWith: energizer.plays_with,
-        agencyRep: energizer.rep_1,
-        ethnicity: energizer.ethnicity,
-        gender: energizer.gender,
-        occupation: energizer.occupation,
-        education: energizer.education,
-        birthday: energizer.birthday,
-        solicitor: energizer.solicitor,
-        notes: energizer.notes,
-        homeZipcode: energizer.home_zipcode,
-        highSchool: energizer.high_school,
-        imdbLink: energizer.imdb_link,
-        social1: energizer.social_1,
-        social2: energizer.social_2,
-        social3: energizer.social_3,
-        stat1: energizer.stat_1, 
-        stat2: energizer.stat_2,
-        createdAt: energizer.created_at     
-      })
-    )
+      data: energizers.map(energizer => mapEnz(energizer))
     });
   } catch (err) {
     console.error(err);
@@ -93,20 +55,23 @@ router.get('/', async (req, res) => {
   }
 });
 
-//list all energizers
-router.get('/env', async (req, res) => {
+
+router.get('/alpha', async (req, res) => {
   try {
+   const energizers = await Energizer.all(true);
    res.status(200).json({
-        version: process.env.NODE_ENV
+      data: energizers.map(energizer => mapEnz(energizer))
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      message: 'Unable to get env',
+      message: 'Unable to find energizers',
       error: err.message,
     });
   }
 });
+
+
 
 // delete energizer
 router.post('/delete', async (req, res) => {
@@ -186,7 +151,51 @@ router.post('/update', async (req, res) => {
 
 });
 
+//fill in last name from first
+router.get('/lastname', async (req, res) => {
+  let noLast = []
+  try {
+    const energizers = await Energizer.all(true);
 
+    for (const enz of energizers) {
+          if ( !enz.last_name || enz.last_name == " ") {           
+            enz.last_name = enz.first_name
+            enz.first_name = null
+            let updateResult = await Energizer.updateDirect(enz)
+            console.log("updateResult",updateResult)
+            noLast.push([updateResult.first_name, updateResult.last_name])
+          } 
+
+    } 
+    await res.status(200).json({
+        data: noLast
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: 'Unable to fix lastnames',
+      error: err.message,
+    });
+  }
+});
+
+
+
+
+//return current env
+router.get('/env', async (req, res) => {
+  try {
+   res.status(200).json({
+        version: process.env.NODE_ENV
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: 'Unable to get env',
+      error: err.message,
+    });
+  }
+});
 
 
 

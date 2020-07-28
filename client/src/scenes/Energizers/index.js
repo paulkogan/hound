@@ -2,12 +2,9 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Switch from '@material-ui/core/Switch';
 import Cookies from 'universal-cookie';
-import { Link as RouterLink } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
 import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
 import CurrentUserContext, { CurrentUserConsumer, CurrentUserProvider }   from '../../contexts/CurrentUserContext.jsx';
-import ExpansionList from './components/ExpansionList';
 import SlimList from './components/SlimList';
 import EnergizerProfile from './components/EnergizerProfile';
 import ReviewWikiResults from './components/ReviewWikiResults';
@@ -106,7 +103,7 @@ class Energizers extends Component {
     openChartModal:false,
     openUploadModal:false,
     energizerUnderEdit: {},
-    sortByAlpha:false,
+    sortByAlpha:true,
     wikiResults: {},
     energizers: [],
     filteredEnergizers: [],
@@ -160,29 +157,32 @@ class Energizers extends Component {
       FileSaver.saveAs(data, fileName);
   }
 
-sortArrayAlphaOrDate = (enzArray) => {
-  if (this.state.sortByAlpha) {
-    enzArray.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1)
-  } else {
-    enzArray.sort((a, b) => {
-       if (!b.createdAt) return -1
-       if (!a.createdAt) return 1
-       if (b.createdAt > a.createdAt) {
-         return 1
-       } else {
-         return -1
-       }
-    })   
-  }
-  return enzArray
-}
+// sortArray = async (enzArray) => {
+//   if (this.state.sortByAlpha) {
+//     console.log("SORTING BY ALPHA", enzArray.length)
+//     await enzArray.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1)
+//   } else {
+//     //sort by created
+//     console.log("SORTING BY createdAt", enzArray.length)
+//     enzArray.sort((a, b) => {
+//        if (!b.createdAt) return -1
+//        if (!a.createdAt) return 1
+//        if (b.createdAt > a.createdAt) {
+//          return 1
+//        } else {
+//          return -1
+//        }
+//     })   
+//   }
+//   return enzArray
+// }
 
 
 refreshEnergizers = async () => {
 
     this.setState({ isLoading: true });
-    let energizers = this.sortArrayAlphaOrDate(await api.fetchEnergizers()) 
-
+    let energizers = await api.fetchEnergizers(this.state.sortByAlpha) 
+    console.log("REFRESHED FROM from DB", energizers.length)
     this.setState({ 
       isLoading: false,
       energizers,
@@ -195,31 +195,81 @@ refreshEnergizers = async () => {
 
 onChangeSort = async () => {
 
-    this.setState({ 
-      isLoading: true,
+    await this.setState({ 
+      //isLoading: true,
       sortByAlpha: !this.state.sortByAlpha,
     });
-    await this.render()    
+   
+    this.onClearSearch()
+    this.refreshEnergizers()
 
-    if (this.state.filteredEnergizers.length < this.state.energizers.length) {
-      let filteredEnergizers =  this.sortArrayAlphaOrDate(this.state.filteredEnergizers)
-      this.setState({ 
-                  filteredEnergizers,
-                  isLoading: false
-      });
+    // if (this.state.filteredEnergizers.length < this.state.energizers.length) {
+    //   let filteredEnergizers =  this.sortArray(this.state.filteredEnergizers)
+    //   this.setState({ 
+    //               filteredEnergizers,
+    //               isLoading: false
+    //   });
 
 
-    } else {  //no filter  sort all
-      let energizers = await this.sortArrayAlphaOrDate(this.state.energizers)
-      this.setState({ 
-                  energizers,
-                  isLoading: false
-      });
-    }
+    // } else {  //no filter  sort all
+    //   let energizers = await this.sortArray(this.state.energizers)
+    //   this.setState({ 
+    //               energizers,
+    //               isLoading: false
+    //   });
+    // }
 
 };
 
 
+
+onClearSearch = () => {
+  this.setState({
+    openListModal: true,
+    openEditModal: false,
+    openReviewWikiModal: false,
+    energizerUnderEdit: {},
+    openSearchModal: false,
+    openChartModal: false,
+    searchTerm: "",
+    filteredEnergizers: this.state.energizers
+  });
+};
+
+
+doFilter = async (searchTerm, statesOnly) => {
+  const {energizers}  = this.state
+  
+  let altState = (searchTerm.length === 2) ? utils.fullStateFromAcr(searchTerm) 
+     : utils.AcrFromFullState(searchTerm)
+  let filteredEnergizers = statesOnly ?
+      energizers.filter (ezr => {
+              return ezr.bornState && ezr.bornState.toUpperCase() == searchTerm.toUpperCase() || 
+              ezr.homeState && ezr.homeState.toUpperCase() == searchTerm.toUpperCase() ||
+              ezr.bornState && altState && ezr.bornState.toUpperCase() == altState.toUpperCase()  || 
+              ezr.homeState && altState && ezr.homeState.toUpperCase() == altState.toUpperCase() 
+      })   :
+      energizers.filter (ezr => {
+              return ezr.bornState && ezr.bornState.toUpperCase() == searchTerm.toUpperCase() || 
+              ezr.homeState && ezr.homeState.toUpperCase() == searchTerm.toUpperCase() ||
+              ezr.currentState && ezr.currentState.toUpperCase() == searchTerm.toUpperCase() ||
+              ezr.bornState && altState && ezr.bornState.toUpperCase() == altState.toUpperCase()  || 
+              ezr.homeState && altState && ezr.homeState.toUpperCase() == altState.toUpperCase()  ||
+              ezr.currentState && altState && ezr.currentState.toUpperCase() == altState.toUpperCase()  ||
+              ezr.bornTown && ezr.bornTown.includes(searchTerm) || 
+              ezr.homeTown && ezr.homeTown.includes(searchTerm) || 
+              ezr.bio && ezr.bio.includes(searchTerm) || 
+              ezr.earlyLife && ezr.earlyLife.includes(searchTerm) || 
+              ezr.education && ezr.education.includes(searchTerm) || 
+              ezr.highSchool && ezr.highSchool.includes(searchTerm) || 
+              ezr.playsWith && ezr.playsWith.includes(searchTerm) ||
+              ezr.firstName && ezr.firstName.includes(searchTerm) ||
+              ezr.lastName && ezr.lastName.includes(searchTerm)
+      })
+
+
+  this.setState({ searchTerm, filteredEnergizers });
+};
 
 
 
@@ -244,81 +294,50 @@ onChangeSort = async () => {
 
 
   onOpenChart = async () => {
-      const statesMap = new Map()
+
       const {energizers, openListModal, openChartModal}  = this.state
-      //statesWithCounts.set("test",608)
-      energizers.forEach(enzr => {
-            if(statesMap.has(enzr.bornState)) {
-                  statesMap.set(enzr.bornState,statesMap.get(enzr.bornState)+1)
-            } else {
-                  statesMap.set(enzr.bornState,1)
-            }
 
-            if(statesMap.has(enzr.homeState)) {
-              statesMap.set(enzr.homeState,statesMap.get(enzr.homeState)+1)
-            } else {
-              statesMap.set(enzr.homeState,1)
-            }
+      if (this.state.statesWithCounts.length < 1) {
+        const statesMap = new Map()
+
+        energizers.forEach(enzr => {
+          if(statesMap.has(enzr.bornState)) {
+                statesMap.set(enzr.bornState,statesMap.get(enzr.bornState)+1)
+          } else {
+                statesMap.set(enzr.bornState,1)
+          }
+
+          if(statesMap.has(enzr.homeState)) {
+            statesMap.set(enzr.homeState,statesMap.get(enzr.homeState)+1)
+          } else {
+            statesMap.set(enzr.homeState,1)
+          }
 
 
-      })
-
-
-      let statesWithCounts = []
-
-      for (let [key,value] of statesMap.entries() ) {
-
-        statesWithCounts.push({
-          "stateName" : key,
-          "numEnergizers" : value
         })
-      }
 
-      statesWithCounts.sort((a,b) => {
-          return b.numEnergizers - a.numEnergizers
-      })
-
-      this.setState({
-          openChartModal: !openChartModal,
-          openListModal: !openListModal,
-          statesWithCounts
-      });
-  };
-
-
-  doSearch = async (searchTerm, statesOnly) => {
-      const {energizers}  = this.state
-      
-      let altState = (searchTerm.length === 2) ? utils.fullStateFromAcr(searchTerm) 
-         : utils.AcrFromFullState(searchTerm)
-      let filteredEnergizers = statesOnly ?
-          energizers.filter (ezr => {
-                  return ezr.bornState && ezr.bornState.toUpperCase() == searchTerm.toUpperCase() || 
-                  ezr.homeState && ezr.homeState.toUpperCase() == searchTerm.toUpperCase() ||
-                  ezr.bornState && altState && ezr.bornState.toUpperCase() == altState.toUpperCase()  || 
-                  ezr.homeState && altState && ezr.homeState.toUpperCase() == altState.toUpperCase() 
-          })   :
-          energizers.filter (ezr => {
-                  return ezr.bornState && ezr.bornState.toUpperCase() == searchTerm.toUpperCase() || 
-                  ezr.homeState && ezr.homeState.toUpperCase() == searchTerm.toUpperCase() ||
-                  ezr.currentState && ezr.currentState.toUpperCase() == searchTerm.toUpperCase() ||
-                  ezr.bornState && altState && ezr.bornState.toUpperCase() == altState.toUpperCase()  || 
-                  ezr.homeState && altState && ezr.homeState.toUpperCase() == altState.toUpperCase()  ||
-                  ezr.currentState && altState && ezr.currentState.toUpperCase() == altState.toUpperCase()  ||
-                  ezr.bornTown && ezr.bornTown.includes(searchTerm) || 
-                  ezr.homeTown && ezr.homeTown.includes(searchTerm) || 
-                  ezr.bio && ezr.bio.includes(searchTerm) || 
-                  ezr.earlyLife && ezr.earlyLife.includes(searchTerm) || 
-                  ezr.education && ezr.education.includes(searchTerm) || 
-                  ezr.highSchool && ezr.highSchool.includes(searchTerm) || 
-                  ezr.playsWith && ezr.playsWith.includes(searchTerm) ||
-                  ezr.firstName && ezr.firstName.includes(searchTerm) ||
-                  ezr.lastName && ezr.lastName.includes(searchTerm)
+        let statesWithCounts = []
+        for (let [key,value] of statesMap.entries() ) {
+          statesWithCounts.push({
+            "stateName" : key,
+            "numEnergizers" : value
           })
+        }
 
+        this.setState({
+          statesWithCounts
+        });
+    }
 
-      this.setState({ searchTerm, filteredEnergizers });
+    this.setState({
+      openChartModal: !openChartModal,
+      openListModal: !openListModal
+    });
+
   };
+
+
+
 
 
   onStartScrapeWiki = async  energizer  => {
@@ -407,7 +426,6 @@ onChangeSort = async () => {
               console.log ("ADDING ", autoWiki)
               enz.wikiPage = autoWiki 
           }
-          //console.log("SEND UPLOAD-LIST AFTER -", enz)
           return enz
     })
 
@@ -426,18 +444,6 @@ onChangeSort = async () => {
   };
 
 
-  onClearSearch = () => {
-    this.refreshEnergizers()
-    this.setState({
-      openListModal: true,
-      openEditModal: false,
-      openReviewWikiModal: false,
-      energizerUnderEdit: {},
-      openSearchModal: false,
-      openChartModal: false,
-      searchTerm: ""
-    });
-  };
   
   onDialogClose = () => {
     this.setState({
@@ -574,7 +580,7 @@ onChangeSort = async () => {
             {openSearchModal && (
             <div>
               <SearchPage
-                doSearch={this.doSearch}
+                doSearch={this.doFilter}
                 onClose={this.onDialogClose}
                 statesList={statesList}
               />
@@ -585,7 +591,7 @@ onChangeSort = async () => {
             <div>
               <ChartPage
                 statesWithCounts = {statesWithCounts}
-                doSearch={this.doSearch}
+                doSearch={this.doFilter}
                 onClose={this.onDialogClose}
               />
             </div>
