@@ -1,0 +1,67 @@
+
+/*
+colors
+blue: #30437A
+grey: #909FAC
+red: #DC483A
+
+*/
+
+.navigation {
+  width: 100%;
+  height: 85px;
+  background-color: #F8F8F8 !important;
+  color: #525252 !important;
+  box-shadow: none !important;
+  align-items: center;
+  border-bottom: 2px solid lightgrey;
+  padding-left: 0px;
+  padding-right: 50px;
+}
+
+.navigation .toolbar {
+  max-width: 1110px;
+  width: 100%;
+  height: 100%;
+  margin-left: 50px;
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  border: 0px solid red;
+}
+
+.hound-head {
+	height: 39px;
+	width: 80%;
+	color: #525252;
+	font-size: 32px;
+	font-weight: 550;
+	line-height: 39px;
+    text-align: left;
+    padding-left: 10px;
+    border: 0px solid blue;
+}
+
+.version {
+    margin-right: 20px;
+    width: 100%;
+    position: right;
+    text-align: right;
+    text-align: right;
+    border: 0px solid green;
+  }
+  
+
+.actionButton {
+    border: 2px solid red;
+    color: yellow;
+
+}
+
+
+
+.hound-logo {
+  text-decoration: none;
+  border: 0px solid purple;
+}
+
