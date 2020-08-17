@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
-import { createMuiTheme } from '@material-ui/core/styles';
+import  { createMuiTheme, ThemeProvider,  MuiThemeProvider}  from '@material-ui/core/styles';
 import Energizers from '../Energizers';
 import Cookies from 'universal-cookie';
 import Login from '../Login';
-import Navigation from '../../components/Navigation';
+import Navigation from '../../components/Navigation.jsx';
 import CurrentUserContext, {CurrentUserProvider} from '../../contexts/CurrentUserContext.jsx';
 //import * as api from 'services/api';
 
@@ -15,22 +15,14 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: '#505D68',
-      light: '#879bad',
-      dark: '#25303a'
+      main: '#30437A', //HTP blue
+      light: '#909FAC', //HTP GREY
+      dark: '#DC483A' //HTP red
     },
   },
-  overrides: {
-    MuiButton: {
-      text: {
-        color: 'white',
-      },
-    },
-    input: {
-      color: 'red'
-    }
-  },
+
 });
+
 
 
 class Root extends Component {
@@ -78,12 +70,16 @@ class Root extends Component {
         <div>
           <CurrentUserProvider value={currentUser}>
              <SnackbarProvider maxSnack={3}>
-              <Router>
-                        <Navigation handleLogout = {this.handleLogout}/>
-                        <Route  path="/" exact component = {Energizers} />
-                        <Route  path="/list"  component = {Energizers} />
-                        <Route  path="/login"  component = {Login} />
-              </Router>
+             < MuiThemeProvider theme={theme}>
+                <Router>
+                          
+                             <Navigation handleLogout = {this.handleLogout}/>
+                          
+                          <Route  path="/" exact component = {Energizers} />
+                          <Route  path="/list"  component = {Energizers} />
+                          <Route  path="/login"  component = {Login} />
+                </Router>
+              </ MuiThemeProvider>
             </SnackbarProvider>
           </CurrentUserProvider>
         </div>
@@ -96,4 +92,36 @@ class Root extends Component {
 
 export default Root;
 
+{/* <ThemeProvider theme={theme}>
+</ThemeProvider> */}
+
+
 //</MuiThemeProvider>
+
+//main: '#505D68',
+// light: '#879bad',
+// dark: '#25303a'
+
+
+// const theme = createMuiTheme({
+//   typography: {
+//     useNextVariants: true,
+//   },
+//   palette: {
+//     primary: {
+//       main: '#AABBCC',
+//       light: '#AABBCC',
+//       dark: '#AABBCC'
+//     },
+//   },
+//   overrides: {
+//     MuiButton: {
+//       text: {
+//         color: 'green',
+//       },
+//     },
+//     input: {
+//       color: 'red'
+//     }
+//   },
+// });

@@ -1,4 +1,14 @@
 
+#gitignore
+node_modules/
+z-old/
+config.json
+Archive*
+*.zip
+.env*
+.env.development
+
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
