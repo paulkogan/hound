@@ -85,43 +85,10 @@ class Root extends Component {
         </div>
 
           )
-     } //render
+     } 
 };
 
 //Root.contextType = CurrentUserContext;
 
 export default Root;
 
-{/* <ThemeProvider theme={theme}>
-</ThemeProvider> */}
-
-
-//</MuiThemeProvider>
-
-//main: '#505D68',
-// light: '#879bad',
-// dark: '#25303a'
-
-
-// const theme = createMuiTheme({
-//   typography: {
-//     useNextVariants: true,
-//   },
-//   palette: {
-//     primary: {
-//       main: '#AABBCC',
-//       light: '#AABBCC',
-//       dark: '#AABBCC'
-//     },
-//   },
-//   overrides: {
-//     MuiButton: {
-//       text: {
-//         color: 'green',
-//       },
-//     },
-//     input: {
-//       color: 'red'
-//     }
-//   },
-// });

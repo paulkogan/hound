@@ -1,0 +1,49 @@
+
+
+/* 
+    input. {
+      margin: '0.5rem 0',
+      padding: '5px'
+    },
+
+  fieldSmall: {
+      fontSize: '12px',
+      lineHeight: '14px',
+      color: '#606A74',
+      fontWeight: 'normal',
+      maxWidth: '80%',
+      margin: '0px',
+      padding: '0px',
+      textAlign: 'left',
+      contentAlign: 'left'
+    },
+    fieldMedium: {
+      fontSize: '12px',
+      lineHeight: '14px',
+      color: '#606A74',
+      fontWeight: 'normal',
+      maxWidth: '100%',
+      margin: '0px',
+      padding: '0px',
+      textAlign: 'left',
+      contentAlign: 'left'
+    },
+  
+    fieldBig: {
+        fontSize: '12px',
+        lineHeight: '14px',
+        color: '#606A74',
+        fontWeight: 'normal',
+        maxWidth: '100%',
+        margin: '0px',
+      },
+   */
+.timestamp {
+    font-size: 12px;
+    line-height: 20px;
+    color: red;
+    font-weight: normal;
+    max-width: 100%;
+    margin-left: 10px;
+}
+  
