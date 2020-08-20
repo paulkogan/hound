@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
 import CurrentUserContext, { CurrentUserConsumer, CurrentUserProvider }   from '../../contexts/CurrentUserContext.jsx';
 import SlimList from './components/SlimList';
-import EnergizerProfileOld from './components/EnergizerProfile';
+import EnergizerProfileOld from './components/EnergizerProfile/index.js';
 import EnergizerProfile from './components/EnergizerProfile.jsx';
 import ReviewWikiResults from './components/ReviewWikiResults';
 import SearchPage from './components/Search';
@@ -275,12 +275,20 @@ doFilter = async (searchTerm, statesOnly) => {
 
 
   onEditEnergizer = ({ energizer }) => {
-    this.setState({ energizerUnderEdit: energizer, openEditModal: true });
+    this.setState({ 
+      energizerUnderEdit: energizer, 
+      openEditModal: true,
+      openListModal: false,
+     });
   };
 
 
   onNewEnergizer = () => {
-      this.setState({ energizerUnderEdit: {}, openEditModal: true });
+      this.setState({ 
+        energizerUnderEdit: {}, 
+        openEditModal: true,
+        openListModal: false,
+      });
   };
 
   onOpenSearch = () => {
@@ -554,15 +562,14 @@ doFilter = async (searchTerm, statesOnly) => {
 
             {openEditModal && (
               <div>
-                <EnergizerProfile
-                  energizer={energizerUnderEdit}
-                  updateEnergizer={this.updateEnergizer}
-                  createEnergizer={this.createEnergizer}
-                  deleteEnergizer={this.deleteEnergizer}
-                  onClose={this.onDialogClose}
-                />
-
-              </div>
+                    <EnergizerProfile
+                      energizer={energizerUnderEdit}
+                      updateEnergizer={this.updateEnergizer}
+                      createEnergizer={this.createEnergizer}
+                      deleteEnergizer={this.deleteEnergizer}
+                      onClose={this.onDialogClose}
+                    />
+              </div>  
             )}
 
 
@@ -675,5 +682,4 @@ const styles = () => ({
 });
 
 export default withSnackbar(withStyles(styles)(Energizers));
-
 

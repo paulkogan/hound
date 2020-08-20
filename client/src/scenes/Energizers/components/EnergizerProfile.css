@@ -1,5 +1,60 @@
 
 
+#outerForm {
+    border: 2px solid grey;
+    border-radius: 6px;
+    margin: 10px;
+    padding: 20px;
+    width: 80%;
+}
+
+#header {
+    margin: 0;
+    display: flex;
+    border: 0px solid red;
+    padding-bottom: 20px;
+
+}
+
+#headLine {
+    font-size: 36px;
+    width: 50%;
+    float: left; 
+    padding-right: 30px;  
+}
+
+#actionButtons {
+    display: flex;
+    justify-content: space-evenly;
+    border: 0px solid blue; 
+    width: 40% 
+}
+
+
+.fieldsRow {
+  border: 0px solid green; 
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.CIF {
+  border: 3px solid red; 
+}
+
+.timestamp {
+    font-size: 12px;
+    line-height: 20px;
+    color: red;
+    font-weight: normal;
+    width: 50%;
+    margin-left: 10px;
+    border: 0px solid blue; 
+}
+
+
+
+
 /* 
     input. {
       margin: '0.5rem 0',
@@ -38,12 +93,5 @@
         margin: '0px',
       },
    */
-.timestamp {
-    font-size: 12px;
-    line-height: 20px;
-    color: red;
-    font-weight: normal;
-    max-width: 100%;
-    margin-left: 10px;
-}
+
   
