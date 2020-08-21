@@ -168,58 +168,6 @@ const EnergizerProfile  = (props) => {
                     isTextArea= { false }
                 />  
 
-            </div>
-
-
-            <div className="fieldsRow">
-                <ControlledInputField
-                    id="bornTown"
-                    label="Born Town"
-                    errorText=""
-                    toValidate={[]}
-                    initialValue={ energizer.bornTown}
-                    saveField = {saveField}
-                    className="CIF"
-                    isTextArea= { false }
-                />  
-
-                <ControlledInputField
-                    id="bornState"
-                    label="Born State"
-                    errorText="valid state"
-                    toValidate={[]}
-                    initialValue={ energizer.bornState}
-                    saveField = {saveField}
-                    className="CIF"
-                    isTextArea= { false }
-                />  
-
-            </div>
-
-
-            <div className="fieldsRow">
-                <ControlledInputField
-                    id="homeTown"
-                    label="Home Town"
-                    errorText=""
-                    toValidate={[]}
-                    initialValue={ energizer.homeTown}
-                    saveField = {saveField}
-                    className="CIF"
-                    isTextArea= { false }
-                />  
-
-                <ControlledInputField
-                    id="homeState"
-                    label="Home State"
-                    errorText="valid state"
-                    toValidate={[]}
-                    initialValue={ energizer.homeState}
-                    saveField = {saveField}
-                    className="CIF"
-                    isTextArea= { false }
-                />  
-
                 <ControlledInputField
                     id="homeZipcode"
                     label="Home Zip"
@@ -229,33 +177,86 @@ const EnergizerProfile  = (props) => {
                     saveField = {saveField}
                     className="CIF"
                     isTextArea= { false }
-                />                  
+                />  
+
             </div>
 
-            <div className="fieldsRow">
-                <ControlledInputField
-                    id="currentTown"
-                    label="Current Town"
-                    errorText=""
-                    toValidate={[]}
-                    initialValue={ energizer.currentTown}
-                    saveField = {saveField}
-                    className="CIF"
-                    isTextArea= { false }
-                />   
+             <div className="rowsBox">
+                <div className="fieldsRow">
+                    <ControlledInputField
+                        id="bornTown"
+                        label="Born Town"
+                        errorText=""
+                        toValidate={[]}
+                        initialValue={ energizer.bornTown}
+                        saveField = {saveField}
+                        className="CIF"
+                        isTextArea= { false }
+                    />  
 
-                <ControlledInputField
-                    id="currentState"
-                    label="Current State"
-                    errorText=""
-                    toValidate={[]}
-                    initialValue={ energizer.currentState}
-                    saveField = {saveField}
-                    className="CIF"
-                    isTextArea= { false }
-                />  
+                    <ControlledInputField
+                        id="bornState"
+                        label="Born State"
+                        errorText="valid state"
+                        toValidate={[]}
+                        initialValue={ energizer.bornState}
+                        saveField = {saveField}
+                        className="CIF"
+                        isTextArea= { false }
+                    />  
+
+                </div>
+
+
+                <div className="fieldsRow">
+                    <ControlledInputField
+                        id="homeTown"
+                        label="Home Town"
+                        errorText=""
+                        toValidate={[]}
+                        initialValue={ energizer.homeTown}
+                        saveField = {saveField}
+                        className="CIF"
+                        isTextArea= { false }
+                    />  
+
+                    <ControlledInputField
+                        id="homeState"
+                        label="Home State"
+                        errorText="valid state"
+                        toValidate={[]}
+                        initialValue={ energizer.homeState}
+                        saveField = {saveField}
+                        className="CIF"
+                        isTextArea= { false }
+                    />  
+                
+                </div>
+
+                <div className="fieldsRow">
+                    <ControlledInputField
+                        id="currentTown"
+                        label="Current Town"
+                        errorText=""
+                        toValidate={[]}
+                        initialValue={ energizer.currentTown}
+                        saveField = {saveField}
+                        className="CIF"
+                        isTextArea= { false }
+                    />   
+
+                    <ControlledInputField
+                        id="currentState"
+                        label="Current State"
+                        errorText="valid state"
+                        toValidate={[]}
+                        initialValue={ energizer.currentState}
+                        saveField = {saveField}
+                        className="CIF"
+                        isTextArea= { false }
+                    />  
              </div>
-
+           </div>
 
              <div className="fieldsRow">
                 <ControlledInputField

@@ -30,6 +30,17 @@
     width: 40% 
 }
 
+.rowsBox {
+  border: 2px solid grey; 
+  width: 90%;
+  border-radius: 6px;
+  padding-left: 20px;
+  padding-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  background: beige;
+
+}
 
 .fieldsRow {
   border: 0px solid green; 
