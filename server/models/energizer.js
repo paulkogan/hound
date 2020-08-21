@@ -110,9 +110,9 @@ class Energizer extends Model {
 
 
     static async all(sortByAlpha) {
-      console.log("SORTBYALPHA is ", sortByAlpha)
+      //console.log("SORTBYALPHA is ", sortByAlpha)
       //return sortByAlpha ? Energizer.query().orderBy('last_name') : Energizer.query().orderBy('created_at')
-      return sortByAlpha ? Energizer.query().orderBy('last_name') : Energizer.query().orderBy('created_at')
+      return sortByAlpha ? Energizer.query().orderBy('last_name') : Energizer.query().orderBy('created_at', 'DESC')
     }
 
     static async getById(id) {
