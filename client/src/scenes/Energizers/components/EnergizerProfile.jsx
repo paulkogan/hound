@@ -36,21 +36,21 @@ const EnergizerProfile  = (props) => {
     return Object.entries(obj).length === 0;
   }
 
-  const handleChange = e => {
-    setEnergizer({
-        ...energizer,
-        [e.target.name]: e.target.value
-    });
-  };
+//   const handleChange = e => {
+//     setEnergizer({
+//         ...energizer,
+//         [e.target.name]: e.target.value
+//     });
+//   };
 
-  const handleBlur = e => {
-    console.log("BLUR dataset ", e.target.dataset.label)  
-    console.log("BLUR get Atrribute: ", e.target.getAttribute("data-label"))  
-    setEnergizer({
-        ...energizer,
-        [e.target.name]: e.target.value
-    });
-  };
+//   const handleBlur = e => {
+//     console.log("BLUR dataset ", e.target.dataset.label)  
+//     console.log("BLUR get Atrribute: ", e.target.getAttribute("data-label"))  
+//     setEnergizer({
+//         ...energizer,
+//         [e.target.name]: e.target.value
+//     });
+//   };
 
 
   const saveField = (fieldName, fieldValue) => {
@@ -87,7 +87,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={[]}
                     initialValue={ energizer.firstName }
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 />
         
@@ -100,7 +99,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={[]}
                     initialValue={ energizer.middleName }
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 />
         
@@ -111,7 +109,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={["REQUIRED"]}
                     initialValue={ energizer.lastName }
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 />
 
@@ -124,10 +121,9 @@ const EnergizerProfile  = (props) => {
                     id="occupation"
                     label="Occupation *"
                     errorText=""
-                    toValidate={[]}
+                    toValidate={["REQUIRED"]}
                     initialValue={ energizer.occupation }
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 />
 
@@ -138,7 +134,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={[]}
                     initialValue={ energizer.playsWith }
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 />
 
@@ -149,7 +144,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={[]}
                     initialValue={ energizer.agencyRep }
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 />      
 
@@ -164,7 +158,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={[]}
                     initialValue={ energizer.wikiPage}
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 />  
 
@@ -175,7 +168,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={[]}
                     initialValue={ energizer.homeZipcode}
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 />  
 
@@ -189,19 +181,17 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.bornTown}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                     />  
 
                     <ControlledInputField
                         id="bornState"
                         label="Born State"
-                        errorText="valid state"
-                        toValidate={[]}
+                        errorText="Needs to be a valid state"
+                        toValidate={["IS_VALID_US_STATE"]}
                         initialValue={ energizer.bornState}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                     />  
 
@@ -215,8 +205,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.homeTown}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                     />  
 
@@ -224,10 +213,9 @@ const EnergizerProfile  = (props) => {
                         id="homeState"
                         label="Home State"
                         errorText="valid state"
-                        toValidate={[]}
+                        toValidate={["IS_VALID_US_STATE"]}
                         initialValue={ energizer.homeState}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                     />  
                 
@@ -240,8 +228,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.currentTown}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                     />   
 
@@ -249,10 +236,9 @@ const EnergizerProfile  = (props) => {
                         id="currentState"
                         label="Current State"
                         errorText="valid state"
-                        toValidate={[]}
+                        toValidate={["IS_VALID_US_STATE"]}
                         initialValue={ energizer.currentState}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                     />  
              </div>
@@ -266,7 +252,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={[]}
                     initialValue={ energizer.education}
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 /> 
 
@@ -277,7 +262,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={[]}
                     initialValue={ energizer.highSchool}
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 /> 
 
@@ -288,7 +272,6 @@ const EnergizerProfile  = (props) => {
                     toValidate={[]}
                     initialValue={ energizer.birthday}
                     saveField = {saveField}
-                    className="CIF"
                     isTextArea= { false }
                 />
             </div>
@@ -300,8 +283,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.earlyLife}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { true }
                 />    
             </div>
@@ -313,8 +295,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.bio}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { true }
                 />    
             </div>
@@ -327,8 +308,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.imdbLink}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                 />    
 
@@ -338,8 +318,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.social1}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                 />         
         
@@ -351,8 +330,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.social2}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                 />    
 
@@ -363,8 +341,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.social3}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                 />   
             </div>
@@ -376,8 +353,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.solicitor}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                 />   
 
@@ -388,8 +364,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.ethnicity}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                 />   
 
@@ -400,8 +375,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.gender}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                 />   
 
@@ -411,8 +385,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.stat1}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { false }
                 />   
              </div>
@@ -425,8 +398,7 @@ const EnergizerProfile  = (props) => {
                         errorText=""
                         toValidate={[]}
                         initialValue={ energizer.notes}
-                        saveField = {saveField}
-                        className="CIF"
+                        saveField = {saveField}    
                         isTextArea= { true }
                 /> 
              </div>

@@ -1,13 +1,14 @@
 import "./ControlledInputField.css";
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from 'prop-types';
+import { validateField } from '../../../services/utils.js'
 
 
 const ControlledInputField = (props) => {
     const {
         id,
         label,
-        errorText,
+        initialErrorText,
         toValidate,
         initialValue,
         saveField,
@@ -16,14 +17,26 @@ const ControlledInputField = (props) => {
     } = props;
 
     const [value, setValue] = useState(initialValue || "");
+    const [errorText, setErrorText] = useState(initialErrorText || "");
+
 
     const handleChange = e => {
            setValue(e.target.value)
     };
     
     const handleBlur = e => {
-        //console.log("BLUR in CIF ", e.target.value, "and value", value) 
-        //validate here
+        /*console.log("BLUR in CIF ", e.target.value, "and value", value) 
+        validate here - do it elegantly.
+        *run the utils validateField function, passing in text and codes
+        * It returns array of error codes
+        * apply error codes to errorText
+        * se the isValid flag for field
+        */
+        let errorsArray = validateField(toValidate,value)
+        setErrorText(errorsArray)
+
+
+        //this is a placeholder, should update context and validate form
         saveField(id,value)
     };
 
