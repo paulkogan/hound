@@ -25,19 +25,12 @@ const ControlledInputField = (props) => {
     };
     
     const handleBlur = e => {
-        /*console.log("BLUR in CIF ", e.target.value, "and value", value) 
-        validate here - do it elegantly.
-        *run the utils validateField function, passing in text and codes
-        * It returns array of error codes
-        * apply error codes to errorText
-        * se the isValid flag for field
-        */
-        let errorsArray = validateField(toValidate,value)
-        setErrorText(errorsArray)
-
-
+        let validateResults = validateField(toValidate,value)
+        console.log("CORRECTED TEXT =",validateResults.text)
+        setErrorText(validateResults.errors)
         //this is a placeholder, should update context and validate form
-        saveField(id,value)
+        if (validateResults.text) setValue(validateResults.text)
+        saveField(id,validateResults.text)
     };
 
     return ( 

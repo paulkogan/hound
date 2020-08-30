@@ -125,13 +125,28 @@ let stateNames = [
     
 
 
-const isNotBlank = (text) => {
-  return (text.length > 0) ? null : "Can't be blank."
+const isNotBlank = (text) => {  
+    return {
+      "text": text,
+      "errorMsg":  (text.length > 0) ? null : "Can't be blank."
+    }  
+
+
 }
 
 const isAValidUSState = (text) => {
-  return (stateNames.includes(text) || text.length <1) ? null : "Must be valid U.S. state."
+
+  //if valid state acronym
+    text = (shortStateKeys[text] !== undefined) ? shortStateKeys[text] : text
+  //capitalize
+    text = (stateNames.includes(text.charAt(0).toUpperCase()+text.substring(1))) ? text.charAt(0).toUpperCase()+text.substring(1) : text
+
+    return {
+      "text": text,
+      "errorMsg":  (stateNames.includes(text) || text.length <1) ? null : "Must be valid U.S. state."
+    }  
 }
+
 
 
 const validationsMap = {
@@ -144,13 +159,22 @@ const validationsMap = {
 
 export const validateField = (validations, text) => {
     if (validations.length < 1) return []
-    return validations.reduce((errorsArray, validation) => {
-          let validationResult = validationsMap[validation](text)
-          console.log("FOR VALIDATION "+validation+" got: "+validationResult)
-          if (validationResult) errorsArray.push(validationResult)        
+    let newText = text
+
+    //let correctedText = text.charAt(0).toUpperCase()+text.substring(1)
+    let errorsArray =  validations.reduce((errorsArray, validation) => {
+          let validationResult = validationsMap[validation](newText)
+          console.log("FOR VALIDATION "+validation+" got: "+JSON.stringify(validationResult))
+          if (validationResult.errorMsg) errorsArray.push(validationResult.errorMsg)
+          newText =  validationResult.text       
           return errorsArray
     }, [])
 
+
+    return {
+      "text": newText,
+      "errors":  errorsArray  
+    }  
 }
 
 

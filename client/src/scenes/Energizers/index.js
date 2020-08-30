@@ -6,7 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
 import CurrentUserContext, { CurrentUserConsumer, CurrentUserProvider }   from '../../contexts/CurrentUserContext.jsx';
 import SlimList from './components/SlimList';
-import EnergizerProfileOld from './components/EnergizerProfile/index.js';
 import EnergizerProfile from './components/EnergizerProfile.jsx';
 import ReviewWikiResults from './components/ReviewWikiResults';
 import SearchPage from './components/Search';
