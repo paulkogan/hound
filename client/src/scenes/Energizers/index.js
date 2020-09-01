@@ -7,7 +7,7 @@ import { withSnackbar } from 'notistack';
 import CurrentUserContext, { CurrentUserConsumer, CurrentUserProvider }   from '../../contexts/CurrentUserContext.jsx';
 import SlimList from './components/SlimList';
 import EnergizerProfile from './components/EnergizerProfile.jsx';
-import ReviewWikiResults from './components/ReviewWikiResults';
+import ReviewWikiResults from './components/ReviewWikiResults.jsx';
 import SearchPage from './components/Search';
 import ChartPage from './components/Chart';
 import UploadPage from './components/Upload';
@@ -16,30 +16,11 @@ import * as cx from 'classnames';
 import * as api from '../../services/api';
 import * as utils from '../../services/utils';
 
-
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 
 
-const compareLast = (a, b) => {
-  // Use toUpperCase() to ignore character casing
-  const aLast = a.lastName ? a.lastName.toUpperCase() : "";
-  const bLast = b.lastName ? b.lastName.toUpperCase() : "";
-
-  let comparison = 0;
-  if (aLast > bLast) {
-    comparison = 1;
-  } else if (aLast < bLast) {
-    comparison = -1;
-  }
-  return comparison;
-}
-
-
-
-
 class Energizers extends Component {
-
 
 
   state = {
@@ -130,7 +111,7 @@ refreshEnergizers = async () => {
 
     this.setState({ isLoading: true });
     let energizers = await api.fetchEnergizers(this.state.sortByAlpha) 
-    console.log("REFRESHED FROM from DB", energizers.length)
+    //console.log("REFRESHED FROM from DB", energizers.length)
     this.setState({ 
       isLoading: false,
       energizers,

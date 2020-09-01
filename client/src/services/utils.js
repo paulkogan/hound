@@ -82,8 +82,8 @@ const isNotBlank = (text) => {
 
 const isUSState = (text) => {
   //if valid state acronym
-    text = text.toUpperCase()
-    text = (stateKeys[text] !== undefined) ? stateKeys[text] : text
+    let capsText = text.toUpperCase()
+    text = (stateKeys[capsText] !== undefined) ? stateKeys[capsText] : text
   //capitalize
     text = (stateNames.includes(capitalizePhrase(text))) ? capitalizePhrase(text) : text
 
@@ -93,20 +93,41 @@ const isUSState = (text) => {
     }  
 }
 
+const isZip = text => {
+  const { ZIP_CODE } = regexMap;
+  return {
+    "text": text,
+    "errorMsg":  (ZIP_CODE.test(text) || text.length <1) ? null : "Please enter a 5-digit U.S. zip zode"
+  }  
+
+};
+
+const regexMap = {
+  EMAIL: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))\s*$/,
+  ZIP_CODE: /^([0-9]{5})\s*$/,
+  NUMBER: /^\d+\s*$/,
+  PHONE: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}\s*$/im
+};
+
 
 const validationsMap = {
   "REQUIRED": isNotBlank,
-  "IS_US_STATE": isUSState
+  "IS_US_STATE": isUSState,
+  "IS_ZIP": isZip
 }
 
 
 export const validateField = (validations, text) => {
-    if (validations.length < 1) return []
+    if (validations.length < 1) return {
+      "text": text,
+      "errors":  [] 
+    }  
+
     let newText = text
 
     let errorsArray =  validations.reduce((errorsArray, validation) => {
           let validationResult = validationsMap[validation](newText)
-          //console.log("FOR VALIDATION "+validation+" got: "+JSON.stringify(validationResult))
+          console.log("FOR VALIDATION "+validation+" text: "+text+"  got: "+JSON.stringify(validationResult))
           if (validationResult.errorMsg) errorsArray.push(validationResult.errorMsg)
           newText =  validationResult.text       
           return errorsArray

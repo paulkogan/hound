@@ -139,9 +139,10 @@ router.post('/create', async (req, res) => {
 // update energizer
 router.post('/update', async (req, res) => {
   const {updatedEnz} = req.body;
+  console.log(`/Controllers/energizers/UPDATE RAW enz  - ${JSON.stringify(updatedEnz, null, 4)}`);
   try {
     const energizer = mapEnz(await Energizer.update(updatedEnz));
-    console.log(`/Controllers/energizers/UPDATE result  10 - ${JSON.stringify(energizer, null, 4)}`);
+    console.log(`/Controllers/energizers/UPDATE post transform  - ${JSON.stringify(energizer, null, 4)}`);
     res.status(200).json(energizer);
   } catch (err) {
     console.log('error on update........');

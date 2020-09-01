@@ -17,46 +17,66 @@ const ControlledInputField = (props) => {
     } = props;
 
     const [value, setValue] = useState(initialValue || "");
+    //const [isValid, setIsValid] = useState(false);
+    //const [touched, setTouched] = useState(false);
+    // let value = initialValue || ""
+    // let isValid = false
+    // let touched = false
     const [errorText, setErrorText] = useState(initialErrorText || "");
-    const [isValid, setIsValid] = useState(false);
-    const [touched, setTouched] = useState(false);
+
+
 
    const { updateFormState } = useContext(ControlledFormContext);
 
     const handleChange = e => {
            setValue(e.target.value)
-           setTouched(true)
     };
     
   const doFieldUpdate = (source) => {
+    //console.log("FieldUpdate "+id+ " from "+source+ " with "+value) 
     let validateResults = validateField(toValidate,value)
-    if (validateResults.text) setValue(validateResults.text)
-    if (validateResults.errors && validateResults.errors.length >0) {
-        if(source=="blur") setErrorText(validateResults.errors)
-        //setIsValid(false)
-        updateFormState(id,value,false)
-        console.log(id+ "is -- NOT -- VALID "+validateResults.errors) 
-
-    } else {
-        setErrorText("")
-        //setIsValid(true)
-        updateFormState(id,value,true)
-        console.log(id+ "is VALID ") 
+    if(source==="blur") {
+        setValue(validateResults.text) //why bpother - to show on screen
+        saveField(id,validateResults.text) //this will always be good.
     }
 
+    if (validateResults.errors && validateResults.errors.length >0) {
+        //setIsValid(false)
+        if(source==="blur") { //touched does not get there
+            setErrorText(validateResults.errors)
+        }
+        updateFormState(id,validateResults.text,false)
+        //console.log(id+ "is -- NOT -- VALID "+validateResults.errors) 
+
+    } else {  //no errors
+        //setIsValid(true)
+        setErrorText("")
+        updateFormState(id,validateResults.text,true)
+        
+        //console.log(id+ "is VALID ") 
+    }
+    
   }
 
-    //run on initial render
+    //run on initial render to disable empty form if tehre are required fields
     useEffect(() => {
         doFieldUpdate("initial")
-      }, []);
+    }, []);
+
+
+    // useEffect(() => {
+    //     doFieldUpdate("touched")
+    // }, [touched]);
+
+
 
 
     const handleBlur = (e) => {
-        setTouched(true)
-        doFieldUpdate("blur")
+        //setTouched(true) //no point
+        doFieldUpdate("blur") //how do you do async useState updates
         //this is a placeholder, should update context and validate form
-        saveField(id,value)
+        
+        
     };
 
     return ( 
