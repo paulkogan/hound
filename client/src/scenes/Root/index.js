@@ -7,6 +7,9 @@ import Cookies from 'universal-cookie';
 import Login from '../Login';
 import Navigation from '../../components/Navigation.jsx';
 import CurrentUserContext, {CurrentUserProvider} from '../../contexts/CurrentUserContext.jsx';
+import {ControlledFormContext, ControlledFormProvider } from '../../contexts/ControlledFormContext.jsx';
+
+
 //import * as api from 'services/api';
 
 const theme = createMuiTheme({
@@ -65,30 +68,41 @@ class Root extends Component {
   }
 
   render() {
-    const {currentUser} = this.state;      
+    const {currentUser} = this.state;  
+   
     return (
         <div>
           <CurrentUserProvider value={currentUser}>
              <SnackbarProvider maxSnack={3}>
              < MuiThemeProvider theme={theme}>
-                <Router>
-                          
-                             <Navigation handleLogout = {this.handleLogout}/>
-                          
-                          <Route  path="/" exact component = {Energizers} />
-                          <Route  path="/list"  component = {Energizers} />
-                          <Route  path="/login"  component = {Login} />
-                </Router>
+                <ControlledFormProvider>   
+                  <Router>
+                            
+                            <Navigation handleLogout = {this.handleLogout}/>
+                            <Route  path="/" exact component = {Energizers} />
+                            <Route  path="/list"  component = {Energizers} />
+                            <Route  path="/login"  component = {Login} />
+                  </Router>
+                </ControlledFormProvider> 
               </ MuiThemeProvider>
             </SnackbarProvider>
           </CurrentUserProvider>
         </div>
 
           )
+    
+
      } 
 };
 
 //Root.contextType = CurrentUserContext;
 
 export default Root;
+
+{/* <ControlledFormContext> {/* write }
+</ControlledFormContext> 
+
+<ControlledFormContext.Provider value = {{"aa":123}}> {/* read }
+</ControlledFormContext.Provider>
+*/}
 

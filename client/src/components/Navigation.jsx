@@ -36,7 +36,7 @@ render () {
               <img width="65" src={"./htp_logo.jpg"}/>
           </Link>
                 <div className="hound-head">
-                      Energizer-Hound
+                      Energizer Hound
                 </div>
 
 
