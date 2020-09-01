@@ -14,6 +14,7 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
+import { stateNames } from  '../../../../services/utils.js';
 
 
 
@@ -78,7 +79,7 @@ onListClick = async event => {
 
 
   render() {
-    const { classes, onClose, statesList } = this.props;
+    const { classes, onClose } = this.props;
     const { statesOnly, anchorEl, searchTerm } = this.state;
     return (
       <Dialog
@@ -147,7 +148,7 @@ onListClick = async event => {
 
             <Grid container justify={'center'}>
 
-                            { statesList.filter(state => {
+                            { stateNames.filter(state => {
 
                                   return state.toLowerCase().includes(searchTerm.toLowerCase())
 
@@ -278,154 +279,3 @@ Search.propTypes = {
 };
 
 export default withStyles(styles)(Search);
-
-
-
-
-            //    color: '#1C1C1C',
-
-
-
-
-
-
-// <div>
-//       {"BAEL: "+Boolean(anchorEl)+" ST:"+searchTerm}
-// </div>
-
-
-
-
-
-// closeStateList = () => {
-//   this.setState({ searchTerm: "nada",
-//                   showStateListModal: false
-//   });
-//
-// }
-
-
-// <div
-//       name={"yabber"}
-//       value={"Bubbles"}
-//       onClick={this.onListClick}
-//       className={ cx(classes.menuItem) }
-// >
-//       {state}
-// </div>
-
-
-// <MenuList>
-//       { statesList.map( state => {
-//             return (
-//                 <MenuItem
-//                       value={state}
-//                       onClick={this.onListClick}
-//                       className={ cx(classes.menuItem) }
-//                 >
-//                 {state}</MenuItem>
-//
-//             )
-//         })
-//       }
-// </MenuList>
-
-
-
-
-
-
-//        <ValidatorForm ref="form" onSubmit={ this.onSubmit }>
-// <TextValidator
-//   label="Enter search term:"
-//   value={ this.state.searchTerm }
-//   variant="outlined"
-//   name="searchTerm"
-//   onChange={this.onChange}
-//   className={ cx(classes.input) }
-// />
-
-// anchorReference="anchorPosition"
-// anchorPosition={{ top: 500, left: 80 }}
-
-// <Popper
-//         open={showStateListModal}
-//         anchorEl={anchorEl}
-//         placement ='bottom-start'
-//         disablePortal
-// >
-
-
-
-
-            // <div className={ cx(classes.fieldSmall) } >
-            //   {showStateListModal && searchTerm == "xxx" &&(
-            //       <div>
-            //         {searchTerm}
-            //
-            //         <PickStatesList
-            //             statesList = {statesList}
-            //             onListClick = {this.onListClick}
-            //         />
-            //       </div>
-            //   )}
-            // </div>
-
-
-
-
-
-            // <Popover
-            //         open={Boolean(anchorEl)}
-            //         anchorEl={anchorEl}
-            //
-            //         anchorOrigin={{
-            //              vertical: 'bottom',
-            //              horizontal: 'left',
-            //         }}
-            //         transformOrigin={{
-            //          vertical: 'top',
-            //          horizontal: 'left',
-            //        }}
-            //        className={ cx(classes.popOver) }
-            // >
-            // <ClickAwayListener onClickAway={this.handlePopoverClose}>
-            //
-            // <Grid container justify={'center'}>
-            //
-            //                 { statesList.map( state => {
-            //                       return (
-            //                           <Grid item xs={3} lg={2} key = {Math.random(100000)}>
-            //                                           <MenuItem
-            //                                                 data-state-name={state}
-            //                                                 onClick={this.onListClick}
-            //                                                 className={ cx(classes.menuItem) }
-            //                                           >
-            //                                           {state}</MenuItem>
-            //                           </Grid>
-            //
-            //                       )
-            //                   })
-            //                 }
-            // </Grid>
-            // </ClickAwayListener>
-            // </Popover>
-
-
-            // <div>
-            //      <Select
-            //        inputId="state-pick"
-            //        name="searchTerm"
-            //        TextFieldProps={{
-            //          label: 'Country',
-            //          InputLabelProps: {
-            //            htmlFor: 'state-pick',
-            //            shrink: true,
-            //          },
-            //        }}
-            //        placeholder="Type State"
-            //        options={statesList}
-            //        value={searchTerm}
-            //        onChange={this.onChange}
-            //      />
-            //  </div>

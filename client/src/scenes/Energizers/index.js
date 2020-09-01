@@ -16,61 +16,9 @@ import * as cx from 'classnames';
 import * as api from '../../services/api';
 import * as utils from '../../services/utils';
 
+
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
-
-let statesList = [
-  'Alabama',
-  'Alaska',
-  'Arizona',
-  'Arkansas',
-  'California',
-  'Colorado',
-  'Connecticut',
-  'Delaware',
-  'Florida',
-  'Georgia',
-  'Hawaii',
-  'Idaho',
-  'Illinois',
-  'Indiana',
-  'Iowa',
-  'Kansas',
-  'Kentucky',
-  'Louisiana',
-  'Maine',
-  'Maryland',
-  'Massachusetts',
-  'Michigan',
-  'Minnesota',
-  'Mississippi',
-  'Missouri',
-  'Montana',
-  'Nebraska',
-  'Nevada',
-  'New Hampshire',
-  'New Jersey',
-  'New Mexico',
-  'New York',
-  'North Carolina',
-  'North Dakota',
-  'Ohio',
-  'Oklahoma',
-  'Oregon',
-  'Pennsylvania',
-  'Rhode Island',
-  'South Carolina',
-  'South Dakota',
-  'Tennessee',
-  'Texas',
-  'Utah',
-  'Vermont',
-  'Virginia',
-  'Washington',
-  'West Virginia',
-  'Wisconsin',
-  'Wyoming'
-]
 
 
 const compareLast = (a, b) => {
@@ -223,25 +171,14 @@ onChangeSort = async () => {
 
 
 
-onClearSearch = () => {
-  this.setState({
-    openListModal: true,
-    openEditModal: false,
-    openReviewWikiModal: false,
-    energizerUnderEdit: {},
-    openSearchModal: false,
-    openChartModal: false,
-    searchTerm: "",
-    filteredEnergizers: this.state.energizers
-  });
-};
+
 
 
 doFilter = async (searchTerm, statesOnly) => {
   const {energizers}  = this.state
   
   let altState = (searchTerm.length === 2) ? utils.fullStateFromAcr(searchTerm) 
-     : utils.AcrFromFullState(searchTerm)
+     : utils.acrFromFullState(searchTerm)
   let filteredEnergizers = statesOnly ?
       energizers.filter (ezr => {
               return ezr.bornState && ezr.bornState.toUpperCase() == searchTerm.toUpperCase() || 
@@ -283,10 +220,9 @@ doFilter = async (searchTerm, statesOnly) => {
 
 
   onNewEnergizer = () => {
+      this.closeAll()
       this.setState({ 
-        energizerUnderEdit: {}, 
         openEditModal: true,
-        openListModal: false,
       });
   };
 
@@ -301,10 +237,9 @@ doFilter = async (searchTerm, statesOnly) => {
 
 
 
-  onOpenChart = async () => {
-
+  onOpenChart = async () => {     
       const {energizers, openListModal, openChartModal}  = this.state
-
+      this.closeAll() 
       if (this.state.statesWithCounts.length < 1) {
         const statesMap = new Map()
 
@@ -338,8 +273,8 @@ doFilter = async (searchTerm, statesOnly) => {
     }
 
     this.setState({
-      openChartModal: !openChartModal,
-      openListModal: !openListModal
+      openChartModal: true,
+      openListModal: false
     });
 
   };
@@ -349,6 +284,7 @@ doFilter = async (searchTerm, statesOnly) => {
 
 
   onStartScrapeWiki = async  energizer  => {
+      this.closeAll()
       try {
         let wikiResults = await api.scrapeWikiUrl(energizer);
         //console.log("WikiResults on FRONTEND", wikiResults)
@@ -451,17 +387,32 @@ doFilter = async (searchTerm, statesOnly) => {
     }
   };
 
-
-  
-  onDialogClose = () => {
+  closeAll = () => {
     this.setState({
-      openListModal: true,
+      openListModal: false,
       openEditModal: false,
       openReviewWikiModal: false,
       energizerUnderEdit: {},
       openSearchModal: false,
       openChartModal: false,
       openUploadModal: false
+    });
+  }
+  
+  onClearSearch = () => {
+    this.closeAll()
+    this.setState({
+      openListModal: true,
+      searchTerm: "",
+      filteredEnergizers: this.state.energizers
+    });
+  };
+
+
+  onDialogClose = () => {
+    this.closeAll()
+    this.setState({
+      openListModal: true,
     });
   };
   
@@ -589,7 +540,6 @@ doFilter = async (searchTerm, statesOnly) => {
               <SearchPage
                 doSearch={this.doFilter}
                 onClose={this.onDialogClose}
-                statesList={statesList}
               />
             </div>
             )}

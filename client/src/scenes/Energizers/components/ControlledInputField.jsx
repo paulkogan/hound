@@ -2,7 +2,7 @@ import "./ControlledInputField.css";
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from 'prop-types';
 import { validateField } from '../../../services/utils.js'
-
+import { ControlledFormContext } from "../../../contexts/ControlledFormContext";
 
 const ControlledInputField = (props) => {
     const {
@@ -18,19 +18,45 @@ const ControlledInputField = (props) => {
 
     const [value, setValue] = useState(initialValue || "");
     const [errorText, setErrorText] = useState(initialErrorText || "");
+    const [isValid, setIsValid] = useState(false);
+    const [touched, setTouched] = useState(false);
 
+   const { updateFormState } = useContext(ControlledFormContext);
 
     const handleChange = e => {
            setValue(e.target.value)
+           setTouched(true)
     };
     
-    const handleBlur = e => {
-        let validateResults = validateField(toValidate,value)
-        console.log("CORRECTED TEXT =",validateResults.text)
-        setErrorText(validateResults.errors)
+  const doFieldUpdate = (source) => {
+    let validateResults = validateField(toValidate,value)
+    if (validateResults.text) setValue(validateResults.text)
+    if (validateResults.errors && validateResults.errors.length >0) {
+        if(source=="blur") setErrorText(validateResults.errors)
+        //setIsValid(false)
+        updateFormState(id,value,false)
+        console.log(id+ "is -- NOT -- VALID "+validateResults.errors) 
+
+    } else {
+        setErrorText("")
+        //setIsValid(true)
+        updateFormState(id,value,true)
+        console.log(id+ "is VALID ") 
+    }
+
+  }
+
+    //run on initial render
+    useEffect(() => {
+        doFieldUpdate("initial")
+      }, []);
+
+
+    const handleBlur = (e) => {
+        setTouched(true)
+        doFieldUpdate("blur")
         //this is a placeholder, should update context and validate form
-        if (validateResults.text) setValue(validateResults.text)
-        saveField(id,validateResults.text)
+        saveField(id,value)
     };
 
     return ( 

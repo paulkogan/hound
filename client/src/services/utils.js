@@ -1,67 +1,7 @@
 
-let stateNames = [
-  "Alabama",
-  "Alaska",
-  "American Samoa",
-  "Arizona",
-  "Arkansas",
-  "California",
-  "Colorado",
-  "Connecticut",
-  "Delaware",
-  "District Of Columbia",
-  "Federated States Of Micronesia",
-  "Florida",
-  "Georgia",
-  "Guam",
-  "Hawaii",
-  "Idaho",
-  "Illinois",
-  "Indiana",
-  "Iowa",
-  "Kansas",
-  "Kentucky",
-  "Louisiana",
-  "Maine",
-  "Marshall Islands",
-  "Maryland",
-  "Massachusetts",
-  "Michigan",
-  "Minnesota",
-  "Mississippi",
-  "Missouri",
-  "Montana",
-  "Nebraska",
-  "Nevada",
-  "New Hampshire",
-  "New Jersey",
-  "New Mexico",
-  "New York",
-  "North Carolina",
-  "North Dakota",
-  "Northern Mariana Islands",
-  "Ohio",
-  "Oklahoma",
-  "Oregon",
-  "Palau",
-  "Pennsylvania",
-  "Puerto Rico",
-  "Rhode Island", 
-  "South Carolina",
-  "South Dakota",
-  "Tennessee",
-  "Texas",
-  "Utah",
-  "Vermont",
-  "Virgin Islands",
-  "Virginia",
-  "Washington",
-  "West Virginia",
-  "Wisconsin",
-  "Wyoming"
-  ]
+
   
-  let shortStateKeys = {
+  let stateKeys = {
       "AL": "Alabama",
       "AK": "Alaska",
       "AS": "American Samoa",
@@ -123,6 +63,14 @@ let stateNames = [
       "WY": "Wyoming"
     }
     
+export const stateNames = Object.values(stateKeys)
+
+const capitalizePhrase = (text) => {
+  return text.split(" ").reduce((allCapPhrase, word) => {
+    allCapPhrase += word.charAt(0).toUpperCase()+word.substring(1).toLowerCase()+" "   
+    return allCapPhrase
+  }, "").trim()
+}
 
 
 const isNotBlank = (text) => {  
@@ -130,16 +78,14 @@ const isNotBlank = (text) => {
       "text": text,
       "errorMsg":  (text.length > 0) ? null : "Can't be blank."
     }  
-
-
 }
 
-const isAValidUSState = (text) => {
-
+const isUSState = (text) => {
   //if valid state acronym
-    text = (shortStateKeys[text] !== undefined) ? shortStateKeys[text] : text
+    text = text.toUpperCase()
+    text = (stateKeys[text] !== undefined) ? stateKeys[text] : text
   //capitalize
-    text = (stateNames.includes(text.charAt(0).toUpperCase()+text.substring(1))) ? text.charAt(0).toUpperCase()+text.substring(1) : text
+    text = (stateNames.includes(capitalizePhrase(text))) ? capitalizePhrase(text) : text
 
     return {
       "text": text,
@@ -148,28 +94,23 @@ const isAValidUSState = (text) => {
 }
 
 
-
 const validationsMap = {
   "REQUIRED": isNotBlank,
-  "IS_VALID_US_STATE": isAValidUSState
+  "IS_US_STATE": isUSState
 }
-
-
 
 
 export const validateField = (validations, text) => {
     if (validations.length < 1) return []
     let newText = text
 
-    //let correctedText = text.charAt(0).toUpperCase()+text.substring(1)
     let errorsArray =  validations.reduce((errorsArray, validation) => {
           let validationResult = validationsMap[validation](newText)
-          console.log("FOR VALIDATION "+validation+" got: "+JSON.stringify(validationResult))
+          //console.log("FOR VALIDATION "+validation+" got: "+JSON.stringify(validationResult))
           if (validationResult.errorMsg) errorsArray.push(validationResult.errorMsg)
           newText =  validationResult.text       
           return errorsArray
     }, [])
-
 
     return {
       "text": newText,
@@ -179,12 +120,12 @@ export const validateField = (validations, text) => {
 
 
 export const fullStateFromAcr = (stateAcr) => {
-  return shortStateKeys[stateAcr] || null
+  return stateKeys[stateAcr] || null
 }
 
 
-export const AcrFromFullState = (stateFull) => {
-  let fullStateKeys = invert(shortStateKeys)
+export const acrFromFullState = (stateFull) => {
+  let fullStateKeys = invert(stateKeys)
   return fullStateKeys[stateFull] || null
 }
 
@@ -205,8 +146,6 @@ function invert(obj) {
   }
   return result;
 }
-
-
 
 
 export const formatPhoneNumber = phoneNumberString => {

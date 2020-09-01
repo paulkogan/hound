@@ -1,17 +1,7 @@
 import "./EnergizerProfile.css";
 import React, { useState, useEffect, useContext } from "react";
-
-
-//import moment from 'moment';
-//import { withStyles } from '@material-ui/core/styles';
-//import * as cx from 'classnames'
-// import Dialog from '@material-ui/core/Dialog';
-// import DialogTitle from '@material-ui/core/DialogTitle';
-// import DialogContent from '@material-ui/core/DialogContent';
-// import DialogActions from '@material-ui/core/DialogActions';
-//import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-
 import ControlledInputField from './ControlledInputField.jsx';
+import { ControlledFormContext } from "../../../contexts/ControlledFormContext";
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 
@@ -19,8 +9,8 @@ import PropTypes from 'prop-types';
 const EnergizerProfile  = (props) => {
     const {onClose, deleteEnergizer, createEnergizer, updateEnergizer} = props;
     const [energizer, setEnergizer] = useState( setInitialEnergizer(props.energizer) || {});
+    const showState = useContext(ControlledFormContext);
 
-    
     const handleSubmit = () => {
         console.log("PROFILE FORM onSubmit : "+JSON.stringify(energizer ,null,4))
         isEmpty(props.energizer) ? createEnergizer(energizer)
@@ -36,32 +26,13 @@ const EnergizerProfile  = (props) => {
     return Object.entries(obj).length === 0;
   }
 
-//   const handleChange = e => {
-//     setEnergizer({
-//         ...energizer,
-//         [e.target.name]: e.target.value
-//     });
-//   };
-
-//   const handleBlur = e => {
-//     console.log("BLUR dataset ", e.target.dataset.label)  
-//     console.log("BLUR get Atrribute: ", e.target.getAttribute("data-label"))  
-//     setEnergizer({
-//         ...energizer,
-//         [e.target.name]: e.target.value
-//     });
-//   };
-
-
+  
   const saveField = (fieldName, fieldValue) => {
-    console.log("saveField got  ", fieldName, ": ", fieldValue)  
     setEnergizer({
         ...energizer,
         [fieldName]: fieldValue
     });
   };
-
-
 
 
     return (
@@ -71,6 +42,7 @@ const EnergizerProfile  = (props) => {
                 <div id="headLine">
                         {isEmpty(props.energizer) ? "New Energizer" : "Update Energizer"}
                 </div>
+                <div> {JSON.stringify({showState},null,4)}</div>
                 <div id="actionButtons">   
                     <Button color="primary" variant="contained" onClick={() => deleteEnergizer(props.energizer)}>Delete</Button>
                     <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
@@ -189,7 +161,7 @@ const EnergizerProfile  = (props) => {
                         id="bornState"
                         label="Born State"
                         errorText="Needs to be a valid state"
-                        toValidate={["IS_VALID_US_STATE"]}
+                        toValidate={["IS_US_STATE"]}
                         initialValue={ energizer.bornState}
                         saveField = {saveField}    
                         isTextArea= { false }
@@ -213,7 +185,7 @@ const EnergizerProfile  = (props) => {
                         id="homeState"
                         label="Home State"
                         errorText="valid state"
-                        toValidate={["IS_VALID_US_STATE"]}
+                        toValidate={["IS_US_STATE"]}
                         initialValue={ energizer.homeState}
                         saveField = {saveField}    
                         isTextArea= { false }
@@ -236,7 +208,7 @@ const EnergizerProfile  = (props) => {
                         id="currentState"
                         label="Current State"
                         errorText="valid state"
-                        toValidate={["IS_VALID_US_STATE"]}
+                        toValidate={["IS_US_STATE"]}
                         initialValue={ energizer.currentState}
                         saveField = {saveField}    
                         isTextArea= { false }
