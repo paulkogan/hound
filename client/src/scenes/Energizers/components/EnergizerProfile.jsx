@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 const EnergizerProfile  = (props) => {
     const {onClose, deleteEnergizer, createEnergizer, updateEnergizer} = props;
     const [energizer, setEnergizer] = useState( setInitialEnergizer(props.energizer) || {});
-    const showState = useContext(ControlledFormContext);
+    const {formState, updateFormState, isFormValid } = useContext(ControlledFormContext);
 
     const handleSubmit = () => {
         console.log("PROFILE FORM onSubmit : "+JSON.stringify(energizer ,null,4))
@@ -26,7 +26,6 @@ const EnergizerProfile  = (props) => {
     return Object.entries(obj).length === 0;
   }
 
-  
   const saveField = (fieldName, fieldValue) => {
     setEnergizer({
         ...energizer,
@@ -42,11 +41,13 @@ const EnergizerProfile  = (props) => {
                 <div id="headLine">
                         {isEmpty(props.energizer) ? "New Energizer" : "Update Energizer"}
                 </div>
-                <div> {JSON.stringify({showState},null,4)}</div>
+                <div> {"FORM IS VALID: "+isFormValid()}</div>
+                
+                <div> {JSON.stringify({formState},null,4)}</div>
                 <div id="actionButtons">   
                     <Button color="primary" variant="contained" onClick={() => deleteEnergizer(props.energizer)}>Delete</Button>
                     <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
-                    <Button color="primary" variant="contained" type="submit">Save</Button>
+                    <Button color="primary" variant="contained" disabled = { !isFormValid()} type="submit">Save</Button>
                 </div>
             </div>
             

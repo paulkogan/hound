@@ -32,6 +32,15 @@ const ControlledFormProvider = ({ children }) => {
         dispatchFormState({ type: 'UPDATE_FIELD', id, value, isValid });
  }
 
+ const isFormValid = () => {
+     let fieldValsArr = Object.values(formState)
+     let isFormValid = !fieldValsArr.some( fieldVal => {
+            return fieldVal.isValid == false
+     })
+     console.log("IsFDormValid: "+isFormValid)
+     return isFormValid
+ }
+
 
  //why usecallback?
 //  const updateFormState = useCallback(
@@ -44,7 +53,7 @@ const ControlledFormProvider = ({ children }) => {
 
 
   return (
-   <Provider value={{formState, updateFormState}}>
+   <Provider value={{formState, updateFormState, isFormValid}}>
             {children}
     </Provider>
   )
