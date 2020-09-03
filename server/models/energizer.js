@@ -8,14 +8,15 @@ class Energizer extends Model {
 
   static async create(enz) {
     console.log("IN MODEL : creating "+JSON.stringify(enz,null,4))
-    const {
+    const { //fields you dont need to translate
       ethnicity=null, 
       gender=null, 
       occupation=null, 
       education=null, 
       birthday=null,
       solicitor=null,
-      notes=null
+      notes=null, 
+      bio=null
     } = enz
 
 
@@ -30,6 +31,7 @@ class Energizer extends Model {
       home_town: enz.homeTown || null,
       current_town: enz.currentTown || null,
       current_state: enz.currentState || null,
+      early_life: enz.earlyLife || null,
       plays_with: enz.playsWith || null,
       rep_1: enz.agencyRep || null,
       ethnicity,
@@ -39,6 +41,7 @@ class Energizer extends Model {
       solicitor,
       birthday,
       notes,
+      bio,
       home_zipcode: parseInt(enz.homeZipcode) || null,
       high_school: enz.highSchool || null,
       imdb_link: enz.imdbLink || null,
@@ -96,6 +99,7 @@ class Energizer extends Model {
       solicitor,
       birthday,
       notes, 
+      bio,
       home_zipcode: parseInt(updatedEnz.homeZipcode) || null,
       high_school: updatedEnz.highSchool || null,
       imdb_link: updatedEnz.imdbLink || null,

@@ -27,28 +27,27 @@ const ControlledFormProvider = ({ children }) => {
         }
   }, initialFormState);
 
-  //this is the exposed update function
- const updateFormState = (id, value, isValid) => {
+
+//useCallback to improve performance
+ const updateFormState = useCallback(
+    (id, value, isValid) => {
+        //console.log("updating state for "+id )
         dispatchFormState({ type: 'UPDATE_FIELD', id, value, isValid });
- }
+    }, [dispatchFormState]
+ );
+
+
 
  const isFormValid = () => {
      let fieldValsArr = Object.values(formState)
      let isFormValid = !fieldValsArr.some( fieldVal => {
             return fieldVal.isValid == false
      })
-     console.log("IsFDormValid: "+isFormValid)
+     //console.log("IsFDormValid: "+isFormValid)
      return isFormValid
  }
 
 
- //why usecallback?
-//  const updateFormState = useCallback(
-//     (id, value, isValid) => {
-//         //console.log("updating state for "+id )
-//         dispatchFormState({ type: 'UPDATE_FIELD', id, value, isValid });
-//     }, [dispatchFormState]
-//  );
 
 
 
