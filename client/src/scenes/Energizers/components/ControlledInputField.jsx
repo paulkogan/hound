@@ -1,5 +1,5 @@
 import "./ControlledInputField.css";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext,useCallback } from "react";
 import PropTypes from 'prop-types';
 import { validateField } from '../../../services/utils.js'
 import { ControlledFormContext } from "../../../contexts/ControlledFormContext";
@@ -18,65 +18,39 @@ const ControlledInputField = (props) => {
 
     const [value, setValue] = useState(initialValue || "");
     //const [isValid, setIsValid] = useState(false);
-    //const [touched, setTouched] = useState(false);
-    // let value = initialValue || ""
-    // let isValid = false
-    // let touched = false
+    const [touched, setTouched] = useState(false);
     const [errorText, setErrorText] = useState(initialErrorText || "");
 
+    const { updateFormState } = useContext(ControlledFormContext);
 
-
-   const { updateFormState } = useContext(ControlledFormContext);
-
-    const handleChange = e => {
-           setValue(e.target.value)
+    const handleChange = value => {
+           setValue(value)
+           setTouched(false) //so next blur will register
     };
+
+    //const doFieldUpdate = useCallback((source) => {  
+    const doFieldUpdate = () => {
+        console.log("FieldUpdate "+id+ " touched= "+touched+ " with "+value) 
+        let validateResults = validateField(toValidate,value)
+        let isFieldValid = !(validateResults.errors && (validateResults.errors.length >0))
+
+        setValue(validateResults.text) //show in field
+        saveField(id,validateResults.text) //in parent component - for sumbission
+        updateFormState(id,validateResults.text,isFieldValid) //tracking form validation
+        setErrorText( (!isFieldValid) ? validateResults.errors : ""  )
     
-  const doFieldUpdate = (source) => {
-    //console.log("FieldUpdate "+id+ " from "+source+ " with "+value) 
-    let validateResults = validateField(toValidate,value)
-    if(source==="blur") {
-        setValue(validateResults.text) //why bpother - to show on screen
-        saveField(id,validateResults.text) //this will always be good.
     }
+//},[touched])
 
-    if (validateResults.errors && validateResults.errors.length >0) {
-        //setIsValid(false)
-        if(source==="blur") { //touched does not get there
-            setErrorText(validateResults.errors)
-        }
-        updateFormState(id,validateResults.text,false)
-        //console.log(id+ "is -- NOT -- VALID "+validateResults.errors) 
-
-    } else {  //no errors
-        //setIsValid(true)
-        setErrorText("")
-        updateFormState(id,validateResults.text,true)
-        
-        //console.log(id+ "is VALID ") 
-    }
-    
-  }
-
-    //run on initial render to disable empty form if tehre are required fields
+    //this runs on initial AND when touched changes
     useEffect(() => {
-        doFieldUpdate("initial")
-    }, []);
+        doFieldUpdate()
+    }, [touched] );
 
 
-    // useEffect(() => {
-    //     doFieldUpdate("touched")
-    // }, [touched]);
-
-
-
-
-    const handleBlur = (e) => {
-        //setTouched(true) //no point
-        doFieldUpdate("blur") //how do you do async useState updates
-        //this is a placeholder, should update context and validate form
-        
-        
+    const handleBlur = () => {
+        setTouched(true)
+        //doFieldUpdate("blur") 
     };
 
     return ( 
@@ -94,7 +68,7 @@ const ControlledInputField = (props) => {
                     rows={10}
                     name={ id }
                     value={ value }
-                    onChange={handleChange}
+                    onChange={event => handleChange(event.target.value)}
                     onBlur={handleBlur}         
                 />
             </div>
@@ -113,7 +87,7 @@ const ControlledInputField = (props) => {
                     className="inputField"
                     name={ id }
                     value={ value }
-                    onChange={handleChange}
+                    onChange={event => handleChange(event.target.value)}
                     onBlur={handleBlur}         
                 />
             </div>
@@ -136,7 +110,4 @@ ControlledInputField.propTypes = {
   };
 
 
-
 export default ControlledInputField
-
-//errorText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),

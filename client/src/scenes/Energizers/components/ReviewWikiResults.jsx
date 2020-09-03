@@ -369,11 +369,6 @@ const ReviewWikiResults  = (props) => {
                         isTextArea= { true }
                 /> 
              </div>
-
-
-
-
-
     </form>
   </div> 
  );
@@ -389,7 +384,7 @@ ReviewWikiResults.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-
+//transformation of initial values
 const setInitialEnergizer = (energizer, wikiResults) => {
   return  {
     id: energizer.id,
@@ -424,75 +419,3 @@ const setInitialEnergizer = (energizer, wikiResults) => {
     stat1: energizer.stat1 || '' 
  }
 }
-
-
-
-
-
-// const styles = () => ({
-//   input: {
-//     margin: '0.5rem 0',
-//     paddingRight: '5px'
-//   },
-// fieldSmall: {
-//     fontSize: '12px',
-//     lineHeight: '14px',
-//     color: '#606A74',
-//     fontWeight: 'normal',
-//     maxWidth: '600px',
-//     margin: 'auto',
-//     textAlign: 'left',
-//     contentAlign: 'left'
-//   },
-
-
-//   fieldMed: {
-//       fontSize: '12px',
-//       lineHeight: '14px',
-//       color: '#606A74',
-//       fontWeight: 'normal',
-//       maxWidth: '900px',
-//       margin: 'auto',
-//       textAlign: 'left',
-//       contentAlign: 'left',
-//       marginLeft: '208px'
-
-//     },
-
-
-//   fieldBig: {
-//       fontSize: '12px',
-//       lineHeight: '14px',
-//       textTransform: 'uppercase',
-//       color: '#606A74',
-//       fontWeight: 'normal',
-//       maxWidth: '800px',
-//       margin: 'auto'
-//     },
-
-//     parentCont: {
-//       display: 'inline-block',
-//       width: '100%',
-//       border: '1px solid blue',
-//       padding: '10px'
-
-//     },
-
-//     textBlockLeft: {
-//       float: 'left',
-//       textAlign: 'left',
-//       contentAlign: 'left',
-//       marginRight: '30px'
-//     },
-
-
-//     textBlockRight: {
-//       float: 'right',
-//       textAlign: 'left',
-//       contentAlign: 'left',
-//       marginRight: '20px'
-//     },
-
-
-
-// });

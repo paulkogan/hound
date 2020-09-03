@@ -391,6 +391,7 @@ EnergizerProfile.propTypes = {
     onClose: PropTypes.func.isRequired,
   };
 
+  //transformation of initial values - none now but possible
   const setInitialEnergizer = (energizer) => {
     return  {
              bio: energizer.bio || '',

@@ -127,7 +127,7 @@ export const validateField = (validations, text) => {
 
     let errorsArray =  validations.reduce((errorsArray, validation) => {
           let validationResult = validationsMap[validation](newText)
-          console.log("FOR VALIDATION "+validation+" text: "+text+"  got: "+JSON.stringify(validationResult))
+          console.log("for validation "+validation+" of text: "+text+"  result: "+JSON.stringify(validationResult))
           if (validationResult.errorMsg) errorsArray.push(validationResult.errorMsg)
           newText =  validationResult.text       
           return errorsArray
