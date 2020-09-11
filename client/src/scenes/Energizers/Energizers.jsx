@@ -12,7 +12,7 @@ import SearchPage from './components/Search';
 import ChartPage from './components/Chart';
 import UploadPage from './components/Upload';
 
-import { useHistory } from "react-router";
+//import { useHistory } from "react-router-dom";
 
 import * as api from '../../services/api';
 import * as utils from '../../services/utils';
@@ -22,7 +22,7 @@ import * as XLSX from 'xlsx';
 
 const Energizers = (props) => {
 
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(true)
   const [openEditModal, setopenEditModal] = useState(false)
   const [openListModal, setopenListModal] = useState(true)
   const [openReviewWikiModal, setopenReviewWikiModal] = useState(false)  
@@ -37,37 +37,75 @@ const Energizers = (props) => {
   const [energizers, setenergizers] = useState([])
   const [filteredEnergizers, setfilteredEnergizers] = useState([]) //YES NEED BOTH
  
-  const [statesWithCounts, setstatesWithCounts] = useState(true) 
+  const [statesWithCounts, setstatesWithCounts] = useState([]) 
   const [filterTerm, setfilterTerm] = useState("")
 
   //const [stateCurrentUser, setstateCurrentUser] = useState({})
   const [cookieUser, setcookieUser] = useState()   //NECESSARY?
 
 
- // const { currentUser } = context;
-  const history = useHistory();
+ // const { currentUser } = context;    // const history = useHistory();
+
   const cookies = new Cookies();
   
 
+  const refreshEnergizers = async () => {
+    let energizers = await api.fetchEnergizers(sortByAlpha) 
+    console.log("REFRESH-ENERGIZERS, GOT: ", energizers.length)
+    setenergizers(energizers)
+    setfilteredEnergizers(energizers)
+    setisLoading(false)
+}
+
+
   useEffect(() => {
     setcookieUser(cookies.get('userEmail') || "")
-    console.log("USER ", cookieUser)
+    console.log("DO useEffect - USER ", cookieUser)
     // if (cookieUser==="") {
     //   history.push('/login');
     //   return;
     // }
-    refreshEnergizers()
+    //refreshEnergizers()
   }, [] );
 
 
 
-  //do onece on load
+  //do on initial pageload and sort change
   useEffect(() => {
-    onClearSearch()
+    setisLoading(true)
+    //onClearSearch()
+    console.log("DO useEffect - with refresh")
     refreshEnergizers()
+    
   }, [sortByAlpha] );
 
 
+
+
+
+  const closeAll = () => {
+    console.log("DO closeAll")
+    setopenListModal(false)
+    setopenEditModal(false)
+    setopenReviewWikiModal(false)
+    setenergizerUnderEdit({})
+    setopenSearchModal(false)
+    setopenChartModal(false)
+    setopenUploadModal(false)
+}
+
+const onClearSearch = () => {
+  closeAll()
+  setopenListModal(true)
+  setfilterTerm("")
+  setfilteredEnergizers(energizers)
+};
+
+
+const onDialogClose = () => {
+  closeAll()
+  setopenListModal(true)
+};
 
 //SORTING FRONTEND
 // sortArray = async (enzArray) => {
@@ -91,11 +129,6 @@ const Energizers = (props) => {
 // }
 
 
-const refreshEnergizers = async () => {
-    let energizers = await api.fetchEnergizers(sortByAlpha) 
-    console.log("REFRESHED FROM from DB", energizers.length)
-    setenergizers(energizers)
-}
 
 
 //why is this here and not in search component
@@ -131,6 +164,40 @@ const doFilter = async (searchTerm, statesOnly) => {
 
 };
 
+const onOpenChart = async () => {     
+  closeAll() 
+  if (statesWithCounts.length < 1) {
+    const statesMap = new Map()
+
+    energizers.forEach(enzr => {
+      if(statesMap.has(enzr.bornState)) {
+            statesMap.set(enzr.bornState,statesMap.get(enzr.bornState)+1)
+      } else {
+            statesMap.set(enzr.bornState,1)
+      }
+
+      if(statesMap.has(enzr.homeState)) {
+        statesMap.set(enzr.homeState,statesMap.get(enzr.homeState)+1)
+      } else {
+        statesMap.set(enzr.homeState,1)
+      }
+    })
+
+    //map to array
+    let newStatesCountsArr = Array.from(statesMap.keys()).map(key => {
+        return {
+          "stateName" : key,
+          "numEnergizers" : statesMap.get(key)
+        }
+      });
+    setstatesWithCounts(newStatesCountsArr)
+  }
+
+  setopenChartModal(true)
+
+};
+
+
 
 const onEditEnergizer = ({ energizer }) => {
     closeAll()
@@ -145,62 +212,16 @@ const onNewEnergizer = () => {
 };
 
 const onOpenSearch = () => {
+  
       setopenSearchModal(true)
   };
 
 const onOpenUpload = () => {
-    setopenUploadModal(true)
+   console.log("DO openUpload")
+   setopenUploadModal(true)
 };
 
 
-const onOpenChart = async () => {     
-      closeAll() 
-      if (statesWithCounts.length < 1) {
-        const statesMap = new Map()
-
-        energizers.forEach(enzr => {
-          if(statesMap.has(enzr.bornState)) {
-                statesMap.set(enzr.bornState,statesMap.get(enzr.bornState)+1)
-          } else {
-                statesMap.set(enzr.bornState,1)
-          }
-
-          if(statesMap.has(enzr.homeState)) {
-            statesMap.set(enzr.homeState,statesMap.get(enzr.homeState)+1)
-          } else {
-            statesMap.set(enzr.homeState,1)
-          }
-
-
-        })
-
-        
-        let newStatesCountsArr = Array.from(statesMap.keys()).map(key => {
-            return {
-              "stateName" : key,
-              "numEnergizers" : statesMap[key]
-            }
-          });
-
-        console.log("STATES WITH COUNTS Array", newStatesCountsArr)  
-        setstatesWithCounts(newStatesCountsArr)
-
-        // let statesWithCounts = []
-        // for (let [key,value] of statesMap.entries() ) {
-        //   statesWithCounts.push({
-        //     "stateName" : key,
-        //     "numEnergizers" : value
-        //   })
-        // }
-
-        // setState({
-        //   statesWithCounts
-        // });
-      }
-
-      setopenChartModal(true)
-
-  };
 
 
   const downloadCSV = async () => {
@@ -327,33 +348,12 @@ const onOpenChart = async () => {
     }
   };
 
-  const closeAll = () => {
-      setopenListModal(false)
-      setopenEditModal(false)
-      setopenReviewWikiModal(false)
-      setenergizerUnderEdit({})
-      setopenSearchModal(false)
-      setopenChartModal(false)
-      setopenUploadModal(false)
-  }
-  
-const onClearSearch = () => {
-    closeAll()
-    setopenListModal(true)
-    setfilterTerm("")
-    setfilteredEnergizers(energizers)
-  };
-
-
-const onDialogClose = () => {
-    closeAll()
-    setopenListModal(true)
-  };
-  
 
 
     return (
       <div id="outerContainer">
+             <div> {"."} </div>
+      
             <div id="buttonsRow">   
                     <Button
                       color="primary"
@@ -411,17 +411,16 @@ const onDialogClose = () => {
                 </Button>
 
                 
-
-                <Switch 
+              <span id="switchBox">     <Switch 
                   checked={sortByAlpha}
                   onChange={() => setsortByAlpha(!sortByAlpha)} 
                   value={sortByAlpha} 
-                /> &alpha;
+                /> &alpha; </span>
+           
             </div>
 
             
-            {openListModal && (
-              
+            {openListModal && (        
               <div>
                 {!isLoading ? 
                 <SlimList
@@ -485,7 +484,7 @@ const onDialogClose = () => {
               <UploadPage
                 onClose={onDialogClose}
                 sendUploadList = {sendUploadList}
-              />
+              /> 
             </div>
             )}  
 

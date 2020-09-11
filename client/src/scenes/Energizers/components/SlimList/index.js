@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component }  from 'react';
+
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import * as cx from 'classnames';
@@ -100,9 +101,25 @@ const styles = () => ({
 
 });
 
+//const Profiler = React.unstable_Profiler;
+
+
+
+
 class SlimList extends Component {
+
+  logProfile = (id, phase, actualTime, baseTime, startTime, commitTime) => {
+    console.log(`${id}'s ${phase} phase:`);
+    console.log(`Actual time: ${actualTime}`);
+    console.log(`Base time: ${baseTime}`);
+    console.log(`Start time: ${startTime}`);
+    console.log(`Commit time: ${commitTime}`);
+};
+
+
   render() {
     const { classes, energizers } = this.props;
+
 
     if (energizers.length > 0) {
      return (
@@ -112,6 +129,7 @@ class SlimList extends Component {
         {energizers.map((energizer, index)  => {
           return (
             <div className={cx(classes.slimBox)} key={energizer.id} >
+
                 <div className={cx(classes.frontBox)}>
                    <div className={cx(classes.slimNum)}>
                       {index+1}.
@@ -129,9 +147,8 @@ class SlimList extends Component {
                                 {energizer.homeState&& (energizer.homeState)}
                             </div>
                     </div>
-                    
-
                 </div> 
+
                 <div className={cx(classes.backBox)}>  
                     <span className={cx(classes.actionButton)}>
                         <Button
@@ -147,7 +164,8 @@ class SlimList extends Component {
                                 onClick={() => this.props.onStartScrapeWiki ({ energizer })}
                         >Pull from WikiPage</Button>
                     </span>
-                </div>       
+                </div>  
+    
             </div>    
           ); //return
         })}
@@ -155,7 +173,7 @@ class SlimList extends Component {
      ) //return
     } else {
 
-       return (<div> <b>No results </b></div>)
+       return (<div> <b>No Results Found </b></div>)
 
     } //if
 
@@ -164,3 +182,7 @@ class SlimList extends Component {
 
 export default withStyles(styles)(SlimList);
 
+{/* <Profiler id="frontBox" onRender={this.logProfile}>
+</Profiler>
+<Profiler id="backBox" onRender={this.logProfile}>               
+</Profiler>   */}
