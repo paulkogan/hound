@@ -1,0 +1,134 @@
+
+
+#outerContainer {
+    border: 1px solid pink;
+    border-radius: 6px;
+    margin: 10px;
+    padding: 20px;
+    width: 80%;
+}
+
+#buttonsRow {
+    border: 1px solid red;
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 24px;
+    margin: 5px;
+    margin-left: 50px;
+    padding-bottom: 30px;
+}
+/* 
+#header {
+    margin: 0;
+    display: flex;
+    border: 0px solid red;
+    padding-bottom: 20px;
+
+}
+
+#headLine {
+    font-size: 36px;
+    width: 50%;
+    float: left; 
+    padding-right: 30px;  
+}
+
+#actionButtons {
+    display: flex;
+    justify-content: space-evenly;
+    border: 0px solid blue; 
+    width: 40% 
+}
+
+.rowsBox {
+  border: 2px solid grey; 
+  width: 90%;
+  border-radius: 6px;
+  padding-left: 20px;
+  padding-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  background: beige;
+
+}
+
+.fieldsRow {
+  border: 0px solid green; 
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+
+.timestamp {
+    font-size: 12px;
+    line-height: 20px;
+    color: red;
+    font-weight: normal;
+    width: 50%;
+    margin-left: 10px;
+    border: 0px solid blue; 
+}
+
+
+
+
+
+ const styles = () => ({
+  root: {
+    padding: '0px',
+    paddingLeft: '30px',
+  },
+  title: {
+    fontWeight: 'normal',
+    fontSize: '24px',
+    lineHeight: '19px',
+    color: '#1C1C1C',
+    margin: '0px',
+    marginTop: '30px',
+    paddingBottom: '0px',
+    paddingLeft: '52px',
+  },
+  panelDetails: {
+    borderTop: '1px solid rgba(96,106,116,0.4)',
+    padding: '24px 0',
+  },
+  panelDetailsSection: {
+    paddingBottom: '34px',
+  },
+  panelDetailsSectionTitle: {
+    fontSize: '12px',
+    lineHeight: '14px',
+    textTransform: 'uppercase',
+    color: '#606A74',
+    fontWeight: 'normal',
+  },
+  panelDetailsSectionText: {
+    color: '#1C2B39',
+    fontWeight: '300',
+    fontSize: '16px',
+    lineHeight: '19px',
+  },
+  panelActions: {
+    padding: '24px',
+    borderTop: '1px solid rgba(96,106,116,0.4)',
+  },
+  actions: {
+    textAlign: 'left',
+    paddingTop: '24px',
+    marginLeft: '50px',
+    paddingBottom: '30px',
+  },
+  actionButton: {
+    marginLeft: '30px',
+    marginRight: '0px',
+
+  },
+  showSearchTerm: {
+    marginLeft: '30px',
+    marginRight: '0px',
+
+  },
+
+});
+*/

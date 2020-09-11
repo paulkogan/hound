@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import  { createMuiTheme, ThemeProvider,  MuiThemeProvider}  from '@material-ui/core/styles';
-import Energizers from '../Energizers';
+import Energizers from '../Energizers/Energizers';
 import Cookies from 'universal-cookie';
 import Login from '../Login';
 import Navigation from '../../components/Navigation.jsx';

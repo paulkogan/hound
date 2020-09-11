@@ -28,7 +28,8 @@ const ControlledInputField = (props) => {
            setTouched(false) //so next blur will register
     };
 
-    //const doFieldUpdate = useCallback((source) => {  
+    //const doFieldUpdate = useCallback((source) => { 
+    //dont need useCallback because not calling useEffect based on a function     
     const doFieldUpdate = () => {
         console.log("FieldUpdate "+id+ " touched= "+touched+ " with "+value) 
         let validateResults = validateField(toValidate,value)
