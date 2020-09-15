@@ -301,7 +301,6 @@ const onNewEnergizer = () => {
               let capLast = enz.lastName.charAt(0).toUpperCase()
               if(enz.lastName.length > 0) capLast+=enz.lastName.substring(1);
               let autoWiki = "https://en.wikipedia.org/wiki/"+capFirst+"_"+capLast
-              console.log ("ADDING ", autoWiki)
               enz.wikiPage = autoWiki 
           }
           return enz

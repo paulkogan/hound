@@ -27,7 +27,7 @@ const EnergizerProfile  = (props) => {
   }
 
   const saveField = (fieldName, fieldValue) => {
-    console.log("savefield got "+fieldName + " : " +fieldValue)  
+    //console.log("savefield got "+fieldName + " : " +fieldValue)  
     setEnergizer({
         ...energizer,
         [fieldName]: fieldValue
@@ -424,9 +424,3 @@ EnergizerProfile.propTypes = {
              stat1: energizer.stat1 || '' 
          }
  } 
-
-    // {/*<div> {"STATE BornState: "+ formState.bornState.value + "HomeState: "+formState.homeState.value}</div> */}
-    // <div> {"LOCAL BornState: " + energizer.bornState +"     HomeState: "+ energizer.homeState}</div>
-    // <div> {" LOCAL Bio "+ energizer.bio +" early life "+ energizer.earlyLife}</div>
-    // <div> {" Props Bio "+ props.energizer.bio +" Props homestate "+ props.energizer.homeState}</div>
-    //  <div> {"FORM IS VALID: "+isFormValid()}</div>
