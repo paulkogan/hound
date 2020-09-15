@@ -4,11 +4,13 @@ import Cookies from 'universal-cookie';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
+import { withStyles } from '@material-ui/core/styles';
 import CurrentUserContext from '../../contexts/CurrentUserContext.jsx';
-//import CardForm from 'components/CardForm';
 import * as api from '../../services/api';
+
+
+
 
 class Login extends Component {
   state = {
@@ -18,19 +20,7 @@ class Login extends Component {
 
 
   async componentDidMount() {
-    const { history } = this.props;
 
-    const cookies = new Cookies();
-    const cookieUser = cookies.get('userEmail') || ""; 
-
-    //if (!currentUser.email) {
-    if (cookieUser==="") {
-      history.push('/login');
-      return;
-    }
-    this.setState({ 
-      cookieUser:cookieUser
-    });
   }
 
   
@@ -40,32 +30,22 @@ class Login extends Component {
     const { email, password } = this.state;
     const cookies = new Cookies();
     const localPass = await process.env.REACT_APP_LOCAL_PASS
-    console.log("LOCAL PASS", localPass)
   
-    let currentUser
-    // await api.loginUser({ email, password });
-    //const currentUser = await api.fetchCurrentUser();
+  
     if (password === localPass) {
-      currentUser = {email}  
+
       //1 minute * 60 min * 6 = 6 hours
-      cookies.set('userEmail', email, { path: '/',  expires: new Date(Date.now()+60000*60*6)} );
-      this.props.enqueueSnackbar('Welcome to Hound!')     
+      cookies.set('userEmail', email, { path: '/',  expires: new Date(Date.now()+60000*60*6)} );   
+      this.props.enqueueSnackbar('Welcome to Hound!') 
+      history.push("/");    
     } else {
-       currentUser = {email: ""} 
-       cookies.set('userEmail', "", { path: '/' });
+       cookies.set('userEmail', "UNAUTH", { path: '/' });
        this.props.enqueueSnackbar('Bad Login')     
     }  
-  
-     setCurrentUser(currentUser);
-     history.push("/");
-     window.location.reload();  
+     
+     window.location.reload(); 
   }
 
-  redirect = () => {
-    const { location = {} } = this.props;
-    const queryParams = queryString.parse(location.search);
-    return queryParams.redirect || '/';
-  }
 
   onEmailChange = (event) => {
     this.setState({ email: event.target.value });
@@ -157,7 +137,7 @@ const styles = () => ({
 
 });
 
-Login.contextType = CurrentUserContext;
+
 
 export default withSnackbar(withStyles(styles)(Login));
 
@@ -165,3 +145,41 @@ export default withSnackbar(withStyles(styles)(Login));
 {/* <div>
 "from Cookie" {JSON.stringify(this.state.cookieUser)}
 </div> */}
+
+
+//Login.contextType = CurrentUserContext;
+
+    //let currentUser
+    //await api.loginUser({ email, password });
+    //currentUser = await api.fetchCurrentUser();
+
+
+        // //if (!currentUser.email) {
+    // if (cookieUser==="") {
+    //   //history.push('/login');
+    //   console.log("NO COOKIE USER", cookieUser)
+
+    //   return;
+    // }
+
+
+         //setCurrentUser(currentUser);
+
+      // redirect = () => {
+  //   const { location = {} } = this.props;
+  //   const queryParams = queryString.parse(location.search);
+  //   return queryParams.redirect || '/';
+  // }
+
+      ///currentUser = {email}  
+
+  // async componentDidMount() {
+  //   // const { history } = this.props;
+
+  //   // const cookies = new Cookies();
+  //   // const cookieUser = cookies.get('userEmail') || ""; 
+
+  //   // this.setState({ 
+  //   //   cookieUser:cookieUser
+  //   // });
+  // }

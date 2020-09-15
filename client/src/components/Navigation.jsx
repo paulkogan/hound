@@ -45,7 +45,7 @@ render () {
             </div>
 
           {cookieUser && (
-            <div>
+            <div className='userBox'>
                 <Button
                     className= 'actionButton'
                     onClick={this.props.handleLogout}
@@ -54,7 +54,9 @@ render () {
                   >
                     Logout
                   </Button>
-            </div>  
+                  <div className='userInfo'>{cookieUser}</div> 
+            </div>
+              
           )}
 
 

@@ -5,14 +5,14 @@ import Switch from '@material-ui/core/Switch';
 import Cookies from 'universal-cookie';
 import { withSnackbar } from 'notistack';
 import CurrentUserContext, { CurrentUserConsumer, CurrentUserProvider }   from '../../contexts/CurrentUserContext.jsx';
-import SlimList from './components/SlimList';
+import SlimList from './components/SlimList.jsx';
 import EnergizerProfile from './components/EnergizerProfile.jsx';
 import ReviewWikiResults from './components/ReviewWikiResults.jsx';
 import SearchPage from './components/Search';
 import ChartPage from './components/Chart';
 import UploadPage from './components/Upload';
 
-//import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import * as api from '../../services/api';
 import * as utils from '../../services/utils';
@@ -41,46 +41,57 @@ const Energizers = (props) => {
   const [filterTerm, setfilterTerm] = useState("")
 
   //const [stateCurrentUser, setstateCurrentUser] = useState({})
-  const [cookieUser, setcookieUser] = useState()   //NECESSARY?
+  const [cookieUser, setcookieUser] = useState("")   //NECESSARY?
 
 
- // const { currentUser } = context;    // const history = useHistory();
-
-  const cookies = new Cookies();
-  
+ // const { currentUser } = context;    
+  const history = useHistory();
+  const cookies = new Cookies(); 
 
   const refreshEnergizers = async () => {
     let energizers = await api.fetchEnergizers(sortByAlpha) 
-    console.log("REFRESH-ENERGIZERS, GOT: ", energizers.length)
+    console.log("DID REFRESH-ENERGIZERS, GOT: ", energizers.length)
     setenergizers(energizers)
     setfilteredEnergizers(energizers)
     setisLoading(false)
 }
 
 
-  useEffect(() => {
-    setcookieUser(cookies.get('userEmail') || "")
-    console.log("DO useEffect - USER ", cookieUser)
-    // if (cookieUser==="") {
-    //   history.push('/login');
-    //   return;
-    // }
-    //refreshEnergizers()
-  }, [] );
+  // useEffect(() => {
+  //   let localCookieUser = cookies.get('userEmail') || "";
+  //   setcookieUser(localCookieUser)
+  //   console.log("DOING useEffect - on-Load cookieuser is:", localCookieUser )
+  //   if (!localCookieUser  || localCookieUser ==="" || localCookieUser ==="UNAUTH") {
+  //     console.log("NOT LOGGED IN")
+  //     history.push('/login');
+  //     return;
+  //   }
+
+  // }, [] );
 
 
 
   //do on initial pageload and sort change
   useEffect(() => {
+    let localCookieUser = cookies.get('userEmail') || "";
+    setcookieUser(localCookieUser)
+    if (!localCookieUser  || localCookieUser ==="" || localCookieUser ==="UNAUTH") {
+      history.push('/login');
+      return;
+    } 
+
     setisLoading(true)
-    //onClearSearch()
-    console.log("DO useEffect - with refresh")
+    onClearSearch()
     refreshEnergizers()
     
   }, [sortByAlpha] );
 
 
-
+  const onDialogClose = () => {
+    console.log("DO dialog close")
+    closeAll()
+    setopenListModal(true)
+  };
 
 
   const closeAll = () => {
@@ -102,31 +113,6 @@ const onClearSearch = () => {
 };
 
 
-const onDialogClose = () => {
-  closeAll()
-  setopenListModal(true)
-};
-
-//SORTING FRONTEND
-// sortArray = async (enzArray) => {
-//   if (state.sortByAlpha) {
-//     console.log("SORTING BY ALPHA", enzArray.length)
-//     await enzArray.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1)
-//   } else {
-//     //sort by created
-//     console.log("SORTING BY createdAt", enzArray.length)
-//     enzArray.sort((a, b) => {
-//        if (!b.createdAt) return -1
-//        if (!a.createdAt) return 1
-//        if (b.createdAt > a.createdAt) {
-//          return 1
-//        } else {
-//          return -1
-//        }
-//     })   
-//   }
-//   return enzArray
-// }
 
 
 
@@ -164,6 +150,7 @@ const doFilter = async (searchTerm, statesOnly) => {
 
 };
 
+//this should be a hook
 const onOpenChart = async () => {     
   closeAll() 
   if (statesWithCounts.length < 1) {
@@ -194,7 +181,6 @@ const onOpenChart = async () => {
   }
 
   setopenChartModal(true)
-
 };
 
 
@@ -208,18 +194,11 @@ const onEditEnergizer = ({ energizer }) => {
 
 const onNewEnergizer = () => {
     closeAll()
+    setopenListModal(false)
     setopenEditModal(true)
 };
 
-const onOpenSearch = () => {
-  
-      setopenSearchModal(true)
-  };
 
-const onOpenUpload = () => {
-   console.log("DO openUpload")
-   setopenUploadModal(true)
-};
 
 
 
@@ -248,18 +227,10 @@ const onOpenUpload = () => {
       closeAll()
       try {
         setwikiResults(await api.scrapeWikiUrl(energizer));
-        //console.log("WikiResults on FRONTEND", wikiResults)
         props.enqueueSnackbar('Got Wiki Page')
 
         setenergizerUnderEdit(energizer)  //NECESSARY?
-        //setwikiResults(wikiResults)
         setopenReviewWikiModal(true)
-        // await setState({
-        //   energizerUnderEdit: energizer,
-        //   wikiResults,
-        //   openReviewWikiModal: true
-        // });
-
 
       } catch (err) {
         console.log("problem", err)
@@ -271,16 +242,17 @@ const onOpenUpload = () => {
 
 
 
-  const updateEnergizer = async energizer => {   //then what is energizer UnderEdit?
+  const updateEnergizer = async energizer => {  
     try {
       let response = await api.updateEnergizer({updatedEnz:energizer});
-      //console.log("FRONT end Update energizer resp", JSON.stringify(response,null,4));
       let updatedEnergizer = response.data
-      //manually insert updated energizer without another DB requrst
+      //manually insert updated energizer without another DB request
+      console.log("ENZ got updated", updatedEnergizer.bornState, updatedEnergizer.homeState,);
       let newFilteredEnergizers = filteredEnergizers.slice()
       let updateIndex = newFilteredEnergizers.findIndex(enz => enz.id === updatedEnergizer.id)
       newFilteredEnergizers.splice(updateIndex, 1, updatedEnergizer );
       setfilteredEnergizers(newFilteredEnergizers)
+      setenergizers(newFilteredEnergizers)
       props.enqueueSnackbar('Energizer updated!');
 
     } catch (err) {
@@ -296,6 +268,7 @@ const onOpenUpload = () => {
     try {
       await api.createEnergizer({newEnz:energizer});
       setenergizers(energizers => [energizer, ...energizers] )
+      setfilteredEnergizers(energizers => [energizer, ...energizers])
       props.enqueueSnackbar('Energizer created!');
     } catch {
        props.enqueueSnackbar(
@@ -351,9 +324,7 @@ const onOpenUpload = () => {
 
 
     return (
-      <div id="outerContainer">
-             <div> {"."} </div>
-      
+      <div id="outerContainer">  
             <div id="buttonsRow">   
                     <Button
                       color="primary"
@@ -366,7 +337,7 @@ const onOpenUpload = () => {
                     <Button
                       color="primary"
                       variant="contained"
-                      onClick={onOpenUpload}
+                      onClick={() => setopenUploadModal(true)}
                     >
                       Upload List
                     </Button>
@@ -392,7 +363,7 @@ const onOpenUpload = () => {
                   <Button
                   color="primary"
                   variant="contained"
-                  onClick={onOpenSearch}
+                  onClick={() => setopenSearchModal(true)}
                 >
                   Search
                 </Button>
@@ -420,15 +391,15 @@ const onOpenUpload = () => {
             </div>
 
             
-            {openListModal && (        
+            {openListModal  && (        
               <div>
                 {!isLoading ? 
-                <SlimList
-                  energizers={filteredEnergizers}
-                  onEditEnergizer={onEditEnergizer}
-                  onStartScrapeWiki = {onStartScrapeWiki}
-                  sortByAlpha = {sortByAlpha}
-                /> : <div> Loading... </div>
+                    <SlimList
+                      energizers={filteredEnergizers}
+                      onEditEnergizer={onEditEnergizer}
+                      onStartScrapeWiki = {onStartScrapeWiki}
+                      sortByAlpha = {sortByAlpha}
+                    /> : <div> Loading... </div>
                 }
               </div> 
 
@@ -450,8 +421,7 @@ const onOpenUpload = () => {
               {openReviewWikiModal && (
               <div>
                 <ReviewWikiResults
-                  //energizer={energizerUnderEdit.energizer}
-                  energizer={energizerUnderEdit}
+                  energizer={energizerUnderEdit.energizer}
                   wikiResults={wikiResults}
                   updateEnergizer={updateEnergizer}
                   onClose={onDialogClose}

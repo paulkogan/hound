@@ -13,17 +13,17 @@ red: #DC483A
   background-color: #F8F8F8 !important;
   color: #525252 !important;
   box-shadow: none !important;
-  align-items: center;
+  align-items: left;
   border-bottom: 2px solid lightgrey;
-  padding-left: 0px;
-  padding-right: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .navigation .toolbar {
   max-width: 1110px;
   width: 100%;
   height: 100%;
-  margin-left: 50px;
+  margin-left: 0px;
   display: flex;
   justify-content: left;
   align-items: left;
@@ -47,13 +47,27 @@ red: #DC483A
     width: 100%;
     position: right;
     text-align: right;
-    text-align: right;
     border: 0px solid green;
-  }
+}
   
+.userBox {
+  display: flex;
+  border: 0px solid purple;
+}
+
+
+.userInfo {
+  margin-right: 10px;
+  width: 30%;
+  padding-top: 10px;
+  margin-left: 5px;
+  font-size: 12px;
+  float: right;
+  border: 0px solid orange;
+}
 
 .actionButton {
-    border: 2px solid red;
+    border: 0px solid red;
     color: yellow;
 
 }

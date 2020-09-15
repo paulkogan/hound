@@ -7,13 +7,6 @@ import PropTypes from 'prop-types';
 
 
 
-
-//  display: 'flex'
-// float: 'left',
-// clear: 'none',
-// margin: 'auto',
-
-
 const ReviewWikiResults  = (props) => {
 
     const {updateEnergizer, wikiResults, onClose} = props;
@@ -407,7 +400,6 @@ const setInitialEnergizer = (energizer, wikiResults) => {
     agencyRep: energizer.agencyRep || '',
     ethnicity: energizer.ethnicity|| '',
     gender: energizer.gender || '',
-    occupation: energizer.occupation || '',
     birthday: energizer.birthday || '',
     solicitor: energizer.solicitor || '',
     notes: energizer.notes || '',

@@ -1,0 +1,100 @@
+
+
+  .panelContainer {
+    width: 90%;
+    text-align: left;
+    padding-left: 50px;
+    border: 0px solid red;
+  }
+
+
+  .countDiv {
+    text-align: right;
+    padding-bottom: 10px;
+  }
+
+  .slimBox {
+    padding: 5px;
+    border-top: 1px solid rgba(96,106,116,0.4);
+    width: 100%;
+    margin: 0px;
+    clear: both;
+  }
+
+  .frontBox {
+    text-align: left;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    border: 0px solid red;
+    display: flex; 
+    float: left;
+    text-align: left;
+    width: 60%
+  }
+
+  .slimNum {
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: bold;
+    padding-right: 5px;
+    padding-top: 3px;
+    width: 35px;
+    border: 0px solid orange;
+    float: left;
+  }
+
+
+  .slimName {
+      font-size: 14px;
+      line-height: 16px;
+      font-weight: bold;
+      padding-right: 5px;
+      padding-top: 3px;
+      width: 250px;
+      border: 0px solid purple;
+      float: left;
+  }
+
+
+  .slimInfo {
+    color: #1C2B39;
+    font-size: 16px;
+    line-height: 14px;
+    font-weight: 300;
+    padding-left: 5px;
+    padding-top: 0px;
+    text-align: left;
+    width: 250px;
+    border: 0px solid blue;
+    float: right;
+}
+
+.townInfo {
+    color: #1C2B39;
+    font-size: 16px;
+    line-height: 14px;
+    font-weight: 300;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    text-align: left;
+    width: 250px;
+    border: 0px solid blue;
+    float: right;
+}
+
+
+.backBox {
+    padding-right: 10px;
+    padding-bottom: 5px;
+    display: flex;
+    float: right;
+}
+
+.action-Button {
+    padding-left: 5px;
+    display: "inline-block";
+    border: 0px solid blue;
+}
+
+
+  

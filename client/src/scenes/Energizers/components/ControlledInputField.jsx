@@ -28,30 +28,29 @@ const ControlledInputField = (props) => {
            setTouched(false) //so next blur will register
     };
 
-    //const doFieldUpdate = useCallback((source) => { 
-    //dont need useCallback because not calling useEffect based on a function     
-    const doFieldUpdate = () => {
-        console.log("FieldUpdate "+id+ " touched= "+touched+ " with "+value) 
+     //dont need useCallback because not calling useEffect based on a function  
+    //const doValidateField = useCallback((source) => { 
+    const doValidateField = () => {
+        //console.log("Validate Field "+id+ " with "+value) 
         let validateResults = validateField(toValidate,value)
         let isFieldValid = !(validateResults.errors && (validateResults.errors.length >0))
-
         setValue(validateResults.text) //show in field
         saveField(id,validateResults.text) //in parent component - for sumbission
         updateFormState(id,validateResults.text,isFieldValid) //tracking form validation
         setErrorText( (!isFieldValid) ? validateResults.errors : ""  )
-    
+
     }
-//},[touched])
+    //},[touched])
+
 
     //this runs on initial AND when touched changes
     useEffect(() => {
-        doFieldUpdate()
+        doValidateField() 
     }, [touched] );
 
 
     const handleBlur = () => {
         setTouched(true)
-        //doFieldUpdate("blur") 
     };
 
     return ( 
