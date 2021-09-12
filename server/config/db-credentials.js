@@ -3,7 +3,7 @@ require('dotenv').config();
 const env = process.env.NODE_ENV;
 const version = process.env.VERSION;
 
-console.log('IN DB Cred - NODE_ENV is: ',env)
+console.log('IN DB Credentials - NODE_ENV is: ',env)
 
 let host = process.env.DEV_HOST;
 let database = process.env.DEV_DATABASE;

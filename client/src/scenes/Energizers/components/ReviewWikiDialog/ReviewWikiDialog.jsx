@@ -1,20 +1,17 @@
-import "./ReviewWikiResults.css";
-import React, { useState, useEffect, useContext } from "react";
-import ControlledInputField from './ControlledInputField.jsx';
-import { ControlledFormContext } from "../../../contexts/ControlledFormContext";
+import "./ReviewWikiDialog.css";
+import React, { useState, useContext } from "react";
+import ControlledInputField from '../ControlledInputField.jsx';
+import { ControlledFormContext } from "../../../../contexts/ControlledFormContext";
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 
 
 
-
-//  display: 'flex'
-// float: 'left',
-// clear: 'none',
-// margin: 'auto',
-
-
-const ReviewWikiResults  = (props) => {
+const ReviewWikiDialog  = (props) => {
 
     const {updateEnergizer, wikiResults, onClose} = props;
     const [energizer, setEnergizer] = useState( setInitialEnergizer(props.energizer, wikiResults) || {});
@@ -42,19 +39,22 @@ const ReviewWikiResults  = (props) => {
 
 
   return (
-    <div id="outerForm">
-    <form onSubmit={handleSubmit} >
-        <div id="header">
-            <div id="headLine">
-                    {"Review Update from Wiki"}
-            </div>
 
+    <Dialog open fullWidth onClose={ onClose } maxWidth={ 'lg' }>
+    <DialogTitle>         
+    {"Review Update from Wiki"}
+   </DialogTitle>
+    <div id="outerForm">
+
+        <DialogActions>
             <div id="actionButtons">   
-        
+            
                 <Button color="primary" variant="contained" onClick={onClose}>Cancel</Button>
-                <Button color="primary" variant="contained" disabled = { !isFormValid()} type="submit">Save</Button>
+                <Button color="primary" variant="contained" disabled = { !isFormValid()}  onClick={handleSubmit}>Save</Button>
             </div>
-        </div>
+        </DialogActions>
+
+        <DialogContent>   
         
         <div className="fromWikiHead">
             <div className = "textBlockLeft">
@@ -369,16 +369,17 @@ const ReviewWikiResults  = (props) => {
                         isTextArea= { true }
                 /> 
              </div>
-    </form>
-  </div> 
- );
+             </DialogContent> 
+        </div>
+    </Dialog>
+        
+    );
 };
-
-export default ReviewWikiResults;
-
+export default ReviewWikiDialog;
 
 
-ReviewWikiResults.propTypes = {
+
+ReviewWikiDialog.propTypes = {
   energizer: PropTypes.object,
   updateEnergizer: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -397,8 +398,8 @@ const setInitialEnergizer = (energizer, wikiResults) => {
     homeState: energizer.homeState || '',
     // bornTown: wikiResults.bornTown || wikiResults.birthPlaceTown || wikiResults.originTown || energizer.bornTown  || '',
     // bornState: wikiResults.bornState || wikiResults.birthPlaceState || wikiResults.originState || energizer.bornState || '',
-    bornTown: energizer.bornTown  || '',
-    bornState: energizer.bornState || '',
+    bornTown: energizer.bornTown  || wikiResults.bornTown || wikiResults.birthPlaceTown || wikiResults.originTown || '',
+    bornState: energizer.bornState || wikiResults.bornState || wikiResults.birthPlaceState || wikiResults.originState ||  '',
     currentTown: energizer.currentTown|| '',
     currentState: energizer.currentState|| '',
     highSchool: energizer.highSchool || '',
