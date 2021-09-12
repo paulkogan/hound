@@ -26,7 +26,7 @@ class Search extends Component {
     this.state = {
         searchTerm: "",
         anchorEl: null,
-        statesOnly: true
+        statesOnly: false
     };
   }
 
@@ -114,7 +114,7 @@ onListClick = async event => {
                           <div className={ cx(classes.optionsLabel)}>
                             {statesOnly
                               ? 'State Fields Only'
-                              : 'All Fields'}
+                              : 'Searching All Fields'}
                           </div>
 
                           <Checkbox

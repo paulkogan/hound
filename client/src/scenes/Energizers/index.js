@@ -4,10 +4,11 @@ import Switch from '@material-ui/core/Switch';
 import Cookies from 'universal-cookie';
 import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
-import CurrentUserContext, { CurrentUserConsumer, CurrentUserProvider }   from '../../contexts/CurrentUserContext.jsx';
+import CurrentUserContext  from '../../contexts/CurrentUserContext.jsx';
 import SlimList from './components/SlimList';
-import EnergizerProfile from './components/EnergizerProfile.jsx';
+import EnzProfileDialog from './components/EnzProfileDialog/EnzProfileDialog.jsx';
 import ReviewWikiResults from './components/ReviewWikiResults.jsx';
+import ReviewWikiDialog from './components/ReviewWikiDialog/ReviewWikiDialog.jsx';
 import SearchPage from './components/Search';
 import ChartPage from './components/Chart';
 import UploadPage from './components/Upload';
@@ -195,7 +196,7 @@ doFilter = async (searchTerm, statesOnly) => {
     this.setState({ 
       energizerUnderEdit: energizer, 
       openEditModal: true,
-      openListModal: false,
+      openListModal: true,
      });
   };
 
@@ -261,11 +262,9 @@ doFilter = async (searchTerm, statesOnly) => {
   };
 
 
-
-
-
   onStartScrapeWiki = async  energizer  => {
       this.closeAll()
+      this.setState({openListModal: true})
       try {
         let wikiResults = await api.scrapeWikiUrl(energizer);
         //console.log("WikiResults on FRONTEND", wikiResults)
@@ -273,7 +272,7 @@ doFilter = async (searchTerm, statesOnly) => {
         await this.setState({
           energizerUnderEdit: energizer,
           wikiResults,
-          openReviewWikiModal: true
+          openReviewWikiModal: true,
         });
 
 
@@ -329,7 +328,14 @@ doFilter = async (searchTerm, statesOnly) => {
     try {
       await api.deleteEnergizer(energizer);
       this.onDialogClose() 
-      this.refreshEnergizers();
+      //this.refreshEnergizers();
+      let newFilteredEnergizers = this.state.filteredEnergizers
+      let deleteIndex = newFilteredEnergizers.findIndex(enz => enz.id === energizer.id)
+      newFilteredEnergizers.splice(deleteIndex, 1 );
+      this.setState({ 
+        filteredEnergizers: newFilteredEnergizers
+      });
+
       this.props.enqueueSnackbar('Energizer deleted!');
     } catch {
        this.props.enqueueSnackbar(
@@ -474,7 +480,7 @@ doFilter = async (searchTerm, statesOnly) => {
                   value={sortByAlpha} 
                 /> &alpha;
             </div>
-
+  
             
             {openListModal && (
               
@@ -486,14 +492,14 @@ doFilter = async (searchTerm, statesOnly) => {
                   onStartScrapeWiki = {this.onStartScrapeWiki}
                   sortByAlpha = {sortByAlpha}
                 /> : <div> Loading... </div>
-  }
+              }
               </div> 
 
               )}
 
             {openEditModal && (
               <div>
-                    <EnergizerProfile
+                    <EnzProfileDialog
                       energizer={energizerUnderEdit}
                       updateEnergizer={this.updateEnergizer}
                       createEnergizer={this.createEnergizer}
@@ -506,7 +512,7 @@ doFilter = async (searchTerm, statesOnly) => {
 
               {openReviewWikiModal && (
               <div>
-                <ReviewWikiResults
+                <ReviewWikiDialog
                   energizer={energizerUnderEdit.energizer}
                   wikiResults={wikiResults}
                   updateEnergizer={this.updateEnergizer}
