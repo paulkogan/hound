@@ -21,6 +21,7 @@ if (env === 'production') {
   port = process.env.PROD_PORT || 5432;
 }
 
+console.log('IN DB Credentials - PROD_HOST is: ',host)
 
 
 module.exports = {

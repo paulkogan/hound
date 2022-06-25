@@ -6,14 +6,14 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
     "add": "^2.0.6",
-    "axios": "^0.18.0",
-    "cheerio": "^1.0.0-rc.3",
+    "axios": "^0.26.1",
+    "cheerio": "^1.0.0-rc.10",
     "classnames": "^2.2.6",
     "d3": "^5.11.0",
     "d3-geo": "^1.11.6",
     "file-saver": "^2.0.2",
     "generate-password": "^1.4.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "lodash.assign": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
     "material-ui-pickers": "^2.2.4",
@@ -29,7 +29,7 @@
     "react-test-renderer": "^16.8.6",
     "topojson": "^3.0.2",
     "universal-cookie": "^4.0.2",
-    "xlsx": "^0.15.4",
+    "xlsx": "^0.18.4",
     "yarn": "^1.17.3"
   },
   "scripts": {
@@ -42,7 +42,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5001",
   "browserslist": {
     "production": [
       ">0.2%",
