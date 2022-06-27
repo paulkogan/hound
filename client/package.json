@@ -29,7 +29,7 @@
     "react-test-renderer": "^16.8.6",
     "topojson": "^3.0.2",
     "universal-cookie": "^4.0.2",
-    "xlsx": "^0.18.4",
+    "xlsx": "^0.17.0",
     "yarn": "^1.17.3"
   },
   "scripts": {
