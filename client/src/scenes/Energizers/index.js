@@ -479,8 +479,10 @@ doFilter = async (searchTerm, statesOnly) => {
                   onChange={this.onChangeSort} 
                   value={sortByAlpha} 
                 /> &alpha;
+                 <div className={cx(classes.shortInstructions)}>
+                 Dont use the browser back button. Use 'cancel' or 'save' when done.
+                </div>
             </div>
-  
             
             {openListModal && (
               
@@ -614,6 +616,11 @@ const styles = () => ({
     marginRight: '0px',
 
   },
+  shortInstructions: {
+    fontWeight: '300',
+    fontSize: '12px',
+    fontStyle: 'italic',
+  }
 
 });
 

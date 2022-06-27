@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import * as api from '../../../../services/api';
-import XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
 import ReviewList from './ReviewList';
 
 const styles = () => ({
@@ -198,23 +198,3 @@ class UploadPage extends Component {
 
 
 export default withSnackbar(withStyles(styles)(UploadPage));
-
-
-
-
-
-
-{/* <form          
-action='http://localhost:5000/api/uploadlist' 
-method='post' 
-encType="multipart/form-data"
->
-
-<input 
-type="file" 
-name="englist"
-onChange={this.onOpenFileSelector} 
-/>
-
-<input type="submit" />
-</form> */}
